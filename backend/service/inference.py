@@ -89,6 +89,10 @@ def analyze(text, request_id):
             if k in INDICATORS
         ],
         "domains": domains,
-        "advice": "Verify unexpected requests through an official app or a number you already know. Do not share an OTP or password in response to this text.",
+        "advice": {
+            "high": "Do not open links or share codes. Verify the request through the official app or a number you already trust.",
+            "review": "Pause before responding. Confirm the request through a known number or the official app.",
+            "low": "No strong phishing signal was detected. Verify unexpected requests before replying or sharing information.",
+        }[risk],
         "indicator_note": raw["indicator_note"],
     }
