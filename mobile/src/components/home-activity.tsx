@@ -91,6 +91,7 @@ export function HomeActivity({ status }: { status: SmsStatus | null }) {
         }}
       >
         <Txt
+          accessibilityLiveRegion="polite"
           color={colors.paper}
           style={{
             fontFamily: fonts.extra,

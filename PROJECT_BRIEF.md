@@ -2,6 +2,8 @@
 
 ## Current implementation — 23 October 2026
 
+Home now has a bold blue overview, four metric tiles using actual local/model/queue counts, an interactive seven-day model-activity chart, and redesigned recent conversation cards with queue badges. Entrance/chart animations honor reduced-motion settings. A virtualized list, pull-to-refresh and older-message loading preserve inbox navigation without rendering every conversation at once.
+
 Reports now supports All / High risk / Review / Low risk filters and local sender/message search over the latest 200 loaded reports. Search and risk filters combine, use the model result when available (offline finding otherwise), show matching counts and provide reset/empty states. Search terms are not persisted or transmitted.
 
 Android now has a local Expo/Kotlin SMS module: permission setup, real received-inbox import and sender grouping, incoming broadcast handling, offline keyword/link observations, encrypted local message copies and a persistent network-constrained model queue. Dummy messages and the demo/online mode selector have been removed. Results use bold, concise actions, expandable reasons, completed-model risk counts and a seven-day report chart. The hollow-shield/S logo and core palette remain unchanged.

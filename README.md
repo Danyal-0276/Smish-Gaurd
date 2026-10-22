@@ -48,6 +48,7 @@ The mobile app uses **React Native, Expo and Kotlin**. A **Django REST Framework
 ### Reports and controls
 
 - Bold assessments, one recommended action, message previews and expandable observations.
+- A bold Home dashboard with four metric cards, an interactive seven-day activity chart, animated recent conversations and pull-to-refresh.
 - Completed-model risk counts and a seven-day report-completion chart, calculated from retained local reports.
 - Permission setup, pause uploads, stop protection and local deletion controls.
 - Optional **My profile** with an encrypted display name and unverified phone number; device-number lookup is permission-based, with manual entry as fallback.

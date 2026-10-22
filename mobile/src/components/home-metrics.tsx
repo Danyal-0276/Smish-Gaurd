@@ -77,13 +77,19 @@ export function HomeMetrics({ status }: { status: SmsStatus | null }) {
                       <Txt
                         variant="small"
                         color={fg}
-                        style={{ fontFamily: fonts.bold }}
+                        style={{ fontFamily: fonts.bold, flex: 1 }}
                       >
                         {label}
                       </Txt>
                       <Icon size={17} color={fg} strokeWidth={1.7} />
                     </View>
-                    <Txt color={fg} style={styles.value}>
+                    <Txt
+                      color={fg}
+                      style={styles.value}
+                      numberOfLines={1}
+                      adjustsFontSizeToFit
+                      minimumFontScale={0.6}
+                    >
                       {value === undefined ? "—" : value.toLocaleString()}
                     </Txt>
                     <Txt variant="small" color={muted}>
