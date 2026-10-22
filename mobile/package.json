@@ -43,6 +43,7 @@
   },
   "scripts": {
     "start": "expo start --dev-client",
+    "start:usb": "powershell -ExecutionPolicy Bypass -File ./scripts/start-usb.ps1",
     "android": "expo run:android",
     "web": "expo start --web",
     "typecheck": "node scripts/generate-route-types.cjs && tsc --noEmit",

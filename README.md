@@ -206,10 +206,10 @@ The server checks database/model readiness and binds to `http://127.0.0.1:8000`.
 
 ```powershell
 cd mobile
-npm start -- --localhost
+npm run start:usb
 ```
 
-After changing the API URL or clearing a stale bundle, use `npm start -- --localhost --clear` instead.
+After changing the API URL or clearing a stale bundle, use `npm run start:usb -- --clear` instead. This Windows helper uses an IPv4 loopback bundle URL, restores USB forwarding when one phone is connected, and refuses to start on an occupied port. Keep only one Metro instance running; mixing tunnel and localhost servers can break bundle/chunk loading.
 
 ### Terminal 3 — phone and build, project root
 

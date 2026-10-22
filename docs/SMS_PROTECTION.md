@@ -4,6 +4,8 @@ This is the current Android implementation and supersedes the older demo/online-
 
 ## Run the updated build over USB
 
+Use one Metro server. The Windows `start:usb` helper binds IPv4 loopback and advertises `127.0.0.1:8081`; it prevents a second server on the same port and avoids stale tunnel URLs in lazy bundle requests. If the development client remembers an old tunnel, return to its launcher and connect to `http://127.0.0.1:8081`.
+
 Restart the backend after updating these files. The supplied Waitress server does not hot reload:
 
 ```powershell
@@ -14,7 +16,7 @@ Restart the backend after updating these files. The supplied Waitress server doe
 ```powershell
 # Terminal 2
 cd mobile
-npm start -- --localhost --clear
+npm run start:usb -- --clear
 ```
 
 ```powershell
