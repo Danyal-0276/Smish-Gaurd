@@ -52,7 +52,7 @@ Django provides an ORM, migrations, transactions, administration, and integratio
 
 MongoDB has an official Django integration, but its backend-specific compatibility and transaction behavior add choices this application does not need. The decision is based on fit and development simplicity, not an unsupported claim that MongoDB lacks transactions or that PostgreSQL is always faster.
 
-PostgreSQL is server-side; the mobile app connects to the API over HTTPS, never directly to the database. Both databases being installed locally is not a reason to use both. No existing local database has been changed or connected during planning.
+PostgreSQL is server-side; the mobile app connects to the API over HTTPS, never directly to the database. Both databases being installed locally is not a reason to use both. Read-only checks verified the local credentials; no database, schema, role, or password was changed during planning. The concrete implementation sequence is in [BACKEND_ROADMAP.md](docs/BACKEND_ROADMAP.md).
 
 ## 4. Roles
 
@@ -64,7 +64,7 @@ There is no public directory of users, installation identifiers, phone numbers, 
 
 ## 5. Frontend features
 
-Implementation update: the current mock-data frontend covers welcome, Home, Check, Result, Activity, Learn, quizzes, Settings, privacy/protection status, confirmations, and empty/error states. It uses the original conversation-shield identity and a restrained green/warm-white design. [Frontend handoff](docs/FRONTEND_GUIDE.md) documents actual behavior; entries below remain the wider product scope, not a claim that native SMS or cloud features are completed.
+Implementation update: the current mock-data frontend covers welcome, Home, Check, Result, Activity, Learn, quizzes, Settings, privacy/protection status, confirmations, and empty/error states. It uses the preserved conversation-shield identity and the approved white, electric-blue, black, and yellow direction. [Frontend handoff](docs/FRONTEND_GUIDE.md) documents actual behavior; entries below remain the wider product scope, not a claim that native SMS or cloud features are completed.
 
 ### Core features
 
@@ -119,7 +119,7 @@ Suggested navigation: Home, Scan, History, Learn, Settings. Result details are o
 - Lightweight signed/authenticated rule updates and update compatibility checks.
 - Separate restricted URL-reputation integration after evaluating privacy, SSRF, redirects, and timeout behavior. No arbitrary URL fetching in the first version.
 
-Start with one Django application deployment. Redis, Celery, microservices, and a separate model-serving cluster are not baseline dependencies; add only when a demonstrated job or load requires them.
+Start with one modular Django deployment. The next plan uses private Redis for atomic quotas shared across workers before public deployment; a single-process development service is not a public security deployment. Celery, microservices, and a separate model-serving cluster remain unnecessary until a demonstrated job or load warrants them. See [the backend roadmap](docs/BACKEND_ROADMAP.md) for request guards, schemas, and acceptance gates.
 
 ## 7. Privacy and isolation without user accounts
 
@@ -222,6 +222,8 @@ Use the historical [initial system review](docs/analysis/weightminer-system-desi
 
 ## 13. Implementation order
 
+The current, detailed milestone sequence and security acceptance gates are maintained in [BACKEND_ROADMAP.md](docs/BACKEND_ROADMAP.md). The list below records the original high-level sequence; completed dataset/frontend work must not be restarted merely because it appears here.
+
 1. Confirm message languages, semester deadline, and available Android test device.
 2. Prove native incoming-SMS screening and warning behavior on that device.
 3. Review data labels and establish a reproducible baseline.
@@ -232,6 +234,10 @@ Use the historical [initial system review](docs/analysis/weightminer-system-desi
 8. Evaluate, run usability tests, and update the report with actual evidence.
 
 ## 14. Change log
+
+- **22 October 2026:** researched existing-SMS/thread scans, historical/incoming event reconciliation, and optional WhatsApp notification-preview checks. Recorded platform restrictions and recommended order in [the feasibility note](docs/decisions/0002-sms-and-whatsapp-feasibility.md). These are candidate extensions, not implemented inbox access or a promise of full WhatsApp chat scanning.
+
+- **22 October 2026:** verified local PostgreSQL authentication using the existing `.env` without displaying its password; identified that runtime configuration still uses the administrator and the project database does not yet exist. Created the secure backend roadmap with installation isolation, least-privilege database roles, shared atomic quotas, API contracts, native SMS constraints, scaling steps, and acceptance tests. Business APIs remain planned.
 
 - **22 October 2026:** refreshed the frontend using the owner's Trifid Media screenshots: white, electric blue, near-black, yellow accents, a floating animated bottom dock, revised screen copy, and restrained transitions. Preserved the hollow shield/S logo geometry and recolored generated assets. This UI refresh is checked without launching the app; phone visual review remains pending.
 

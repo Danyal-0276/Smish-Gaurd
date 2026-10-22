@@ -44,7 +44,7 @@ The SDK's CMake 3.22.1 includes Ninja 1.10.2. It failed while building `react_co
 
 ## Backend foundation
 
-`backend/.env` exists locally with a generated Django secret and blank database password. Do not paste credentials in chat or commit that file. Fill `POSTGRES_USER` and `POSTGRES_PASSWORD` for your local PostgreSQL installation.
+`backend/.env` exists locally. On 22 October 2026 its configured `postgres` username and stored password authenticated successfully using read-only queries. The password was not displayed or changed. The project database `smishguard_dev` does not yet exist. Do not paste credentials in chat or commit that file. The next secure setup step is a dedicated project database and restricted runtime/migration roles; do not deploy Django with the PostgreSQL superuser. See [the backend roadmap](BACKEND_ROADMAP.md).
 
 From the repository root, once credentials are ready:
 

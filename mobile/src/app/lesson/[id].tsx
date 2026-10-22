@@ -9,6 +9,7 @@ import {
   Pill,
   Button,
   Card,
+  Enter,
 } from "../../components/ui";
 import { colors, fonts } from "../../theme/tokens";
 import { lessons } from "../../data/fixtures";
@@ -70,7 +71,7 @@ export default function LessonScreen() {
           >
             <Txt
               variant="small"
-              color={answer === i ? colors.accent : colors.muted}
+              color={answer === i ? colors.paper : colors.muted}
             >
               {String.fromCharCode(65 + i)}
             </Txt>
@@ -83,19 +84,21 @@ export default function LessonScreen() {
           </Pressable>
         ))}
         {revealed && (
-          <View accessibilityLiveRegion="polite" style={{ gap: 6 }}>
-            <Txt
-              style={{ fontFamily: fonts.bold }}
-              color={correct ? colors.green : colors.amber}
-            >
-              {correct
-                ? "That’s a helpful instinct."
-                : "A useful moment to reconsider."}
-            </Txt>
-            <Txt color={colors.muted} variant="small">
-              {lesson.explanation}
-            </Txt>
-          </View>
+          <Enter>
+            <View accessibilityLiveRegion="polite" style={{ gap: 6 }}>
+              <Txt
+                style={{ fontFamily: fonts.bold }}
+                color={correct ? colors.green : colors.amber}
+              >
+                {correct
+                  ? "That’s a helpful instinct."
+                  : "A useful moment to reconsider."}
+              </Txt>
+              <Txt color={colors.muted} variant="small">
+                {lesson.explanation}
+              </Txt>
+            </View>
+          </Enter>
         )}
         {!revealed ? (
           <Button

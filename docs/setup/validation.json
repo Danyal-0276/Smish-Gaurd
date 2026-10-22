@@ -31,7 +31,9 @@
     "unit_tests": 2,
     "local_model_runtime": "load and inference passed",
     "postgres_server": "running, accepting TCP",
-    "postgres_project_connection": "pending local credentials",
+    "postgres_credentials": "configured postgres user/password verified against maintenance database via read-only queries; password not displayed",
+    "postgres_project_connection": "project database smishguard_dev not created yet",
+    "postgres_privileges": "runtime currently points at superuser; dedicated restricted roles are the next planned step",
     "business_api": "not implemented"
   },
   "android": {

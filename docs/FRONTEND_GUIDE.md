@@ -14,6 +14,8 @@ The 22 October UI refresh was checked without launching the app, as requested. E
 
 The native splash uses Expo SplashScreen, followed by a short Reanimated brand entrance. Fonts and local state hydrate before app content appears. System reduced-motion is respected by animation builders; the preference also disables screen entrances/transitions. The standalone Android splash must be inspected in a built APK: web preview does not prove native launch behavior.
 
+Quiz explanations now use the same short, reduced-motion-aware reveal when an answer is checked; selected option letters use white on blue for text contrast. The backend roadmap schedules further motion around actual request/permission states rather than adding permanent animated decoration.
+
 ## Implemented screens and interactions
 
 - Welcome/onboarding, no account or sign-in.

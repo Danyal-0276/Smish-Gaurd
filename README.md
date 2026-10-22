@@ -6,6 +6,8 @@ Repository: [Danyal-0276/Smish-Gaurd](https://github.com/Danyal-0276/Smish-Gaurd
 
 Start with [PROJECT_BRIEF.md](PROJECT_BRIEF.md). It is the living project description and decision record to share with the documentation collaborator. The earlier working name was Weightminer.
 
+Next implementation work is organized in [the secure backend roadmap](docs/BACKEND_ROADMAP.md): API contracts, installation isolation, database privileges, model integration, native SMS milestones, and security/load acceptance tests.
+
 ## Workspace
 
 ```text
