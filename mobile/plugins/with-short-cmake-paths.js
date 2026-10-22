@@ -1,11 +1,11 @@
-const { withProjectBuildGradle } = require('expo/config-plugins');
+const { withProjectBuildGradle } = require("expo/config-plugins");
 
 // Preserve the fix across Expo native regeneration; do not patch node_modules.
 module.exports = function withShortCmakePaths(config) {
   return withProjectBuildGradle(config, (mod) => {
-    const marker = '// SmishGuard: bounded CMake object paths for Windows';
+    const marker = "// SmishGuard: bounded CMake object paths for Windows";
     if (!mod.modResults.contents.includes(marker)) {
-      mod.modResults.contents += `
+      const nativeFixes = `
 ${marker}
 subprojects { subproject ->
   ['com.android.library', 'com.android.application'].each { pluginId ->
@@ -21,6 +21,11 @@ subprojects { subproject ->
   }
 }
 `;
+      // Register callbacks before the React root plugin evaluates :app.
+      const anchor = 'apply plugin: "expo-root-project"';
+      mod.modResults.contents = mod.modResults.contents.includes(anchor)
+        ? mod.modResults.contents.replace(anchor, nativeFixes + "\n" + anchor)
+        : mod.modResults.contents + nativeFixes;
     }
     return mod;
   });

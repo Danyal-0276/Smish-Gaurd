@@ -31,7 +31,7 @@
     "java": "17.0.17",
     "sdk_compile": 37,
     "device_or_avd": "none",
-    "native_build": "pending: Windows path-length failure in Reanimated; shortening CMake staging paths"
+    "native_build": "not fully verified: build stopped at user request; Windows path and driver fixes configured"
   },
   "audit": {
     "high_advisory_chains": 19,

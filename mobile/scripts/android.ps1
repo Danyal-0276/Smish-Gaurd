@@ -8,4 +8,4 @@ $env:TEMP = $taskTemp
 $env:TMP = $taskTemp
 $env:JAVA_TOOL_OPTIONS = '-Djdk.net.unixdomain.tmpdir="' + $taskTemp + '"'
 Push-Location $taskMobile
-try { npx.cmd expo run:android } finally { Pop-Location }
+try { npx.cmd expo run:android @args } finally { Pop-Location }
