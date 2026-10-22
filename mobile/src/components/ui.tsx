@@ -16,9 +16,7 @@ import {
   ArrowLeft,
   ArrowUpRight,
   ChevronRight,
-  CircleCheck,
   CircleHelp,
-  TriangleAlert,
   type LucideIcon,
 } from "lucide-react-native";
 import { router, useSegments } from "expo-router";
@@ -30,7 +28,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { colors, fonts } from "../theme/tokens";
 import { useAppStore } from "../store/app-store";
-import type { Risk, ScanRecord } from "../types/domain";
 
 type Variant = "body" | "small" | "label" | "title" | "heading" | "display";
 const textStyles = StyleSheet.create({
@@ -323,93 +320,6 @@ export function Pill({
         {label}
       </Txt>
     </View>
-  );
-}
-export const riskDisplay: Record<
-  Risk,
-  { title: string; short: string; color: string; bg: string; icon: LucideIcon }
-> = {
-  low: {
-    title: "Low detected risk",
-    short: "Low risk",
-    color: colors.green,
-    bg: colors.greenSoft,
-    icon: CircleCheck,
-  },
-  review: {
-    title: "Worth a closer look",
-    short: "Review",
-    color: colors.amber,
-    bg: colors.amberSoft,
-    icon: CircleHelp,
-  },
-  high: {
-    title: "Pause before you act",
-    short: "High risk",
-    color: colors.danger,
-    bg: colors.dangerSoft,
-    icon: TriangleAlert,
-  },
-};
-export function RecordRow({
-  record,
-  last = false,
-}: {
-  record: ScanRecord;
-  last?: boolean;
-}) {
-  const risk = riskDisplay[record.risk];
-  const Icon = risk.icon;
-  return (
-    <Pressable
-      onPress={() =>
-        router.push({ pathname: "/result/[id]", params: { id: record.id } })
-      }
-      accessibilityRole="button"
-      accessibilityLabel={`${risk.short}, ${record.origin === "sample" ? "sample message" : record.mode === "backend_model" ? "online model check" : "manual demo check"}`}
-      style={({ pressed }) => ({
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 12,
-        paddingVertical: 15,
-        borderBottomWidth: last ? 0 : 1,
-        borderBottomColor: colors.line,
-        opacity: pressed ? 0.6 : 1,
-      })}
-    >
-      <View
-        style={{
-          width: 44,
-          height: 44,
-          borderRadius: 15,
-          backgroundColor: risk.bg,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Icon size={20} color={risk.color} strokeWidth={1.7} />
-      </View>
-      <View style={{ flex: 1, gap: 3 }}>
-        <Txt style={{ fontFamily: fonts.bold, fontSize: 13 }}>
-          {record.origin === "sample"
-            ? "Sample message"
-            : record.mode === "backend_model"
-              ? "Online model check"
-              : "Manual demo check"}
-        </Txt>
-        <Txt variant="small" color={colors.muted}>
-          {record.characterCount} characters ·{" "}
-          {new Date(record.createdAt).toLocaleDateString(undefined, {
-            month: "short",
-            day: "numeric",
-          })}
-        </Txt>
-      </View>
-      <Txt variant="small" color={risk.color} style={{ fontSize: 10 }}>
-        {risk.short}
-      </Txt>
-      <ChevronRight size={15} color={colors.muted} />
-    </Pressable>
   );
 }
 export function Notice({

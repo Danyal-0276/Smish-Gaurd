@@ -28,7 +28,7 @@ class MessageText(serializers.CharField):
 
 class RegistrationSerializer(StrictSerializer):
     app_version = serializers.RegexField(r"^[0-9A-Za-z._-]{1,30}$")
-    consent_version = serializers.ChoiceField(choices=["2026-10-22"])
+    consent_version = serializers.ChoiceField(choices=["2026-10-22", "2026-10-23"])
     cloud_analysis_consent = ExplicitConsent()
 
     def validate_cloud_analysis_consent(self, value):

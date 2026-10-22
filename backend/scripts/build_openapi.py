@@ -31,7 +31,7 @@ schemas = {
     "Registration": obj(
         {
             "app_version": {**text(30), "pattern": "^[0-9A-Za-z._-]{1,30}$"},
-            "consent_version": {"type": "string", "enum": ["2026-10-22"]},
+            "consent_version": {"type": "string", "enum": ["2026-10-22", "2026-10-23"]},
             "cloud_analysis_consent": {"type": "boolean", "enum": [True]},
         }
     ),
@@ -158,6 +158,7 @@ schemas["Capabilities"] = obj(
         "coverage": text(2000),
         "stores_message_bodies": {"type": "boolean"},
         "automatic_sms": {"type": "boolean"},
+        "android_client_sms_queue": {"type": "boolean"},
         "whatsapp_access": {"type": "boolean"},
     }
 )

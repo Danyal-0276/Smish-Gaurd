@@ -91,13 +91,14 @@ class Capabilities(APIView):
         return Response(
             {
                 "api_version": "v1",
-                "consent_version": "2026-10-22",
+                "consent_version": "2026-10-23",
                 "max_characters": 5000,
                 "max_body_bytes": 32768,
                 "modes": ["backend_model"],
                 "coverage": "English-oriented historical SMS benchmark; language is not automatically verified.",
                 "stores_message_bodies": False,
                 "automatic_sms": False,
+                "android_client_sms_queue": True,
                 "whatsapp_access": False,
             }
         )
