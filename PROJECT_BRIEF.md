@@ -233,6 +233,8 @@ Use the historical [initial system review](docs/analysis/weightminer-system-desi
 
 ## 14. Change log
 
+- **22 October 2026:** refreshed the frontend using the owner's Trifid Media screenshots: white, electric blue, near-black, yellow accents, a floating animated bottom dock, revised screen copy, and restrained transitions. Preserved the hollow shield/S logo geometry and recolored generated assets. This UI refresh is checked without launching the app; phone visual review remains pending.
+
 - **22 October 2026:** reviewed six supplied files; established SMS scope and university Android APK target.
 - **22 October 2026:** selected SmishGuard as the working name; selected React Native/TypeScript, native Kotlin integration, Django/DRF, and PostgreSQL; specified local SQLite metadata, no end-user account, and pseudonymous installation access controls. These are design decisions, not implemented features.
 - **22 October 2026:** organized original sources, analysis, and future code directories; created this shared living brief.

@@ -23,6 +23,7 @@ import { colors, fonts } from "../../theme/tokens";
 import { sampleMessages } from "../../features/scan/demo-engine";
 import { scanRepository } from "../../services/scan-repository";
 import { useAppStore } from "../../store/app-store";
+import { ScanProgress } from "../../components/scan-progress";
 
 export default function Scan() {
   const [text, setText] = useState("");
@@ -50,11 +51,16 @@ export default function Scan() {
     <Screen>
       <View style={{ gap: 10 }}>
         <Txt variant="label" color={colors.muted}>
-          A MOMENT BEFORE THE NEXT STEP
+          BEFORE YOU CLICK
         </Txt>
-        <Txt variant="heading">Let’s look at{"\n"}that message.</Txt>
+        <Txt variant="heading">
+          Check the text.{"\n"}
+          <Txt variant="heading" color={colors.brand}>
+            Take your time.
+          </Txt>
+        </Txt>
         <Txt color={colors.muted}>
-          Paste an unexpected text. We’ll walk through the signs together.
+          Paste a message to explore its warning signs.
         </Txt>
       </View>
       <Enter>
@@ -85,7 +91,7 @@ export default function Scan() {
           <TextInput
             accessibilityLabel="Message to check"
             placeholder="Paste the message here…"
-            placeholderTextColor="#99A49A"
+            placeholderTextColor={colors.muted}
             multiline
             maxLength={5000}
             editable={!mutation.isPending}
@@ -125,8 +131,8 @@ export default function Scan() {
                 minHeight: 32,
               }}
             >
-              <ClipboardPaste size={16} color={colors.forest} />
-              <Txt variant="small" color={colors.forest}>
+              <ClipboardPaste size={16} color={colors.brand} />
+              <Txt variant="small" color={colors.brand}>
                 Paste message
               </Txt>
             </Pressable>
@@ -142,10 +148,11 @@ export default function Scan() {
         </Txt>
       )}
       <View style={{ gap: 12 }}>
+        {mutation.isPending && <ScanProgress />}
         <Button
           label={
             mutation.isPending
-              ? "Looking at the patterns…"
+              ? "Checking demo patterns…"
               : "Check this message"
           }
           icon={ScanLine}
@@ -157,14 +164,13 @@ export default function Scan() {
           }}
         />
         <Notice icon={LockKeyhole}>
-          Your text stays in this demo session. Only result metadata is saved
-          when history is on.
+          Text stays in this session. History saves the result, not the message.
         </Notice>
       </View>
       <View style={{ gap: 12 }}>
-        <Txt variant="title">Just exploring?</Txt>
+        <Txt variant="title">Try an example</Txt>
         <Txt variant="small" color={colors.muted}>
-          Try a sample and see how the experience works.
+          Choose a sample, then tap Check.
         </Txt>
         {sampleMessages.map((sample) => (
           <Pressable
@@ -178,6 +184,8 @@ export default function Scan() {
             style={({ pressed }) => ({
               padding: 16,
               backgroundColor: colors.paper,
+              borderWidth: 1,
+              borderColor: colors.line,
               borderRadius: 18,
               flexDirection: "row",
               alignItems: "center",
@@ -193,15 +201,15 @@ export default function Scan() {
                 {sample.description}
               </Txt>
             </View>
-            <ArrowUpRight size={18} color={colors.forest} />
+            <ArrowUpRight size={18} color={colors.brand} />
           </Pressable>
         ))}
       </View>
       <View style={{ gap: 10 }}>
         <Pill label="SIMULATED CHECK" tone="amber" />
         <Txt variant="small" color={colors.muted}>
-          These results use simple demo patterns, not the trained model. No live
-          SMS permissions, network requests, or website visits are involved.
+          Results are simulated, not a security verdict. This demo cannot read
+          incoming SMS or open links.
         </Txt>
       </View>
     </Screen>

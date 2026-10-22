@@ -47,8 +47,8 @@ export default function LessonScreen() {
           <Txt color={colors.muted}>{section.body}</Txt>
         </View>
       ))}
-      <Card style={{ backgroundColor: colors.sage, gap: 16 }}>
-        <Txt variant="label" color={colors.forest}>
+      <Card style={{ backgroundColor: colors.brandSoft, gap: 16 }}>
+        <Txt variant="label" color={colors.brand}>
           A QUICK CHECK-IN
         </Txt>
         <Txt variant="title">{lesson.question}</Txt>
@@ -62,7 +62,7 @@ export default function LessonScreen() {
             style={{
               padding: 15,
               borderRadius: 15,
-              backgroundColor: answer === i ? colors.forest : colors.paper,
+              backgroundColor: answer === i ? colors.brand : colors.paper,
               flexDirection: "row",
               gap: 10,
               alignItems: "center",
@@ -70,7 +70,7 @@ export default function LessonScreen() {
           >
             <Txt
               variant="small"
-              color={answer === i ? colors.lime : colors.muted}
+              color={answer === i ? colors.accent : colors.muted}
             >
               {String.fromCharCode(65 + i)}
             </Txt>

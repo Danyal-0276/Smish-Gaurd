@@ -35,9 +35,9 @@ export default function Settings() {
     <Screen>
       <View style={{ gap: 8 }}>
         <Txt variant="label" color={colors.muted}>
-          MAKE YOURSELF AT HOME
+          YOUR PREFERENCES
         </Txt>
-        <Txt variant="heading">Your app.{"\n"}Your boundaries.</Txt>
+        <Txt variant="heading">Make it yours.</Txt>
       </View>
       <Card style={{ flexDirection: "row", gap: 16, alignItems: "center" }}>
         <BrandMark size={43} tile />
@@ -55,8 +55,8 @@ export default function Settings() {
         <Card style={{ paddingVertical: 4 }}>
           <SettingRow
             icon={Vibrate}
-            title="Gentle haptics"
-            description="A little feedback when you tap"
+            title="Tap feedback"
+            description="Light vibrations on supported devices"
             value={preferences.haptics}
             onChange={(v) => update({ haptics: v })}
           />

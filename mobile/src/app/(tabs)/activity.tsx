@@ -41,9 +41,9 @@ export default function Activity() {
       >
         <View style={{ gap: 5 }}>
           <Txt variant="label" color={colors.muted}>
-            YOUR LOCAL RECORD
+            ON THIS DEVICE
           </Txt>
-          <Txt variant="heading">A little perspective.</Txt>
+          <Txt variant="heading">Your checks.</Txt>
         </View>
         <IconButton
           icon={Trash2}
@@ -55,6 +55,8 @@ export default function Activity() {
         style={{
           flexDirection: "row",
           backgroundColor: colors.paper,
+          borderWidth: 1,
+          borderColor: colors.line,
           borderRadius: 17,
           paddingHorizontal: 15,
           alignItems: "center",
@@ -96,7 +98,7 @@ export default function Activity() {
               paddingHorizontal: 13,
               borderRadius: 99,
               backgroundColor:
-                filter === item.value ? colors.forest : colors.paper,
+                filter === item.value ? colors.brand : colors.paper,
             }}
           >
             <Txt
@@ -135,7 +137,7 @@ export default function Activity() {
           <Card
             style={{ alignItems: "center", paddingVertical: 32, marginTop: 12 }}
           >
-            <Clock3 size={32} color={colors.forest} strokeWidth={1.3} />
+            <Clock3 size={32} color={colors.brand} strokeWidth={1.3} />
             <Txt variant="title">
               {history.length ? "Nothing matches yet." : "A fresh start."}
             </Txt>

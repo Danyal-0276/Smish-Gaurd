@@ -13,7 +13,7 @@ const config: ExpoConfig = {
     allowBackup: false,
     adaptiveIcon: {
       foregroundImage: "./assets/brand/adaptive-foreground.png",
-      backgroundColor: "#234D40",
+      backgroundColor: "#0064EF",
       monochromeImage: "./assets/brand/monochrome.png",
     },
     blockedPermissions: [
@@ -31,7 +31,7 @@ const config: ExpoConfig = {
     name: "SmishGuard",
   },
   plugins: [
-    './plugins/with-short-cmake-paths',
+    "./plugins/with-short-cmake-paths",
     "expo-router",
     "expo-font",
     "expo-sqlite",
@@ -41,7 +41,7 @@ const config: ExpoConfig = {
         image: "./assets/brand/splash-mark.png",
         imageWidth: 100,
         resizeMode: "contain",
-        backgroundColor: "#F6F7F2",
+        backgroundColor: "#FAFAFC",
       },
     ],
   ],

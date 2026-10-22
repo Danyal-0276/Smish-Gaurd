@@ -4,7 +4,7 @@ import { colors } from "../theme/tokens";
 
 export function BrandMark({
   size = 44,
-  color = colors.forest,
+  color = colors.brand,
   tile = false,
 }: {
   size?: number;
@@ -17,7 +17,7 @@ export function BrandMark({
       style={
         tile
           ? {
-              backgroundColor: colors.sage,
+              backgroundColor: colors.brandSoft,
               borderRadius: size * 0.3,
               padding: size * 0.2,
             }
@@ -71,7 +71,7 @@ export function ShieldIllustration({ compact = false }: { compact?: boolean }) {
           cy="124"
           r="116"
           fill="none"
-          stroke="#547563"
+          stroke="#FFFFFF"
           strokeWidth="1"
           opacity=".45"
         />
@@ -80,15 +80,15 @@ export function ShieldIllustration({ compact = false }: { compact?: boolean }) {
           cy="124"
           r="89"
           fill="none"
-          stroke="#789180"
+          stroke="#FFFFFF"
           strokeWidth="1"
           opacity=".5"
         />
-        <Circle cx="124" cy="124" r="62" fill="#315B49" />
-        <Circle cx="218" cy="65" r="6" fill={colors.lime} />
-        <Circle cx="34" cy="166" r="4" fill="#91AE82" />
+        <Circle cx="124" cy="124" r="62" fill="#1978FF" />
+        <Circle cx="218" cy="65" r="6" fill={colors.accent} />
+        <Circle cx="34" cy="166" r="4" fill="#FFFFFF" />
       </Svg>
-      <BrandMark size={compact ? 62 : 86} color={colors.lime} />
+      <BrandMark size={compact ? 62 : 86} color={colors.paper} />
     </View>
   );
 }

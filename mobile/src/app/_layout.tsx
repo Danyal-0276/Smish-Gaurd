@@ -17,8 +17,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Animated, {
   FadeIn,
   FadeOut,
-  ZoomIn,
+  FadeInUp,
   ReduceMotion,
+  useReducedMotion,
 } from "react-native-reanimated";
 import { BrandMark } from "../components/brand";
 import { Txt } from "../components/ui";
@@ -40,19 +41,23 @@ export default function RootLayout() {
   });
   const hydrated = useAppStore((s) => s.hydrated);
   const reduced = useAppStore((s) => s.preferences.reduceMotion);
+  const systemReduced = useReducedMotion();
   const [introDone, setIntroDone] = useState(false);
   const ready = (fontsReady || Boolean(fontError)) && hydrated;
   useEffect(() => {
     if (!ready) return;
     void SplashScreen.hideAsync().catch(() => {});
-    const timer = setTimeout(() => setIntroDone(true), reduced ? 100 : 1200);
+    const timer = setTimeout(
+      () => setIntroDone(true),
+      reduced || systemReduced ? 100 : 1200,
+    );
     return () => clearTimeout(timer);
-  }, [ready, reduced]);
+  }, [ready, reduced, systemReduced]);
   return (
     <GestureHandlerRootView
       style={{
         flex: 1,
-        backgroundColor: Platform.OS === "web" ? "#E7ECE5" : colors.background,
+        backgroundColor: Platform.OS === "web" ? "#EDF0F6" : colors.background,
       }}
     >
       <SafeAreaProvider>
@@ -72,7 +77,8 @@ export default function RootLayout() {
                 screenOptions={{
                   headerShown: false,
                   contentStyle: { backgroundColor: colors.background },
-                  animation: reduced ? "none" : "slide_from_right",
+                  animation:
+                    reduced || systemReduced ? "none" : "fade_from_bottom",
                 }}
               >
                 <Stack.Screen name="index" />
@@ -87,7 +93,7 @@ export default function RootLayout() {
             {!introDone && (
               <Animated.View
                 exiting={FadeOut.duration(280).reduceMotion(
-                  ReduceMotion.System,
+                  reduced ? ReduceMotion.Always : ReduceMotion.System,
                 )}
                 style={[
                   StyleSheet.absoluteFill,
@@ -101,26 +107,28 @@ export default function RootLayout() {
                 ]}
               >
                 <Animated.View
-                  entering={ZoomIn.springify()
-                    .damping(18)
-                    .reduceMotion(ReduceMotion.System)}
+                  entering={FadeInUp.duration(500).reduceMotion(
+                    reduced ? ReduceMotion.Always : ReduceMotion.System,
+                  )}
                 >
                   <BrandMark size={86} />
                 </Animated.View>
                 <Animated.View
                   entering={FadeIn.delay(200)
                     .duration(550)
-                    .reduceMotion(ReduceMotion.System)}
+                    .reduceMotion(
+                      reduced ? ReduceMotion.Always : ReduceMotion.System,
+                    )}
                   style={{ alignItems: "center", gap: 7 }}
                 >
                   <Txt variant="heading">smishguard</Txt>
                   <Txt variant="small" color={colors.muted}>
-                    A moment of clarity.
+                    A clearer next step.
                   </Txt>
                 </Animated.View>
                 <View style={{ position: "absolute", bottom: 56 }}>
                   <Txt variant="label" color={colors.muted}>
-                    PAUSE. CHECK. PROCEED.
+                    PAUSE. CHECK. DECIDE.
                   </Txt>
                 </View>
               </Animated.View>

@@ -12,17 +12,22 @@ export default function Learn() {
     <Screen>
       <View style={{ gap: 10 }}>
         <Txt variant="label" color={colors.muted}>
-          SMALL LESSONS. BETTER INSTINCTS.
+          THE SAFETY NOTES
         </Txt>
-        <Txt variant="heading">Stay curious.{"\n"}Stay a step ahead.</Txt>
+        <Txt variant="heading">
+          Small lessons.{"\n"}
+          <Txt variant="heading" color={colors.brand}>
+            Smarter habits.
+          </Txt>
+        </Txt>
         <Txt color={colors.muted}>
-          A few minutes now can make the next message easier to read.
+          Four short reads. Practical steps you can use today.
         </Txt>
       </View>
       <Enter>
         <View
           style={{
-            backgroundColor: colors.forest,
+            backgroundColor: colors.brand,
             borderRadius: 26,
             padding: 24,
             gap: 16,
@@ -31,8 +36,8 @@ export default function Learn() {
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <BookOpen size={25} color={colors.lime} strokeWidth={1.5} />
-            <Txt variant="small" color={colors.lime}>
+            <BookOpen size={25} color={colors.accent} strokeWidth={1.5} />
+            <Txt variant="small" color={colors.paper}>
               {completed.length} / {lessons.length} complete
             </Txt>
           </View>
@@ -46,18 +51,22 @@ export default function Learn() {
               max: lessons.length,
               now: completed.length,
             }}
-            style={{ height: 5, backgroundColor: "#446657", borderRadius: 99 }}
+            style={{
+              height: 5,
+              backgroundColor: colors.brandDark,
+              borderRadius: 99,
+            }}
           >
             <View
               style={{
                 height: 5,
                 width: `${(completed.length / lessons.length) * 100}%`,
-                backgroundColor: colors.lime,
+                backgroundColor: colors.accent,
                 borderRadius: 99,
               }}
             />
           </View>
-          <Txt variant="small" color="#CAD7CF">
+          <Txt variant="small" color={colors.onDark}>
             Short reads. One question. Something useful to keep.
           </Txt>
         </View>
@@ -75,6 +84,8 @@ export default function Learn() {
             }
             style={({ pressed }) => ({
               backgroundColor: colors.paper,
+              borderWidth: 1,
+              borderColor: colors.line,
               borderRadius: 23,
               padding: 22,
               gap: 14,
@@ -92,7 +103,7 @@ export default function Learn() {
               {completed.includes(lesson.id) ? (
                 <Check size={19} color={colors.green} />
               ) : (
-                <ArrowUpRight size={19} color={colors.forest} />
+                <ArrowUpRight size={19} color={colors.brand} />
               )}
             </View>
             <Txt
@@ -114,8 +125,13 @@ export default function Learn() {
           </Pressable>
         </Enter>
       ))}
-      <Card style={{ backgroundColor: "#EEEDE2" }}>
-        <Lightbulb size={21} color={colors.forest} />
+      <Card
+        style={{
+          backgroundColor: colors.brandSoft,
+          borderColor: colors.brandSoft,
+        }}
+      >
+        <Lightbulb size={21} color={colors.brand} />
         <Txt variant="title">The strongest habit?</Txt>
         <Txt color={colors.muted}>
           Verify an unexpected request through a channel you chose yourself.

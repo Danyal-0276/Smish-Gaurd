@@ -53,7 +53,7 @@ export default function Permissions() {
               justifyContent: "space-between",
             }}
           >
-            <Icon size={24} color={colors.forest} strokeWidth={1.5} />
+            <Icon size={24} color={colors.brand} strokeWidth={1.5} />
             <Pill
               label={ready ? "AVAILABLE" : "NOT CONNECTED"}
               tone={ready ? "green" : "neutral"}

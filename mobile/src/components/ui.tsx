@@ -21,9 +21,13 @@ import {
   TriangleAlert,
   type LucideIcon,
 } from "lucide-react-native";
-import { router } from "expo-router";
+import { router, useSegments } from "expo-router";
 import * as Haptics from "expo-haptics";
-import Animated, { FadeInDown, ReduceMotion } from "react-native-reanimated";
+import Animated, {
+  FadeInUp,
+  ReduceMotion,
+  useReducedMotion,
+} from "react-native-reanimated";
 import { colors, fonts } from "../theme/tokens";
 import { useAppStore } from "../store/app-store";
 import type { Risk, ScanRecord } from "../types/domain";
@@ -36,7 +40,7 @@ const textStyles = StyleSheet.create({
     fontFamily: fonts.bold,
     fontSize: 10,
     lineHeight: 16,
-    letterSpacing: 1.8,
+    letterSpacing: 1.3,
   },
   title: {
     fontFamily: fonts.bold,
@@ -71,6 +75,10 @@ export function Screen({
   scroll = true,
 }: PropsWithChildren<{ style?: ViewStyle; scroll?: boolean }>) {
   const insets = useSafeAreaInsets();
+  const segments = useSegments();
+  const dockSpace = segments.some((segment) => segment === "(tabs)")
+    ? 100 + insets.bottom
+    : 18;
   const content = (
     <View
       style={[
@@ -93,7 +101,7 @@ export function Screen({
         <ScrollView
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 18 }}
+          contentContainerStyle={{ paddingBottom: dockSpace }}
         >
           {content}
         </ScrollView>
@@ -108,12 +116,13 @@ export function Enter({
   delay = 0,
 }: PropsWithChildren<{ delay?: number }>) {
   const reduced = useAppStore((s) => s.preferences.reduceMotion);
+  const systemReduced = useReducedMotion();
   return (
     <Animated.View
       entering={
-        reduced
+        reduced || systemReduced
           ? undefined
-          : FadeInDown.duration(400)
+          : FadeInUp.duration(380)
               .delay(delay)
               .reduceMotion(ReduceMotion.System)
       }
@@ -131,7 +140,9 @@ export function Card({
       style={[
         {
           backgroundColor: colors.paper,
-          borderRadius: 24,
+          borderRadius: 20,
+          borderWidth: 1,
+          borderColor: colors.line,
           padding: 20,
           gap: 12,
         },
@@ -156,7 +167,7 @@ export function SectionTitle({
       <Txt variant="title">{title}</Txt>
       {action && (
         <Pressable accessibilityRole="button" onPress={onPress} hitSlop={12}>
-          <Txt variant="small" color={colors.forest}>
+          <Txt variant="small" color={colors.brand}>
             {action}
           </Txt>
         </Pressable>
@@ -185,7 +196,7 @@ export function Button({
       ? colors.paper
       : tone === "danger"
         ? colors.danger
-        : colors.forest;
+        : colors.brand;
   return (
     <Pressable
       accessibilityRole="button"
@@ -199,7 +210,7 @@ export function Button({
       style={({ pressed }) => [
         {
           minHeight: 56,
-          borderRadius: 18,
+          borderRadius: 999,
           paddingHorizontal: 20,
           flexDirection: "row",
           alignItems: "center",
@@ -207,12 +218,11 @@ export function Button({
           gap: 12,
           backgroundColor:
             tone === "primary"
-              ? colors.forest
+              ? colors.brand
               : tone === "danger"
                 ? colors.dangerSoft
-                : colors.sage,
+                : colors.brandSoft,
           opacity: disabled ? 0.45 : pressed ? 0.8 : 1,
-          transform: [{ scale: pressed ? 0.985 : 1 }],
         },
       ]}
     >
@@ -244,7 +254,9 @@ export function IconButton({
       style={({ pressed }) => ({
         width: 44,
         height: 44,
-        borderRadius: 16,
+        borderRadius: 999,
+        borderWidth: 1,
+        borderColor: colors.line,
         backgroundColor: colors.paper,
         alignItems: "center",
         justifyContent: "center",
@@ -292,7 +304,7 @@ export function Pill({
         ? [colors.amberSoft, colors.amber]
         : tone === "danger"
           ? [colors.dangerSoft, colors.danger]
-          : [colors.sage, colors.forest];
+          : [colors.brandSoft, colors.brand];
   return (
     <View
       style={{
@@ -435,12 +447,12 @@ export function SettingRow({
           alignItems: "center",
           justifyContent: "center",
           borderRadius: 12,
-          backgroundColor: danger ? colors.dangerSoft : colors.sage,
+          backgroundColor: danger ? colors.dangerSoft : colors.brandSoft,
         }}
       >
         <Icon
           size={17}
-          color={danger ? colors.danger : colors.forest}
+          color={danger ? colors.danger : colors.brand}
           strokeWidth={1.7}
         />
       </View>
@@ -462,7 +474,7 @@ export function SettingRow({
           accessibilityLabel={title}
           value={value}
           onValueChange={onChange}
-          trackColor={{ false: colors.line, true: colors.forest }}
+          trackColor={{ false: colors.line, true: colors.brand }}
           thumbColor={colors.paper}
         />
       ) : (
@@ -497,17 +509,19 @@ export function ConfirmSheet({
   onConfirm: () => void;
   onClose: () => void;
 }) {
+  const reduced = useAppStore((s) => s.preferences.reduceMotion);
+  const systemReduced = useReducedMotion();
   return (
     <Modal
       transparent
       visible={visible}
-      animationType="fade"
+      animationType={reduced || systemReduced ? "none" : "fade"}
       onRequestClose={onClose}
     >
       <View
         style={{
           flex: 1,
-          backgroundColor: "rgba(20,40,30,.35)",
+          backgroundColor: "rgba(10,14,25,.42)",
           justifyContent: "flex-end",
         }}
       >

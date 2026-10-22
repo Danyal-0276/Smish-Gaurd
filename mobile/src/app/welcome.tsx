@@ -21,12 +21,12 @@ export default function Welcome() {
           <BrandMark size={27} />
           <Txt style={{ fontFamily: fonts.extra }}>smishguard</Txt>
         </View>
-        <Pill label="A thoughtful little guard" />
+        <Pill label="SMS SAFETY" />
       </View>
       <Enter>
         <View
           style={{
-            backgroundColor: colors.forest,
+            backgroundColor: colors.brand,
             borderRadius: 32,
             paddingVertical: 22,
             alignItems: "center",
@@ -34,21 +34,26 @@ export default function Welcome() {
           }}
         >
           <ShieldIllustration />
-          <Txt variant="label" color={colors.lime} style={{ marginTop: 2 }}>
-            YOUR NEXT TAP, WITH CONFIDENCE
+          <Txt variant="label" color={colors.paper} style={{ marginTop: 2 }}>
+            PAUSE. CHECK. DECIDE.
           </Txt>
         </View>
       </Enter>
       <Enter delay={100}>
-        <Txt variant="display">A little clarity.{"\n"}Before you tap.</Txt>
+        <Txt variant="display">
+          A text arrives.{"\n"}
+          <Txt variant="display" color={colors.brand}>
+            You stay in control.
+          </Txt>
+        </Txt>
         <Txt color={colors.muted} style={{ marginTop: 14 }}>
-          A calmer way to look at unexpected texts. Understand the warning
-          signs, then decide your next step.
+          Learn the signs of SMS phishing, explore a message, and make an
+          informed next move.
         </Txt>
       </Enter>
       <View style={{ gap: 15 }}>
         {[
-          { Icon: Eye, text: "Understand the signs, not just a score." },
+          { Icon: Eye, text: "Clear reasons behind each demo result." },
           { Icon: Fingerprint, text: "No account. No phone number required." },
           { Icon: ShieldCheck, text: "Your history stays on this device." },
         ].map(({ Icon, text }) => (
@@ -56,14 +61,14 @@ export default function Welcome() {
             key={text}
             style={{ flexDirection: "row", alignItems: "center", gap: 12 }}
           >
-            <Icon size={18} color={colors.forest} strokeWidth={1.7} />
+            <Icon size={18} color={colors.brand} strokeWidth={1.7} />
             <Txt style={{ fontSize: 13 }}>{text}</Txt>
           </View>
         ))}
       </View>
       <View style={{ gap: 14 }}>
         <Button
-          label="Let’s take a look"
+          label="Get started"
           onPress={() => {
             finish();
             router.replace("/(tabs)");
@@ -83,10 +88,10 @@ export default function Welcome() {
         >
           <Txt
             variant="small"
-            color={colors.forest}
+            color={colors.brand}
             style={{ textAlign: "center", textDecorationLine: "underline" }}
           >
-            How we approach your privacy
+            Read the privacy notes
           </Txt>
         </Pressable>
       </View>

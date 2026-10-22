@@ -37,14 +37,14 @@ export default function Privacy() {
         },
       ].map(({ Icon, title, body }) => (
         <View key={title} style={{ gap: 9 }}>
-          <Icon size={23} color={colors.forest} strokeWidth={1.5} />
+          <Icon size={23} color={colors.brand} strokeWidth={1.5} />
           <Txt variant="title">{title}</Txt>
           <Txt color={colors.muted}>{body}</Txt>
         </View>
       ))}
-      <Card style={{ backgroundColor: colors.sage }}>
+      <Card style={{ backgroundColor: colors.brandSoft }}>
         <Txt variant="title">When cloud analysis is added</Txt>
-        <Txt color={colors.forest} style={{ fontSize: 13 }}>
+        <Txt color={colors.brand} style={{ fontSize: 13 }}>
           We’ll explain what is sent and ask for explicit consent first. A
           server-side model needs the message text to analyze it; that is
           different from keeping everything on your phone.

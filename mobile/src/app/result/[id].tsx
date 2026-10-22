@@ -141,12 +141,12 @@ export default function ResultScreen() {
                       width: 27,
                       height: 27,
                       borderRadius: 10,
-                      backgroundColor: colors.sage,
+                      backgroundColor: colors.brandSoft,
                       alignItems: "center",
                       justifyContent: "center",
                     }}
                   >
-                    <Txt variant="small" color={colors.forest}>
+                    <Txt variant="small" color={colors.brand}>
                       {String(i + 1).padStart(2, "0")}
                     </Txt>
                   </View>
@@ -185,15 +185,15 @@ export default function ResultScreen() {
           )}
           <View
             style={{
-              backgroundColor: colors.sage,
+              backgroundColor: colors.brandSoft,
               padding: 22,
               borderRadius: 24,
               gap: 10,
             }}
           >
-            <ShieldCheck size={22} color={colors.forest} />
+            <ShieldCheck size={22} color={colors.brand} />
             <Txt variant="title">Your next step</Txt>
-            <Txt color={colors.forest} style={{ fontSize: 13 }}>
+            <Txt color={colors.brand} style={{ fontSize: 13 }}>
               {result.advice}
             </Txt>
           </View>

@@ -1,12 +1,10 @@
-import { View, Pressable } from "react-native";
+import { View, Pressable, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import {
   ArrowUpRight,
-  Bell,
   ScanLine,
-  ShieldCheck,
-  Sparkles,
   LockKeyhole,
+  ShieldCheck,
 } from "lucide-react-native";
 import {
   Screen,
@@ -19,7 +17,7 @@ import {
   IconButton,
   Notice,
 } from "../../components/ui";
-import { BrandMark, ShieldIllustration } from "../../components/brand";
+import { BrandMark } from "../../components/brand";
 import { colors, fonts } from "../../theme/tokens";
 import { useAppStore } from "../../store/app-store";
 
@@ -28,211 +26,193 @@ export default function Home() {
   const storageError = useAppStore((s) => s.storageError);
   const flagged = history.filter((r) => r.risk !== "low").length;
   return (
-    <Screen>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+    <Screen style={{ gap: 28 }}>
+      <View style={styles.between}>
         <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
-          <BrandMark size={30} />
+          <BrandMark size={31} />
           <Txt
             style={{
               fontFamily: fonts.extra,
-              fontSize: 18,
-              letterSpacing: -0.6,
+              fontSize: 19,
+              letterSpacing: -0.8,
             }}
           >
             smishguard
           </Txt>
         </View>
         <IconButton
-          icon={Bell}
-          label="Protection and notification setup"
+          icon={ShieldCheck}
+          label="Protection status"
           onPress={() => router.push("/permissions")}
         />
       </View>
       <Enter>
-        <View style={{ gap: 10 }}>
-          <Pill label="DEMO WORKSPACE" tone="amber" />
-          <Txt variant="heading">
-            A little clarity.{"\n"}For what comes next.
+        <View style={{ gap: 12 }}>
+          <Pill label="SMS SAFETY · DEMO" />
+          <Txt variant="display" style={styles.headline}>
+            Think before{"\n"}you{" "}
+            <Txt variant="display" color={colors.brand} style={styles.headline}>
+              tap.
+            </Txt>
           </Txt>
-          <Txt color={colors.muted}>Make space for a safer decision.</Txt>
+          <Txt color={colors.muted}>Unexpected text? Take a closer look.</Txt>
         </View>
       </Enter>
-      <Enter delay={80}>
-        <View
-          style={{
-            backgroundColor: colors.forest,
-            borderRadius: 30,
-            padding: 24,
-            overflow: "hidden",
-            minHeight: 280,
-          }}
-        >
-          <View
-            style={{ position: "absolute", right: -60, top: -12, opacity: 0.8 }}
-          >
-            <ShieldIllustration />
+      <Enter delay={60}>
+        <View style={styles.hero}>
+          <View pointerEvents="none" style={styles.watermark}>
+            <BrandMark size={170} color="#FFFFFF" />
           </View>
-          <View style={{ flexDirection: "row", gap: 6, alignItems: "center" }}>
-            <View
-              style={{
-                width: 6,
-                height: 6,
-                backgroundColor: colors.lime,
-                borderRadius: 3,
-              }}
-            />
-            <Txt variant="label" color={colors.lime}>
-              PAUSE. CHECK. PROCEED.
+          <View style={styles.between}>
+            <Txt variant="label" color={colors.onDark}>
+              01 / MESSAGE CHECK
             </Txt>
+            <ScanLine size={22} color={colors.paper} strokeWidth={1.5} />
           </View>
-          <Txt
-            style={{
-              fontFamily: fonts.bold,
-              fontSize: 26,
-              lineHeight: 35,
-              letterSpacing: -0.8,
-              marginTop: 24,
-              maxWidth: 220,
-            }}
-            color={colors.paper}
-          >
-            Not every text{"\n"}deserves a tap.
+          <Txt color={colors.paper} style={styles.heroTitle}>
+            A safer next step{"\n"}starts here.
           </Txt>
-          <Txt
-            variant="small"
-            color="#C7D8CB"
-            style={{ maxWidth: 205, marginTop: 10 }}
-          >
-            Look at the message.{"\n"}Understand the warning signs.
+          <Txt color={colors.onDark} style={{ maxWidth: 220, fontSize: 13 }}>
+            Paste a text. Explore the signs. Choose what to do next.
           </Txt>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Check a message"
             onPress={() => router.push("/(tabs)/scan")}
-            style={({ pressed }) => ({
-              backgroundColor: colors.lime,
-              marginTop: 26,
-              borderRadius: 16,
-              minHeight: 50,
-              paddingHorizontal: 16,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              opacity: pressed ? 0.8 : 1,
-            })}
+            style={({ pressed }) => [
+              styles.cta,
+              { opacity: pressed ? 0.8 : 1 },
+            ]}
           >
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 9 }}
-            >
-              <ScanLine size={19} color={colors.forestDark} />
-              <Txt
-                style={{ fontFamily: fonts.bold, fontSize: 13 }}
-                color={colors.forestDark}
-              >
-                Check a message
-              </Txt>
-            </View>
-            <ArrowUpRight size={18} color={colors.forestDark} />
+            <Txt style={{ fontFamily: fonts.bold, fontSize: 13 }}>
+              Check a message
+            </Txt>
+            <ArrowUpRight size={19} color={colors.ink} />
           </Pressable>
         </View>
       </Enter>
-      <Enter delay={140}>
-        <View style={{ flexDirection: "row", gap: 12 }}>
-          <Card style={{ flex: 1 }}>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Txt variant="label" color={colors.muted}>
-                DEMO CHECKS
-              </Txt>
-              <ShieldCheck size={16} color={colors.forest} />
-            </View>
-            <Txt variant="heading">
-              {history.length.toString().padStart(2, "0")}
+      <Enter delay={120}>
+        <View style={styles.metrics}>
+          <View style={{ flex: 1, gap: 4 }}>
+            <Txt style={styles.number}>
+              {String(history.length).padStart(2, "0")}
             </Txt>
             <Txt variant="small" color={colors.muted}>
-              Stored on this device
+              Local checks
             </Txt>
-          </Card>
-          <Card style={{ flex: 1 }}>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Txt variant="label" color={colors.muted}>
-                TO REVIEW
-              </Txt>
-              <Sparkles size={16} color={colors.amber} />
-            </View>
-            <Txt variant="heading">{flagged.toString().padStart(2, "0")}</Txt>
+          </View>
+          <View style={{ width: 1, backgroundColor: colors.line }} />
+          <View style={{ flex: 1, gap: 4, paddingLeft: 24 }}>
+            <Txt style={styles.number}>{String(flagged).padStart(2, "0")}</Txt>
             <Txt variant="small" color={colors.muted}>
-              Simulated warnings
+              Demo warnings
             </Txt>
-          </Card>
+          </View>
         </View>
       </Enter>
       <View style={{ gap: 8 }}>
         <SectionTitle
-          title="Recent activity"
+          title="Recent checks"
           action="View all"
           onPress={() => router.push("/(tabs)/activity")}
         />
         {history.length ? (
           history
             .slice(0, 3)
-            .map((r, i) => (
+            .map((record, index) => (
               <RecordRow
-                record={r}
-                key={r.id}
-                last={i === Math.min(history.length, 3) - 1}
+                key={record.id}
+                record={record}
+                last={index === Math.min(history.length, 3) - 1}
               />
             ))
         ) : (
           <Card>
-            <Txt color={colors.muted}>
-              A fresh start. Your next check will appear here if local history
-              is enabled.
-            </Txt>
+            <Txt color={colors.muted}>Your saved checks will appear here.</Txt>
           </Card>
         )}
       </View>
       <Pressable
         accessibilityRole="button"
         onPress={() => router.push("/lesson/pause")}
-        style={{
-          backgroundColor: "#E9EBDD",
-          borderRadius: 22,
-          padding: 20,
-          gap: 10,
-        }}
+        style={({ pressed }) => [styles.lesson, { opacity: pressed ? 0.8 : 1 }]}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Txt variant="label" color={colors.forest}>
-            A SMALL SAFETY HABIT
+        <View style={styles.between}>
+          <Txt variant="label" color={colors.accent}>
+            ONE GOOD HABIT
           </Txt>
-          <ArrowUpRight size={18} color={colors.forest} />
+          <ArrowUpRight size={20} color={colors.paper} />
         </View>
-        <Txt variant="title">Urgency is a reason to pause.</Txt>
-        <Txt variant="small" color={colors.muted}>
-          An account warning can wait while you open the official app yourself.
+        <Txt variant="title" color={colors.paper}>
+          If it feels urgent, pause.
+        </Txt>
+        <Txt variant="small" color="#BBC0CE">
+          Open the official app yourself before you act.
         </Txt>
       </Pressable>
       <Notice icon={LockKeyhole}>
         {storageError
-          ? "Local storage is unavailable. Changes may not survive a restart."
-          : "No account. No inbox upload. This demo does not read your SMS or provide live protection."}
+          ? "Storage is unavailable. Changes may not survive a restart."
+          : "Demo checks only. No SMS access or live protection. Your text stays in this session."}
       </Notice>
     </Screen>
   );
 }
+const styles = StyleSheet.create({
+  between: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 10,
+  },
+  headline: { fontSize: 43, lineHeight: 49, letterSpacing: -2.2 },
+  hero: {
+    backgroundColor: colors.brand,
+    padding: 23,
+    borderRadius: 24,
+    overflow: "hidden",
+    gap: 16,
+  },
+  heroTitle: {
+    fontFamily: fonts.bold,
+    fontSize: 29,
+    lineHeight: 36,
+    letterSpacing: -1.1,
+  },
+  watermark: {
+    position: "absolute",
+    right: -24,
+    top: 36,
+    opacity: 0.09,
+    transform: [{ rotate: "-12deg" }],
+  },
+  cta: {
+    backgroundColor: colors.accent,
+    borderRadius: 30,
+    paddingHorizontal: 19,
+    minHeight: 49,
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 26,
+    marginTop: 2,
+  },
+  metrics: {
+    flexDirection: "row",
+    paddingVertical: 4,
+    alignItems: "center",
+    gap: 15,
+  },
+  number: {
+    fontFamily: fonts.extra,
+    fontSize: 28,
+    lineHeight: 34,
+    letterSpacing: -1,
+  },
+  lesson: {
+    backgroundColor: colors.night,
+    borderRadius: 21,
+    padding: 22,
+    gap: 12,
+  },
+});
