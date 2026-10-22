@@ -6,14 +6,28 @@ from .models import Feedback, Lesson, ModelRelease
 class StrictSerializer(serializers.Serializer):
     def to_internal_value(self, data):
         if not isinstance(data, Mapping) or set(data) - set(self.fields):
-            raise serializers.ValidationError("Unexpected request fields or structure.")
+            raise serializers.ValidationError({"non_field_errors": ["Unexpected request fields or structure."]})
+        return super().to_internal_value(data)
+
+
+class ExplicitConsent(serializers.BooleanField):
+    def to_internal_value(self, data):
+        if type(data) is not bool:
+            raise serializers.ValidationError("Use an explicit JSON boolean.")
+        return super().to_internal_value(data)
+
+
+class MessageText(serializers.CharField):
+    def to_internal_value(self, data):
+        if not isinstance(data, str):
+            raise serializers.ValidationError("Use a JSON string.")
         return super().to_internal_value(data)
 
 
 class RegistrationSerializer(StrictSerializer):
     app_version = serializers.RegexField(r"^[0-9A-Za-z._-]{1,30}$")
     consent_version = serializers.ChoiceField(choices=["2026-10-22"])
-    cloud_analysis_consent = serializers.BooleanField()
+    cloud_analysis_consent = ExplicitConsent()
 
     def validate_cloud_analysis_consent(self, value):
         if value is not True:
@@ -22,8 +36,8 @@ class RegistrationSerializer(StrictSerializer):
 
 
 class AnalysisSerializer(StrictSerializer):
-    text = serializers.CharField(max_length=5000, trim_whitespace=False)
-    cloud_analysis_consent = serializers.BooleanField()
+    text = MessageText(max_length=5000, trim_whitespace=False)
+    cloud_analysis_consent = ExplicitConsent()
 
     def validate_text(self, value):
         if not value.strip():
@@ -38,7 +52,7 @@ class FeedbackInput(StrictSerializer):
     model_version = serializers.PrimaryKeyRelatedField(queryset=ModelRelease.objects.all(), source="model_release")
     risk = serializers.ChoiceField(choices=Feedback.RISKS)
     reason = serializers.ChoiceField(choices=Feedback.REASONS)
-    feedback_consent = serializers.BooleanField()
+    feedback_consent = ExplicitConsent()
 
     def validate_feedback_consent(self, value):
         if value is not True:
