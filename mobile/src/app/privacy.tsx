@@ -1,61 +1,12 @@
-import { View } from "react-native";
-import {
-  Fingerprint,
-  Smartphone,
-  CloudOff,
-  LockKeyhole,
-} from "lucide-react-native";
-import { Screen, Txt, BackHeader, Card, Pill, Button } from "../components/ui";
-import { router } from "expo-router";
+import { Screen,BackHeader,Txt,Card,Notice } from "../components/ui";
 import { colors } from "../theme/tokens";
 export default function Privacy() {
-  return (
-    <Screen>
-      <BackHeader title="Your privacy" />
-      <Pill label="PRIVATE BY DEFAULT" />
-      <Txt variant="heading">Less collected.{"\n"}More peace of mind.</Txt>
-      {[
-        {
-          Icon: Fingerprint,
-          title: "You don’t need a profile.",
-          body: "This app does not ask for your name, email, phone number, SIM serial, or contacts.",
-        },
-        {
-          Icon: Smartphone,
-          title: "Your history lives here.",
-          body: "Only check metadata, preferences, and lesson progress are saved on this device. Text you enter stays in session memory, not saved history.",
-        },
-        {
-          Icon: CloudOff,
-          title: "Online analysis is your choice.",
-          body: "Demo checks stay local. If you enable the online model, text you deliberately check is sent to our Django backend for transient analysis. It is not saved in its database or used to retrain the model. Links are not opened.",
-        },
-        {
-          Icon: LockKeyhole,
-          title: "You stay in control.",
-          body: "Turn history off for future checks or clear existing history in Settings. Clearing app history never deletes messages from your SMS inbox.",
-        },
-      ].map(({ Icon, title, body }) => (
-        <View key={title} style={{ gap: 9 }}>
-          <Icon size={23} color={colors.brand} strokeWidth={1.5} />
-          <Txt variant="title">{title}</Txt>
-          <Txt color={colors.muted}>{body}</Txt>
-        </View>
-      ))}
-      <Card style={{ backgroundColor: colors.brandSoft }}>
-        <Txt variant="title">You choose each online check</Txt>
-        <Txt color={colors.brand} style={{ fontSize: 13 }}>
-          Online mode asks for consent before sending text. The backend sees
-          that text to classify it; HTTPS protects transit in deployment. Local
-          USB development uses loopback HTTP. Turning online analysis off stops
-          future uploads. Resetting the online connection revokes the
-          installation credential when the backend is reachable.
-        </Txt>
-      </Card>
-      <Button
-        label="Back to my settings"
-        onPress={() => router.replace("/(tabs)/settings")}
-      />
-    </Screen>
-  );
+  return <Screen><BackHeader title="Your privacy" /><Txt variant="heading">Your messages.{"\n"}Your controls.</Txt>
+    <Card><Txt variant="title">On your phone</Txt><Txt color={colors.muted}>Received SMS text and sender addresses are encrypted with AES-GCM using an Android Keystore key. Reports, timestamps and queue state stay in private app storage. Local copies expire after 30 days and storage is capped at 5,000 messages. Device backup is disabled.</Txt></Card>
+    <Card><Txt variant="title">When connected</Txt><Txt color={colors.muted}>If you enable automatic model reports during setup, imported and incoming message text is sent to Django when reachable. The app never sends sender numbers, contacts or SIM identifiers. Text may itself contain personal details; the backend processes it transiently without saving message bodies or retraining from them. Detected OTP/code messages are excluded, but text detection is not infallible.</Txt></Card>
+    <Card><Txt variant="title">Offline findings</Txt><Txt color={colors.muted}>Offline checks use English keyword and link rules, not the trained model. A message without matching patterns may still be malicious. The backend model is evaluated on an English SMS benchmark and can also miss scams.</Txt></Card>
+    <Card><Txt variant="title">Your choices</Txt><Txt color={colors.muted}>Pause uploads, stop protection, revoke Android permissions, or delete local reports in Settings. Deleting a local report removes its queued request. Requests already sent cannot be recalled. Uninstalling deletes local app data. Original SMS messages are never deleted by SmishGuard.</Txt></Card>
+    <Notice>No WhatsApp access, message blocking, personal account, contact-book access or SIM tracking. Release connections require HTTPS; local USB development uses loopback HTTP.</Notice>
+  </Screen>;
 }
+
