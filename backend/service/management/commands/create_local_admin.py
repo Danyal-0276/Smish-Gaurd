@@ -9,7 +9,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         if not settings.DEBUG:
-            raise CommandError("Use createsuperuser interactively for deployment; this helper is local-only.")
+            raise CommandError(
+                "Use createsuperuser interactively for deployment; this helper is local-only."
+            )
         username = "smishguard_admin"
         if get_user_model().objects.filter(username=username).exists():
             self.stdout.write("Local administrator already exists; password was not changed.")
@@ -22,6 +24,10 @@ class Command(BaseCommand):
         # Create the private file first so a failed/interrupted account creation
         # does not leave an inaccessible account with a lost generated password.
         with output.open("x", encoding="utf-8") as file:
-            file.write(f"Local development staff only\nURL: http://127.0.0.1:8000/admin/\nUsername: {username}\nPassword: {password}\n")
+            file.write(
+                f"Local development staff only\nURL: http://127.0.0.1:8000/admin/\nUsername: {username}\nPassword: {password}\n"
+            )
         get_user_model().objects.create_superuser(username=username, password=password)
-        self.stdout.write("Local staff account created. Credentials saved in .setup/backend-admin-credentials.txt (ignored by Git); not displayed.")
+        self.stdout.write(
+            "Local staff account created. Credentials saved in .setup/backend-admin-credentials.txt (ignored by Git); not displayed."
+        )

@@ -13,7 +13,14 @@ from .credentials import issue, revoke, rotate
 from .inference import analyze, get_predictor
 from .models import Feedback, Installation, Lesson
 from .quotas import consume, peer
-from .serializers import AnalysisSerializer, FeedbackInput, FeedbackOutput, LessonOutput, RegistrationSerializer, StrictSerializer
+from .serializers import (
+    AnalysisSerializer,
+    FeedbackInput,
+    FeedbackOutput,
+    LessonOutput,
+    RegistrationSerializer,
+    StrictSerializer,
+)
 
 
 class ProtectedView(APIView):
@@ -27,11 +34,21 @@ class Register(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        consume([("register-burst", peer(request), 5, 60), ("register-hour", peer(request), settings.REGISTER_PER_HOUR, 3600), ("register-global", "all", settings.REGISTER_GLOBAL_DAILY, 86400)])
+        consume(
+            [
+                ("register-burst", peer(request), 5, 60),
+                ("register-hour", peer(request), settings.REGISTER_PER_HOUR, 3600),
+                ("register-global", "all", settings.REGISTER_GLOBAL_DAILY, 86400),
+            ]
+        )
         form = RegistrationSerializer(data=request.data)
         form.is_valid(raise_exception=True)
         with transaction.atomic():
-            install = Installation.objects.create(app_version=form.validated_data["app_version"], consent_version=form.validated_data["consent_version"], cloud_consent_at=timezone.now())
+            install = Installation.objects.create(
+                app_version=form.validated_data["app_version"],
+                consent_version=form.validated_data["consent_version"],
+                cloud_consent_at=timezone.now(),
+            )
             result = issue(install)
         return Response(result, status=201)
 
@@ -58,7 +75,13 @@ class Analyze(ProtectedView):
     def post(self, request):
         form = AnalysisSerializer(data=request.data)
         form.is_valid(raise_exception=True)
-        consume([("analysis-minute", str(request.user.pk), settings.ANALYSIS_PER_MINUTE, 60), ("analysis-day", str(request.user.pk), settings.ANALYSIS_PER_DAY, 86400), ("analysis-global", "all", settings.ANALYSIS_GLOBAL_DAILY, 86400)])
+        consume(
+            [
+                ("analysis-minute", str(request.user.pk), settings.ANALYSIS_PER_MINUTE, 60),
+                ("analysis-day", str(request.user.pk), settings.ANALYSIS_PER_DAY, 86400),
+                ("analysis-global", "all", settings.ANALYSIS_GLOBAL_DAILY, 86400),
+            ]
+        )
         return Response(analyze(form.validated_data["text"], request.request_id))
 
 
@@ -67,7 +90,19 @@ class Capabilities(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        return Response({"api_version": "v1", "consent_version": "2026-10-22", "max_characters": 5000, "max_body_bytes": 32768, "modes": ["backend_model"], "coverage": "English-oriented historical SMS benchmark; language is not automatically verified.", "stores_message_bodies": False, "automatic_sms": False, "whatsapp_access": False})
+        return Response(
+            {
+                "api_version": "v1",
+                "consent_version": "2026-10-22",
+                "max_characters": 5000,
+                "max_body_bytes": 32768,
+                "modes": ["backend_model"],
+                "coverage": "English-oriented historical SMS benchmark; language is not automatically verified.",
+                "stores_message_bodies": False,
+                "automatic_sms": False,
+                "whatsapp_access": False,
+            }
+        )
 
 
 class Pages(CursorPagination):
@@ -78,7 +113,9 @@ class Pages(CursorPagination):
 class FeedbackList(ProtectedView):
     def get(self, request):
         pages = Pages()
-        records = pages.paginate_queryset(Feedback.objects.filter(installation=request.user), request, view=self)
+        records = pages.paginate_queryset(
+            Feedback.objects.filter(installation=request.user), request, view=self
+        )
         return pages.get_paginated_response(FeedbackOutput(records, many=True).data)
 
     def post(self, request):
@@ -92,8 +129,11 @@ class FeedbackList(ProtectedView):
             install = Installation.objects.select_for_update().get(pk=request.user.pk)
             if install.revoked_at:
                 from rest_framework.exceptions import AuthenticationFailed
+
                 raise AuthenticationFailed()
-            row, created = Feedback.objects.get_or_create(installation=install, client_event_id=data.pop("client_event_id"), defaults=data)
+            row, created = Feedback.objects.get_or_create(
+                installation=install, client_event_id=data.pop("client_event_id"), defaults=data
+            )
             if not created and any(getattr(row, k) != v for k, v in data.items()):
                 raise ValidationError("Event already exists with different metadata.")
         return Response(FeedbackOutput(row).data, status=201 if created else 200)
@@ -110,7 +150,9 @@ class LessonList(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        rows = LessonOutput(Lesson.objects.filter(published=True).order_by("slug")[:50], many=True).data
+        rows = LessonOutput(
+            Lesson.objects.filter(published=True).order_by("slug")[:50], many=True
+        ).data
         return Response({"results": rows})
 
 

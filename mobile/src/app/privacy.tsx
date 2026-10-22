@@ -47,8 +47,8 @@ export default function Privacy() {
         <Txt color={colors.brand} style={{ fontSize: 13 }}>
           Online mode asks for consent before sending text. The backend sees
           that text to classify it; HTTPS protects transit in deployment. Local
-          USB development uses loopback HTTP. Turning online analysis off
-          stops future uploads. Resetting the online connection revokes the
+          USB development uses loopback HTTP. Turning online analysis off stops
+          future uploads. Resetting the online connection revokes the
           installation credential when the backend is reachable.
         </Txt>
       </Card>

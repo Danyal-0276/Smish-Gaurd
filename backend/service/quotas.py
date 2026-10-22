@@ -1,4 +1,5 @@
 """Shared PostgreSQL quotas. Transactional row locks, never process-local counters."""
+
 import hashlib
 import hmac
 from datetime import datetime, timedelta, timezone as dt_timezone
@@ -21,14 +22,18 @@ def consume(specs):
     rows = []
     for scope, principal, limit, seconds in specs:
         start = int(now.timestamp()) // seconds * seconds
-        key = hmac.new(settings.QUOTA_PEPPER.encode(), f"{scope}:{principal}:{start}".encode(), hashlib.sha256).hexdigest()
+        key = hmac.new(
+            settings.QUOTA_PEPPER.encode(), f"{scope}:{principal}:{start}".encode(), hashlib.sha256
+        ).hexdigest()
         end = datetime.fromtimestamp(start + seconds, dt_timezone.utc)
         rows.append((key, limit, end))
     try:
         with transaction.atomic():
             locked = []
             for key, limit, end in sorted(rows):
-                QuotaBucket.objects.get_or_create(key=key, defaults={"expires_at": end + timedelta(hours=1)})
+                QuotaBucket.objects.get_or_create(
+                    key=key, defaults={"expires_at": end + timedelta(hours=1)}
+                )
                 bucket = QuotaBucket.objects.select_for_update().get(pk=key)
                 if bucket.count >= limit:
                     raise Throttled(wait=max(1, int((end - now).total_seconds()) + 1))

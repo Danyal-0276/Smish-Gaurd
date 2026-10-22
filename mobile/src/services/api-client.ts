@@ -4,6 +4,25 @@ export interface CredentialStore {
   set(token: string): Promise<void>;
   clear(): Promise<void>;
 }
+export function credentialEnvelope(base: string, token: string): string {
+  return JSON.stringify({ origin: new URL(base).origin, token });
+}
+export function credentialForOrigin(
+  base: string,
+  stored: string | null,
+): string | null {
+  if (!stored) return null;
+  try {
+    const value = JSON.parse(stored) as { origin?: unknown; token?: unknown };
+    return value.origin === new URL(base).origin &&
+      typeof value.token === "string" &&
+      /^sg1\.[0-9a-f-]{36}\.[A-Za-z0-9_-]{43}$/.test(value.token)
+      ? value.token
+      : null;
+  } catch {
+    return null;
+  }
+}
 export class ApiError extends Error {
   constructor(
     public code: string,
@@ -184,6 +203,39 @@ export function createApiClient(
     }
   }
   return {
+    async feedback(
+      payload: {
+        client_event_id: string;
+        model_version: string;
+        risk: string;
+        reason: "false_positive" | "false_negative" | "unclear";
+      },
+      consent: boolean,
+    ) {
+      if (!consent)
+        throw new ApiError(
+          "consent_required",
+          "Sharing correction metadata requires separate consent.",
+        );
+      const token = await store.get();
+      if (!token)
+        throw new ApiError(
+          "expired",
+          "Make an online check to establish a service connection before sharing feedback.",
+        );
+      const result = await request(
+        "feedback/me",
+        "POST",
+        { client_event_id: payload.client_event_id, model_version: payload.model_version, risk: payload.risk, reason: payload.reason, feedback_consent: true },
+        token,
+      );
+      if (!object(result) || !string(result.id, 100))
+        throw new ApiError(
+          "invalid_response",
+          "Could not confirm the feedback receipt.",
+        );
+      return result.id;
+    },
     async analyze(text: string, consent: boolean) {
       if (!consent)
         throw new ApiError(

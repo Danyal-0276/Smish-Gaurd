@@ -1,5 +1,9 @@
 import { Platform } from "react-native";
-import { createApiClient } from "./api-client";
+import {
+  createApiClient,
+  credentialEnvelope,
+  credentialForOrigin,
+} from "./api-client";
 import type { ScanResult } from "../types/domain";
 
 export const backendUrl = process.env.EXPO_PUBLIC_API_URL ?? "";
@@ -41,10 +45,14 @@ function checkEndpoint() {
     );
 }
 const client = createApiClient(backendUrl, {
-  get: async () => (await secureStore()).getItemAsync(key),
+  get: async () =>
+    credentialForOrigin(
+      backendUrl,
+      await (await secureStore()).getItemAsync(key),
+    ),
   set: async (value) => {
     const secure = await secureStore();
-    await secure.setItemAsync(key, value);
+    await secure.setItemAsync(key, credentialEnvelope(backendUrl, value));
   },
   clear: async () => (await secureStore()).deleteItemAsync(key),
 });
@@ -75,4 +83,22 @@ export async function analyzeOnline(
 export async function resetOnlineInstallation() {
   checkEndpoint();
   await client.reset();
+}
+export async function submitCorrectionMetadata(
+  record: { id: string; risk: string; modelVersion?: string },
+  reason: "false_positive" | "false_negative" | "unclear",
+  consent: boolean,
+) {
+  checkEndpoint();
+  if (!record.modelVersion)
+    throw new Error("Model version is unavailable for this record.");
+  return client.feedback(
+    {
+      client_event_id: record.id,
+      model_version: record.modelVersion,
+      risk: record.risk,
+      reason,
+    },
+    consent,
+  );
 }

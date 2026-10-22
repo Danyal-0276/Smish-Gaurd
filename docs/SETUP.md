@@ -42,27 +42,16 @@ The standard equivalent is `npm run android`. A development APK needs Metro (`np
 
 The SDK's CMake 3.22.1 includes Ninja 1.10.2. It failed while building `react_codegen_rngesturehandler_codegen` with `Filename longer than 260 characters`, despite Windows long-path support already being enabled. The Android helper now provisions official Ninja 1.13.2 under `.setup/tools/`, verifies pinned archive and executable SHA-256 hashes, and the Expo config plugin selects it through `CMAKE_MAKE_PROGRAM`. The installed Android SDK is not modified. This follows the [Reanimated Windows guide](https://docs.swmansion.com/react-native-reanimated/docs/guides/building-on-windows/), which recommends Ninja 1.12 or newer. Run `scripts/setup-ninja.ps1` before direct Gradle builds; `scripts/android.ps1` does this automatically. No dependency downgrade or global cache deletion is needed.
 
-## Backend foundation
+## Backend and staff console
 
-`backend/.env` exists locally. On 22 October 2026 its configured `postgres` username and stored password authenticated successfully using read-only queries. The password was not displayed or changed. The project database `smishguard_dev` does not yet exist. Do not paste credentials in chat or commit that file. The next secure setup step is a dedicated project database and restricted runtime/migration roles; do not deploy Django with the PostgreSQL superuser. See [the backend roadmap](BACKEND_ROADMAP.md).
+The protected API, restricted PostgreSQL roles, trusted local model and staff console are implemented. The actual runtime role is `smishguard_app`; administrator and migration credentials are stored in separate ignored files. Current run, migration, phone and deployment instructions are in [BACKEND_GUIDE.md](BACKEND_GUIDE.md); [CLIENT_UPDATE.md](CLIENT_UPDATE.md) is the client-facing progress summary.
 
-From the repository root, once credentials are ready:
+From the repository root:
 
 ```powershell
-.\backend\.venv\Scripts\python.exe backend/scripts/prepare_database.py
-.\backend\.venv\Scripts\python.exe backend/manage.py migrate
-.\backend\.venv\Scripts\python.exe backend/manage.py check
-.\backend\.venv\Scripts\python.exe backend/manage.py runserver 127.0.0.1:8000
+.\backend\.venv\Scripts\python.exe backend/serve.py
 ```
 
-The bootstrap creates only the explicitly named `smishguard_` database when missing; it never drops/resets existing databases. Default development credentials may use the locally installed PostgreSQL administrator; create a dedicated least-privilege service role before real deployment. Migrations at this stage are Django's built-in admin/auth/session tables, not a business schema.
+Staff console: `http://127.0.0.1:8000/admin/`. Local staff credentials are in the ignored `.setup/backend-admin-credentials.txt`; do not paste or commit them. For a phone, reverse USB ports 8000 and 8081, restart Metro after setting the public API URL, and rebuild once for the SecureStore native module. See the backend guide for exact commands.
 
-`GET /health/` reports the foundation status without querying private data. Staff admin is available at `/admin/` after deliberately creating a local superuser. No analysis, installation-authentication, history, feedback, or learning API is implemented. DRF defaults to authenticated access for future endpoints; CORS allows only explicit local preview origins.
-
-The backend model package is installed and the path to the existing selected bundle is configured, but no inference endpoint is wired. The frontend does not call the backend.
-
-## Recreate the backend on another machine
-
-Use Python 3.12, create `backend/.venv`, install `backend/requirements.txt`, then install the local package with `python -m pip install ./ml` from the root. Copy `.env.example` to `.env`, set an independent secret/password, and run the commands above. Keep the selected trusted model bundle outside public media/static storage.
-
-SQL/PostgreSQL tooling is installed; no additional database type is needed. iOS builds require macOS and are outside the confirmed Android target. Never treat this development configuration or demo frontend as production security software.
+Tests now use a dedicated PostgreSQL test database; do not run migrations with the restricted runtime role. Existing/incoming SMS and WhatsApp screening remain future work. No public hosting or app-store release was performed.

@@ -6,7 +6,9 @@ from .models import Feedback, Lesson, ModelRelease
 class StrictSerializer(serializers.Serializer):
     def to_internal_value(self, data):
         if not isinstance(data, Mapping) or set(data) - set(self.fields):
-            raise serializers.ValidationError({"non_field_errors": ["Unexpected request fields or structure."]})
+            raise serializers.ValidationError(
+                {"non_field_errors": ["Unexpected request fields or structure."]}
+            )
         return super().to_internal_value(data)
 
 
@@ -49,7 +51,9 @@ class AnalysisSerializer(StrictSerializer):
 
 class FeedbackInput(StrictSerializer):
     client_event_id = serializers.UUIDField()
-    model_version = serializers.PrimaryKeyRelatedField(queryset=ModelRelease.objects.all(), source="model_release")
+    model_version = serializers.PrimaryKeyRelatedField(
+        queryset=ModelRelease.objects.all(), source="model_release"
+    )
     risk = serializers.ChoiceField(choices=Feedback.RISKS)
     reason = serializers.ChoiceField(choices=Feedback.REASONS)
     feedback_consent = ExplicitConsent()
@@ -65,10 +69,30 @@ class FeedbackOutput(serializers.ModelSerializer):
 
     class Meta:
         model = Feedback
-        fields = ["id", "client_event_id", "model_version", "risk", "reason", "status", "created_at"]
+        fields = [
+            "id",
+            "client_event_id",
+            "model_version",
+            "risk",
+            "reason",
+            "status",
+            "created_at",
+        ]
 
 
 class LessonOutput(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = ["slug", "title", "summary", "category", "duration", "sections", "question", "options", "correct_index", "explanation", "revision"]
+        fields = [
+            "slug",
+            "title",
+            "summary",
+            "category",
+            "duration",
+            "sections",
+            "question",
+            "options",
+            "correct_index",
+            "explanation",
+            "revision",
+        ]

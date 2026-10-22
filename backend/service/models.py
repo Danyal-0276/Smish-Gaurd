@@ -1,4 +1,5 @@
 """Operational metadata only: no message bodies, senders, URLs or usable tokens."""
+
 import uuid
 from django.conf import settings
 from django.db import models
@@ -26,7 +27,9 @@ class Installation(models.Model):
 
 class InstallationCredential(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    installation = models.ForeignKey(Installation, on_delete=models.CASCADE, related_name="credentials")
+    installation = models.ForeignKey(
+        Installation, on_delete=models.CASCADE, related_name="credentials"
+    )
     verifier = models.CharField(max_length=64, editable=False)
     key_version = models.PositiveSmallIntegerField(default=1, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -71,12 +74,27 @@ class Lesson(models.Model):
 
     def clean(self):
         from django.core.exceptions import ValidationError
+
+        if not 1 <= self.duration <= 60:
+            raise ValidationError({"duration": "Use a reading time from 1 to 60 minutes."})
         if not isinstance(self.sections, list) or not 1 <= len(self.sections) <= 20:
             raise ValidationError({"sections": "Use 1–20 reviewed sections."})
         for item in self.sections:
-            if not isinstance(item, dict) or set(item) != {"heading", "body"} or any(not isinstance(v, str) or not v.strip() or len(v) > 2000 for v in item.values()):
-                raise ValidationError({"sections": "Each section needs bounded heading/body strings."})
-        if not isinstance(self.options, list) or not 2 <= len(self.options) <= 6 or any(not isinstance(v, str) or not v.strip() or len(v) > 500 for v in self.options):
+            if (
+                not isinstance(item, dict)
+                or set(item) != {"heading", "body"}
+                or any(
+                    not isinstance(v, str) or not v.strip() or len(v) > 2000 for v in item.values()
+                )
+            ):
+                raise ValidationError(
+                    {"sections": "Each section needs bounded heading/body strings."}
+                )
+        if (
+            not isinstance(self.options, list)
+            or not 2 <= len(self.options) <= 6
+            or any(not isinstance(v, str) or not v.strip() or len(v) > 500 for v in self.options)
+        ):
             raise ValidationError({"options": "Use 2–6 bounded answer strings."})
         if self.correct_index >= len(self.options):
             raise ValidationError({"correct_index": "Choose an existing answer."})
@@ -94,11 +112,17 @@ class Feedback(models.Model):
     model_release = models.ForeignKey(ModelRelease, on_delete=models.PROTECT)
     risk = models.CharField(max_length=10, choices=RISKS)
     reason = models.CharField(max_length=20, choices=REASONS)
-    status = models.CharField(max_length=20, choices=[("new", "New"), ("reviewed", "Reviewed")], default="new")
+    status = models.CharField(
+        max_length=20, choices=[("new", "New"), ("reviewed", "Reviewed")], default="new"
+    )
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=["installation", "client_event_id"], name="feedback_owner_event_unique")]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["installation", "client_event_id"], name="feedback_owner_event_unique"
+            )
+        ]
         indexes = [models.Index(fields=["installation", "-created_at", "id"])]
 
 

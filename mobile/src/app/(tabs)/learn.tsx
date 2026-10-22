@@ -1,13 +1,24 @@
 import { View, Pressable } from "react-native";
 import { router } from "expo-router";
 import { ArrowUpRight, Check, BookOpen, Lightbulb } from "lucide-react-native";
-import { Screen, Txt, Pill, Card, Enter } from "../../components/ui";
-import { lessons } from "../../data/fixtures";
+import { Screen, Txt, Pill, Card, Enter, Button } from "../../components/ui";
+import { useMutation } from "@tanstack/react-query";
+import { refreshLessons } from "../../services/learning-service";
 import { useAppStore } from "../../store/app-store";
 import { colors, fonts } from "../../theme/tokens";
 
 export default function Learn() {
   const completed = useAppStore((s) => s.completedLessons);
+  const lessons = useAppStore((s) => s.lessons);
+  const setLessons = useAppStore((s) => s.setLessons);
+  const refresh = useMutation({
+    mutationFn: refreshLessons,
+    onSuccess: setLessons,
+    retry: false,
+  });
+  const completionCount = lessons.filter((lesson) =>
+    completed.includes(lesson.id),
+  ).length;
   return (
     <Screen>
       <View style={{ gap: 10 }}>
@@ -21,7 +32,7 @@ export default function Learn() {
           </Txt>
         </Txt>
         <Txt color={colors.muted}>
-          Four short reads. Practical steps you can use today.
+          Short reads. Practical steps you can use today.
         </Txt>
       </View>
       <Enter>
@@ -38,7 +49,7 @@ export default function Learn() {
           >
             <BookOpen size={25} color={colors.accent} strokeWidth={1.5} />
             <Txt variant="small" color={colors.paper}>
-              {completed.length} / {lessons.length} complete
+              {completionCount} / {lessons.length} complete
             </Txt>
           </View>
           <Txt variant="title" color={colors.paper}>
@@ -49,7 +60,7 @@ export default function Learn() {
             accessibilityValue={{
               min: 0,
               max: lessons.length,
-              now: completed.length,
+              now: completionCount,
             }}
             style={{
               height: 5,
@@ -60,7 +71,7 @@ export default function Learn() {
             <View
               style={{
                 height: 5,
-                width: `${(completed.length / lessons.length) * 100}%`,
+                width: `${lessons.length ? (completionCount / lessons.length) * 100 : 0}%`,
                 backgroundColor: colors.accent,
                 borderRadius: 99,
               }}
@@ -72,6 +83,22 @@ export default function Learn() {
         </View>
       </Enter>
       <Txt variant="title">Your field guide</Txt>
+      <Button
+        label={
+          refresh.isSuccess
+            ? "Published lessons refreshed"
+            : "Refresh published lessons"
+        }
+        tone="secondary"
+        loading={refresh.isPending}
+        disabled={refresh.isPending}
+        onPress={() => refresh.mutate()}
+      />
+      {refresh.error && (
+        <Txt variant="small" color={colors.danger} accessibilityRole="alert">
+          {refresh.error.message}
+        </Txt>
+      )}
       {lessons.map((lesson, index) => (
         <Enter key={lesson.id} delay={index * 35}>
           <Pressable

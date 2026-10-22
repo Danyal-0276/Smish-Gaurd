@@ -4,6 +4,8 @@ import {
   ApiError,
   createApiClient,
   validateAssessment,
+  credentialEnvelope,
+  credentialForOrigin,
   type CredentialStore,
 } from "../src/services/api-client";
 
@@ -187,4 +189,44 @@ test("reset revokes installation then clears local credential", async () => {
   await client.reset();
   assert.equal(method, "DELETE");
   assert.equal(storage.current(), null);
+});
+
+test("a stored credential is never reused for another backend origin", () => {
+  const saved = credentialEnvelope("https://original.invalid", token);
+  assert.equal(credentialForOrigin("https://original.invalid", saved), token);
+  assert.equal(credentialForOrigin("https://different.invalid", saved), null);
+  assert.equal(
+    credentialForOrigin("https://original.invalid", "corrupt"),
+    null,
+  );
+});
+
+test("metadata feedback requires consent and never sends message text", async () => {
+  let payload = "";
+  let calls = 0;
+  const client = createApiClient(
+    "https://service.invalid",
+    memory(token),
+    async (_url, init) => {
+      calls++;
+      payload = String(init?.body);
+      return json({ id: "synthetic-feedback" }, 201);
+    },
+  );
+  const metadata = {
+    client_event_id: "synthetic-event",
+    model_version: "model-v1",
+    risk: "high",
+    reason: "false_positive" as const,
+  };
+  await assert.rejects(client.feedback(metadata, false), ApiError);
+  assert.equal(calls, 0);
+  await client.feedback(metadata, true);
+  assert.deepEqual(Object.keys(JSON.parse(payload)).sort(), [
+    "client_event_id",
+    "feedback_consent",
+    "model_version",
+    "reason",
+    "risk",
+  ]);
 });

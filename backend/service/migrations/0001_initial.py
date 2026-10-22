@@ -16,89 +16,166 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Installation',
+            name="Installation",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('revoked_at', models.DateTimeField(blank=True, null=True)),
-                ('app_version', models.CharField(max_length=30)),
-                ('consent_version', models.CharField(max_length=30)),
-                ('cloud_consent_at', models.DateTimeField()),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True, db_index=True)),
+                ("revoked_at", models.DateTimeField(blank=True, null=True)),
+                ("app_version", models.CharField(max_length=30)),
+                ("consent_version", models.CharField(max_length=30)),
+                ("cloud_consent_at", models.DateTimeField()),
             ],
         ),
         migrations.CreateModel(
-            name='Lesson',
+            name="Lesson",
             fields=[
-                ('slug', models.SlugField(max_length=60, primary_key=True, serialize=False)),
-                ('title', models.CharField(max_length=120)),
-                ('summary', models.CharField(max_length=300)),
-                ('category', models.CharField(max_length=60)),
-                ('duration', models.PositiveSmallIntegerField(default=2)),
-                ('sections', models.JSONField(default=list)),
-                ('question', models.CharField(max_length=500)),
-                ('options', models.JSONField(default=list)),
-                ('correct_index', models.PositiveSmallIntegerField()),
-                ('explanation', models.TextField(max_length=2000)),
-                ('revision', models.PositiveIntegerField(default=1)),
-                ('published', models.BooleanField(default=False)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                ("slug", models.SlugField(max_length=60, primary_key=True, serialize=False)),
+                ("title", models.CharField(max_length=120)),
+                ("summary", models.CharField(max_length=300)),
+                ("category", models.CharField(max_length=60)),
+                ("duration", models.PositiveSmallIntegerField(default=2)),
+                ("sections", models.JSONField(default=list)),
+                ("question", models.CharField(max_length=500)),
+                ("options", models.JSONField(default=list)),
+                ("correct_index", models.PositiveSmallIntegerField()),
+                ("explanation", models.TextField(max_length=2000)),
+                ("revision", models.PositiveIntegerField(default=1)),
+                ("published", models.BooleanField(default=False)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
         ),
         migrations.CreateModel(
-            name='ModelRelease',
+            name="ModelRelease",
             fields=[
-                ('version', models.CharField(max_length=100, primary_key=True, serialize=False)),
-                ('checksum', models.CharField(max_length=64)),
-                ('policy_version', models.CharField(max_length=100)),
-                ('metrics', models.JSONField(default=dict)),
-                ('registered_at', models.DateTimeField(auto_now_add=True)),
+                ("version", models.CharField(max_length=100, primary_key=True, serialize=False)),
+                ("checksum", models.CharField(max_length=64)),
+                ("policy_version", models.CharField(max_length=100)),
+                ("metrics", models.JSONField(default=dict)),
+                ("registered_at", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
-            name='QuotaBucket',
+            name="QuotaBucket",
             fields=[
-                ('key', models.CharField(max_length=64, primary_key=True, serialize=False)),
-                ('count', models.PositiveIntegerField(default=0)),
-                ('expires_at', models.DateTimeField(db_index=True)),
+                ("key", models.CharField(max_length=64, primary_key=True, serialize=False)),
+                ("count", models.PositiveIntegerField(default=0)),
+                ("expires_at", models.DateTimeField(db_index=True)),
             ],
         ),
         migrations.CreateModel(
-            name='AdminAuditEvent',
+            name="AdminAuditEvent",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('action', models.CharField(max_length=50)),
-                ('object_reference', models.CharField(max_length=120)),
-                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('actor', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("action", models.CharField(max_length=50)),
+                ("object_reference", models.CharField(max_length=120)),
+                ("created_at", models.DateTimeField(auto_now_add=True, db_index=True)),
+                (
+                    "actor",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='InstallationCredential',
+            name="InstallationCredential",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('verifier', models.CharField(editable=False, max_length=64)),
-                ('key_version', models.PositiveSmallIntegerField(default=1, editable=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('expires_at', models.DateTimeField(db_index=True)),
-                ('revoked_at', models.DateTimeField(blank=True, null=True)),
-                ('installation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='credentials', to='service.installation')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                ("verifier", models.CharField(editable=False, max_length=64)),
+                ("key_version", models.PositiveSmallIntegerField(default=1, editable=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("expires_at", models.DateTimeField(db_index=True)),
+                ("revoked_at", models.DateTimeField(blank=True, null=True)),
+                (
+                    "installation",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="credentials",
+                        to="service.installation",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Feedback',
+            name="Feedback",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('client_event_id', models.UUIDField()),
-                ('risk', models.CharField(choices=[('low', 'low'), ('review', 'review'), ('high', 'high')], max_length=10)),
-                ('reason', models.CharField(choices=[('false_positive', 'false_positive'), ('false_negative', 'false_negative'), ('unclear', 'unclear')], max_length=20)),
-                ('status', models.CharField(choices=[('new', 'New'), ('reviewed', 'Reviewed')], default='new', max_length=20)),
-                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('installation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='service.installation')),
-                ('model_release', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='service.modelrelease')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                ("client_event_id", models.UUIDField()),
+                (
+                    "risk",
+                    models.CharField(
+                        choices=[("low", "low"), ("review", "review"), ("high", "high")],
+                        max_length=10,
+                    ),
+                ),
+                (
+                    "reason",
+                    models.CharField(
+                        choices=[
+                            ("false_positive", "false_positive"),
+                            ("false_negative", "false_negative"),
+                            ("unclear", "unclear"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[("new", "New"), ("reviewed", "Reviewed")],
+                        default="new",
+                        max_length=20,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True, db_index=True)),
+                (
+                    "installation",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="service.installation"
+                    ),
+                ),
+                (
+                    "model_release",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT, to="service.modelrelease"
+                    ),
+                ),
             ],
             options={
-                'indexes': [models.Index(fields=['installation', '-created_at', 'id'], name='service_fee_install_ef899c_idx')],
-                'constraints': [models.UniqueConstraint(fields=('installation', 'client_event_id'), name='feedback_owner_event_unique')],
+                "indexes": [
+                    models.Index(
+                        fields=["installation", "-created_at", "id"],
+                        name="service_fee_install_ef899c_idx",
+                    )
+                ],
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("installation", "client_event_id"),
+                        name="feedback_owner_event_unique",
+                    )
+                ],
             },
         ),
     ]

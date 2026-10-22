@@ -22,7 +22,7 @@ docs/
   decisions/                Detailed technical decision records
 ```
 
-The mobile directory now contains the runnable Expo/React Native demo frontend. The backend contains a Django foundation; business APIs are not implemented. Start with [local setup](docs/SETUP.md) and [frontend handoff](docs/FRONTEND_GUIDE.md). The ML directory contains the dataset, executed notebook, reports, and local-inference package; see [ml/README.md](ml/README.md). The original six supplied files are unchanged; SHA-256 hashes are recorded in `docs/analysis/source-file-manifest.json`.
+The mobile directory contains the Expo/React Native frontend with separate demo and consented online-model modes. The backend contains protected APIs, local model inference, restricted PostgreSQL roles and a small staff operations console. Start with [the backend run guide](docs/BACKEND_GUIDE.md), [client update](docs/CLIENT_UPDATE.md), [local setup](docs/SETUP.md) and [frontend handoff](docs/FRONTEND_GUIDE.md). The ML directory contains the executed notebook, reports and inference package; see [ml/README.md](ml/README.md). Original supplied files remain unchanged; hashes are recorded in `docs/analysis/source-file-manifest.json`.
 
 Selected stack: Expo development builds with React Native and TypeScript, native Android integration in Kotlin where necessary, Python Django with Django REST Framework, and PostgreSQL. SQLite stores local app metadata. Installed versions are recorded in the lockfiles and setup guide.
 

@@ -10,7 +10,7 @@
 
 **Delivery:** Android APK for a university capstone demonstration
 
-**Status:** The ML workflow and a working mock-data mobile frontend are implemented. The backend is scaffolded and configured, with no business API yet. The Android project is generated; see the setup guide for current native build/database validation. Live SMS, model-backed API integration, and installation access controls are not implemented.
+**Status:** The trained model, mobile frontend, protected Django APIs, restricted PostgreSQL roles and small staff operations console are implemented. The app has explicit consented online checking, secure installation credential storage, optional metadata feedback and published-lesson refresh. Backend/security tests pass; native phone verification requires a rebuild with SecureStore and remains pending. Existing/incoming SMS access, WhatsApp screening, public hosting and a standalone customer APK remain future milestones. See [the implemented backend guide](docs/BACKEND_GUIDE.md) and [client update](docs/CLIENT_UPDATE.md).
 
 This is the living handoff document for the development and documentation collaborators. It records the current proposed product, accepted constraints, and decisions still requiring evidence. Update it as decisions change. It does not substitute for the final university report or measured evaluation results.
 
@@ -27,7 +27,7 @@ The research contribution is an evaluated SMS-phishing detection pipeline integr
 - The client has delegated technology selection, and the developer prefers React Native and Python Django. Use that stack.
 - Use PostgreSQL for backend data. Do not introduce MongoDB alongside it.
 - Use React Native with TypeScript for the mobile interface and Kotlin for required Android-native integration.
-- Frontend workflow selected: Expo SDK 58 development builds with Expo Router. The current frontend uses local simulated checks; future native SMS integration must use an Expo module/config plugin and a rebuilt development client.
+- Frontend workflow selected: Expo SDK 58 development builds with Expo Router. Local demo and consented online model modes are separate; native SMS integration remains future work. SecureStore adds a native dependency requiring a rebuilt client.
 - Use Django REST Framework for the API and Django Admin for protected staff operations.
 - Use SQLite for local scan metadata and preferences that suit structured storage. Store installation secrets through a maintained Android Keystore-backed secure-storage integration, not plaintext preferences or SQLite.
 - Require no end-user login/logout, account profile, or verified phone number.
@@ -52,7 +52,7 @@ Django provides an ORM, migrations, transactions, administration, and integratio
 
 MongoDB has an official Django integration, but its backend-specific compatibility and transaction behavior add choices this application does not need. The decision is based on fit and development simplicity, not an unsupported claim that MongoDB lacks transactions or that PostgreSQL is always faster.
 
-PostgreSQL is server-side; the mobile app connects to the API over HTTPS, never directly to the database. Both databases being installed locally is not a reason to use both. Read-only checks verified the local credentials; no database, schema, role, or password was changed during planning. The concrete implementation sequence is in [BACKEND_ROADMAP.md](docs/BACKEND_ROADMAP.md).
+PostgreSQL is server-side; the mobile app connects to the API over HTTPS, never directly to the database. Both databases being installed locally is not a reason to use both. The initial read-only checks verified local administrator credentials. Authorized implementation has since created separate project/test databases and restricted migration/runtime roles; original administrator credentials were preserved privately. The concrete implementation sequence is in [BACKEND_ROADMAP.md](docs/BACKEND_ROADMAP.md).
 
 ## 4. Roles
 
@@ -64,7 +64,7 @@ There is no public directory of users, installation identifiers, phone numbers, 
 
 ## 5. Frontend features
 
-Implementation update: the current mock-data frontend covers welcome, Home, Check, Result, Activity, Learn, quizzes, Settings, privacy/protection status, confirmations, and empty/error states. It uses the preserved conversation-shield identity and the approved white, electric-blue, black, and yellow direction. [Frontend handoff](docs/FRONTEND_GUIDE.md) documents actual behavior; entries below remain the wider product scope, not a claim that native SMS or cloud features are completed.
+Implementation update: the current mock-data frontend covers welcome, Home, Check, Result, Activity, Learn, quizzes, Settings, privacy/protection status, confirmations, and empty/error states. It uses the preserved conversation-shield identity and the approved white, electric-blue, black, and yellow direction. [Frontend handoff](docs/FRONTEND_GUIDE.md) documents actual behavior; entries below remain the wider product scope, not a claim that native SMS or every proposed cloud feature is completed.
 
 ### Core features
 
@@ -234,6 +234,8 @@ The current, detailed milestone sequence and security acceptance gates are maint
 8. Evaluate, run usability tests, and update the report with actual evidence.
 
 ## 14. Change log
+
+- **22 October 2026:** implemented protected installation/analysis/content/feedback APIs, keyed credential verification, transactional shared PostgreSQL quotas, least-privilege database roles, audited staff operations, model-backed manual checking, origin-bound SecureStore credentials, consented feedback, lesson refresh, and metadata retention. Added 23 PostgreSQL-backed tests and 16 mobile contract/privacy tests, runtime-role verification, OpenAPI and customer handoff. Native UI/secure-store checks await a phone rebuild; no SMS/WhatsApp access is claimed.
 
 - **22 October 2026:** researched existing-SMS/thread scans, historical/incoming event reconciliation, and optional WhatsApp notification-preview checks. Recorded platform restrictions and recommended order in [the feasibility note](docs/decisions/0002-sms-and-whatsapp-feasibility.md). These are candidate extensions, not implemented inbox access or a promise of full WhatsApp chat scanning.
 

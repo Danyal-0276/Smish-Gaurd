@@ -25,6 +25,7 @@ import {
 } from "../../components/ui";
 import { colors, fonts } from "../../theme/tokens";
 import { useAppStore } from "../../store/app-store";
+import { submitCorrectionMetadata } from "../../services/online-service";
 
 export default function ResultScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -34,6 +35,13 @@ export default function ResultScreen() {
   const correct = useAppStore((s) => s.correct);
   const remove = useAppStore((s) => s.deleteRecord);
   const [confirm, setConfirm] = useState(false);
+  const [feedbackConsent, setFeedbackConsent] = useState(false);
+  const [feedbackReason, setFeedbackReason] = useState<
+    "false_positive" | "false_negative" | "unclear"
+  >("unclear");
+  const [sendingFeedback, setSendingFeedback] = useState(false);
+  const [feedbackSent, setFeedbackSent] = useState(false);
+  const [feedbackError, setFeedbackError] = useState("");
   const item = result ?? record;
   if (!item)
     return (
@@ -54,6 +62,21 @@ export default function ResultScreen() {
   const display = riskDisplay[item.risk];
   const online = item.mode === "backend_model";
   const Icon = display.icon;
+  async function sendFeedback() {
+    if (!item) return;
+    setSendingFeedback(true);
+    setFeedbackError("");
+    try {
+      await submitCorrectionMetadata(item, feedbackReason, true);
+      setFeedbackSent(true);
+    } catch (error) {
+      setFeedbackError(
+        error instanceof Error ? error.message : "Could not share feedback.",
+      );
+    } finally {
+      setSendingFeedback(false);
+    }
+  }
   return (
     <Screen>
       <BackHeader
@@ -237,6 +260,65 @@ export default function ResultScreen() {
             : "Does this result seem wrong?"}
         </Txt>
       </Pressable>
+      {online && corrected && (
+        <Card>
+          <Txt variant="title">Share a correction?</Txt>
+          <Txt variant="small" color={colors.muted}>
+            Optional. Send only the verdict, model version and your selected
+            reason. No message text, sender or links.
+          </Txt>
+          {(
+            [
+              ["false_positive", "Warning seems too strong"],
+              ["false_negative", "Risk seems understated"],
+              ["unclear", "I’m unsure about the result"],
+            ] as const
+          ).map(([reason, label]) => (
+            <Pressable
+              key={reason}
+              disabled={sendingFeedback || feedbackSent}
+              accessibilityRole="radio"
+              accessibilityState={{ checked: feedbackReason === reason }}
+              onPress={() => setFeedbackReason(reason)}
+              style={{
+                padding: 12,
+                borderRadius: 12,
+                backgroundColor:
+                  feedbackReason === reason
+                    ? colors.brandSoft
+                    : colors.background,
+              }}
+            >
+              <Txt
+                variant="small"
+                color={feedbackReason === reason ? colors.brand : colors.ink}
+              >
+                {label}
+              </Txt>
+            </Pressable>
+          ))}
+          <Button
+            label={
+              feedbackSent
+                ? "Correction metadata shared"
+                : "Share metadata with staff"
+            }
+            tone="secondary"
+            disabled={sendingFeedback || feedbackSent}
+            loading={sendingFeedback}
+            onPress={() => setFeedbackConsent(true)}
+          />
+          {!!feedbackError && (
+            <Txt
+              variant="small"
+              color={colors.danger}
+              accessibilityRole="alert"
+            >
+              {feedbackError}
+            </Txt>
+          )}
+        </Card>
+      )}
       <Button
         label="Check another message"
         icon={ArrowRight}
@@ -244,7 +326,7 @@ export default function ResultScreen() {
       />
       <Notice>
         {online
-          ? `Model: ${item.modelVersion ?? "version unavailable"}. English-oriented benchmark; mistakes are possible. Text was processed transiently by the backend. Corrections stay local.`
+          ? `Model: ${item.modelVersion ?? "version unavailable"}. English-oriented benchmark; mistakes are possible. Text was processed transiently by the backend. Corrections stay local unless you choose to share metadata.`
           : "Simulated result, not a trained-model prediction. Your correction stays local and is not used to retrain a model."}
       </Notice>
       <ConfirmSheet
@@ -256,6 +338,17 @@ export default function ResultScreen() {
         onConfirm={() => {
           remove(id);
           router.replace("/(tabs)/activity");
+        }}
+      />
+      <ConfirmSheet
+        visible={feedbackConsent}
+        title="Share correction metadata?"
+        body="Send this model version, verdict, selected reason and an event identifier to staff. This does not send your message, sender or links. Feedback has a 30-day retention policy with deletion during server maintenance. It does not automatically retrain the model."
+        confirmLabel="I agree — share metadata"
+        confirmTone="primary"
+        onClose={() => setFeedbackConsent(false)}
+        onConfirm={() => {
+          void sendFeedback();
         }}
       />
     </Screen>

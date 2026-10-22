@@ -1,22 +1,10 @@
 import io
-import logging
 import uuid
 from django.conf import settings
 from django.http import JsonResponse
 from django.core.exceptions import RequestDataTooBig
 from rest_framework.exceptions import Throttled
-from .quotas import budget, ServiceUnavailable
-
-
-class SafeRequestFilter(logging.Filter):
-    def filter(self, record):
-        # Django development access/error logs can otherwise echo URLs or exceptions.
-        record.msg = "HTTP request completed"
-        record.args = ()
-        record.exc_info = None
-        record.exc_text = None
-        record.stack_info = None
-        return True
+from .quotas import budget, consume, peer, ServiceUnavailable
 
 
 class ApiBoundaryMiddleware:
@@ -28,7 +16,16 @@ class ApiBoundaryMiddleware:
         api = request.path.startswith("/api/")
 
         def error(code, message, status, wait=None):
-            result = JsonResponse({"error": {"code": code, "message": message, "request_id": str(request.request_id)}}, status=status)
+            result = JsonResponse(
+                {
+                    "error": {
+                        "code": code,
+                        "message": message,
+                        "request_id": str(request.request_id),
+                    }
+                },
+                status=status,
+            )
             if wait:
                 result["Retry-After"] = str(int(wait))
             result["Cache-Control"] = "no-store"
@@ -56,6 +53,20 @@ class ApiBoundaryMiddleware:
                 return error("rate_limited", "Too many requests. Try again later.", 429, exc.wait)
             except ServiceUnavailable:
                 return error("service_unavailable", "The service is temporarily unavailable.", 503)
+        if request.path == "/admin/login/" and request.method == "POST":
+            try:
+                consume(
+                    [
+                        ("staff-login-minute", peer(request), 5, 60),
+                        ("staff-login-hour", peer(request), 20, 3600),
+                    ]
+                )
+            except Throttled as exc:
+                return error(
+                    "rate_limited", "Too many login attempts. Try again later.", 429, exc.wait
+                )
+            except ServiceUnavailable:
+                return error("service_unavailable", "Staff login is temporarily unavailable.", 503)
         response = self.get_response(request)
         response["X-Request-ID"] = str(request.request_id)
         if api:

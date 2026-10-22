@@ -2,6 +2,8 @@
 
 Updated 22 October 2026. This is the next implementation plan, not a claim that its APIs or security controls already exist. It extends PROJECT_BRIEF.md and the existing frontend/model handoffs. Android APK demonstration remains the delivery target. The app stays stopped during this planning work.
 
+**Implementation update:** the first protected API/model/operations release is now implemented. [BACKEND_GUIDE.md](BACKEND_GUIDE.md) is the authoritative record of actual behavior and run commands. Shared atomic quotas use PostgreSQL transactions instead of requiring Redis; this is not a process-local limiter. Lesson reads are bounded to 50 rather than cursor-paginated. Per-installation credential key version 1 is implemented; hot multi-pepper rollover and production staff MFA remain deployment work. The planning sections below retain the original baseline and proposals for later milestones.
+
 ## 1. Current position and immediate priorities
 
 Implemented: React Native/Expo frontend, synthetic checks, local metadata history, lessons/quizzes, blue/black/white/yellow design, original shield/S logo, reduced-motion-aware floating dock and transitions; evaluated Python model bundle; Django/DRF foundation. Not implemented: installation authentication, business APIs, live inference integration, native incoming-SMS screening, or production deployment.

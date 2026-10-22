@@ -14,6 +14,6 @@ export const demoScanRepository: ScanRepository = {
     );
   },
 };
-// Swap this typed boundary for a separately secured Django adapter later.
-// No API request, model prediction, or real SMS access is performed in this build.
+// Explicit local demo adapter. Online mode uses online-service.ts after consent;
+// a network failure must never silently invoke this simulation.
 export const scanRepository = demoScanRepository;

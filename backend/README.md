@@ -1,19 +1,17 @@
-# SmishGuard backend workspace
+# SmishGuard backend
 
-Python 3.12 / Django 5.2 LTS foundation with Django REST Framework, PostgreSQL/psycopg, dotenv, explicit local CORS origins, and the local trained-model runtime. Business APIs and application data models are intentionally not implemented yet.
+Python 3.12, Django/DRF, PostgreSQL and the local evaluated model. Implemented: installation credentials/rotation/revocation, strict transient analysis, shared atomic quotas, published lessons, owner-scoped consented feedback and an audited staff console. No server SMS inbox or mobile-user accounts.
 
-Source of scope and decisions: [project brief](../PROJECT_BRIEF.md).
-
-The local `.env` includes a generated Django secret; fill PostgreSQL credentials there without committing it or sending secrets in chat. From the repository root:
+Run from the repository root:
 
 ```powershell
-.\backend\.venv\Scripts\python.exe backend/scripts/prepare_database.py
-.\backend\.venv\Scripts\python.exe backend/manage.py migrate
-.\backend\.venv\Scripts\python.exe backend/manage.py runserver 127.0.0.1:8000
+.\backend\.venv\Scripts\python.exe backend/serve.py
 ```
 
-The setup script creates only the explicitly named project database when missing and never drops an existing database. `GET /health/` returns foundation status; `/admin/` requires separately created staff credentials. There is no SMS analysis/history/installation endpoint, and the mobile frontend does not call this backend yet.
+Staff console: `http://127.0.0.1:8000/admin/`. Local credentials are saved privately in `.setup/backend-admin-credentials.txt`, ignored by Git. Runtime uses `smishguard_app`; schema migrations use a separate role. No password is embedded in the mobile app.
 
-Required security evidence includes two-installation authorization tests, filtering of list responses, ownership checks on create/detail/update/delete, credential revocation, and redaction of message content and tokens from logs.
+Use [BACKEND_GUIDE.md](../docs/BACKEND_GUIDE.md) for setup, role files, migration/test commands, USB integration, retention and production boundaries. [openapi.json](openapi.json) documents the API. [CLIENT_UPDATE.md](../docs/CLIENT_UPDATE.md) describes what can be shown to the client.
 
-Run `backend/manage.py check` and `backend/manage.py test config` using this environment. These foundation checks run without connecting to PostgreSQL. The real database connection and initial migrations require the filled `.env`; see [setup guide](../docs/SETUP.md). The model bundle path is configured, but inference is not wired into an endpoint.
+Database-backed tests: set `SG_DATABASE_MODE=test`, run `backend/manage.py test config service --keepdb --noinput` with this venv, then remove the override. The test database is separate. `scripts/verify_runtime.py` verifies actual runtime grants and rolls back synthetic data; `manage.py check_readiness` checks database/model readiness.
+
+The staff console is not a contact CRM or a message viewer. Native SMS/WhatsApp features, a phone rebuild test, public TLS deployment and production capacity validation remain separate work.

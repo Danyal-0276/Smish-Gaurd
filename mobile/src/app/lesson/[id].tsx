@@ -12,11 +12,11 @@ import {
   Enter,
 } from "../../components/ui";
 import { colors, fonts } from "../../theme/tokens";
-import { lessons } from "../../data/fixtures";
 import { useAppStore } from "../../store/app-store";
 
 export default function LessonScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const lessons = useAppStore((s) => s.lessons);
   const lesson = lessons.find((l) => l.id === id);
   const [answer, setAnswer] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);

@@ -29,7 +29,7 @@ Quiz explanations now use the same short, reduced-motion-aware reveal when an an
 - Privacy and protection-status screens explaining unavailable SMS/notification integration honestly.
 - Missing-route and missing/deleted-result states.
 
-There are no live model predictions, SMS-reading permissions, website fetches, installation credentials, or backend calls in the frontend. The demo engine is explicitly labelled and should never be promoted as a detector. Scanning an entered message does not send it anywhere. The Django service and trained model are separate later integration work.
+Demo mode remains explicitly simulated and local. A separate consented online mode now calls the protected Django model API using an origin-bound SecureStore installation credential. Online results preserve model/version metadata and never fall back silently to demo data. Unsupported inputs and errors produce no risk verdict. Corrections stay local unless the user separately chooses metadata-only feedback sharing. Published lessons refresh through an explicit action, with bundled lessons as the startup fallback. Native SMS-reading, automatic warnings, website visits and WhatsApp access are still absent. See [the implemented backend guide](BACKEND_GUIDE.md).
 
 ## Structure
 
@@ -41,7 +41,7 @@ TanStack Query handles async scan mutations and future server-data lifecycle. Re
 
 Only metadata, preferences, corrections, and lesson progress are persisted. Entered message bodies, domains, and result explanations remain in session memory. After reload, a retained record explains that message details are unavailable and offers re-entry. Fictional built-in sample texts remain part of the application's source/demo fixtures.
 
-Turning history off affects future records; it does not silently delete existing records. Clear/delete actions remove app-held records, not system SMS. History is capped at 200 records. A timed retention policy, encryption-at-rest, biometric lock, and production installation credentials have not been implemented. Android app backup is disabled in the generated configuration; no non-resettable device identifiers are requested.
+Turning history off affects future records; it does not silently delete existing records. Clear/delete actions remove app-held records, not system SMS. History is capped at 200 records and expired after 30 days when loaded or saved; session results are also capped. Local database encryption and biometric locking are not implemented. Installation credentials use SecureStore rather than metadata persistence. Android app backup is disabled; no non-resettable device identifiers are requested. Online text is processed transiently by Django; it cannot be described as never leaving the phone.
 
 ## Validation and delivery boundaries
 

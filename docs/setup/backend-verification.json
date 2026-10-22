@@ -1,0 +1,11 @@
+{
+  "runtime_role": "smishguard_app",
+  "runtime_is_restricted": true,
+  "actual_runtime_api_registration_and_inference": "passed",
+  "model_version": "smishguard-multinomial_nb-20261022T113407Z",
+  "raw_text_in_analysis_response": false,
+  "revocation": "passed",
+  "staff_login_and_all_operations_pages": "passed",
+  "synthetic_database_changes": "rolled back",
+  "mobile_device_check": "pending rebuild with expo-secure-store; no app UI launched"
+}

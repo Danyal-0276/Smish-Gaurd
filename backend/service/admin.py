@@ -27,12 +27,18 @@ class InstallationAdmin(ReadOnlyAdmin):
     search_fields = ["id"]
     actions = ["revoke_selected"]
 
-    @admin.action(description="Revoke selected installations and their credentials", permissions=["change"])
+    @admin.action(
+        description="Revoke selected installations and their credentials", permissions=["change"]
+    )
     def revoke_selected(self, request, queryset):
         with transaction.atomic():
             for installation in queryset.select_for_update().order_by("id"):
                 revoke(installation)
-                AdminAuditEvent.objects.create(actor=request.user, action="installation_revoked", object_reference=str(installation.id))
+                AdminAuditEvent.objects.create(
+                    actor=request.user,
+                    action="installation_revoked",
+                    object_reference=str(installation.id),
+                )
         self.message_user(request, "Selected installations were revoked.", messages.SUCCESS)
 
 
@@ -53,7 +59,9 @@ class FeedbackAdmin(ReadOnlyAdmin):
             for row in queryset.select_for_update().order_by("id"):
                 row.status = "reviewed"
                 row.save(update_fields=["status"])
-                AdminAuditEvent.objects.create(actor=request.user, action="feedback_reviewed", object_reference=str(row.id))
+                AdminAuditEvent.objects.create(
+                    actor=request.user, action="feedback_reviewed", object_reference=str(row.id)
+                )
         self.message_user(request, "Feedback reviewed. No training or blacklisting was performed.")
 
 
@@ -68,7 +76,9 @@ class LessonAdmin(admin.ModelAdmin):
         if change:
             obj.revision += 1
         super().save_model(request, obj, form, change)
-        AdminAuditEvent.objects.create(actor=request.user, action="lesson_changed", object_reference=obj.slug)
+        AdminAuditEvent.objects.create(
+            actor=request.user, action="lesson_changed", object_reference=obj.slug
+        )
 
     def has_delete_permission(self, request, obj=None):
         return False  # Unpublish instead; retain release/audit continuity.

@@ -1,28 +1,19 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { demoResults } from "../data/fixtures";
+import { demoResults, lessons as bundledLessons } from "../data/fixtures";
 import { metadataStorage } from "../services/storage";
-import type { Preferences, ScanRecord, ScanResult } from "../types/domain";
+import {
+  retainHistory,
+  toMetadata as metadata,
+  MAX_HISTORY,
+} from "../services/history-policy";
+import type {
+  Lesson,
+  Preferences,
+  ScanRecord,
+  ScanResult,
+} from "../types/domain";
 
-const metadata = ({
-  id,
-  risk,
-  createdAt,
-  origin,
-  indicatorCount,
-  characterCount,
-  mode,
-  modelVersion,
-}: ScanResult): ScanRecord => ({
-  id,
-  risk,
-  createdAt,
-  origin,
-  indicatorCount,
-  characterCount,
-  mode,
-  modelVersion,
-});
 interface AppState {
   hydrated: boolean;
   storageError: boolean;
@@ -30,6 +21,8 @@ interface AppState {
   history: ScanRecord[];
   results: Record<string, ScanResult>;
   completedLessons: string[];
+  lessons: Lesson[];
+  setLessons(lessons: Lesson[]): void;
   corrections: Record<string, boolean>;
   preferences: Preferences;
   finishOnboarding(): void;
@@ -50,6 +43,8 @@ export const useAppStore = create<AppState>()(
       history: demoResults.map(metadata),
       results: Object.fromEntries(demoResults.map((r) => [r.id, r])),
       completedLessons: [],
+      lessons: bundledLessons,
+      setLessons: (lessons) => set({ lessons }),
       corrections: {},
       preferences: {
         haptics: true,
@@ -63,16 +58,26 @@ export const useAppStore = create<AppState>()(
         set((state) => ({ preferences: { ...state.preferences, ...value } })),
       addResult: (result) =>
         set((state) => ({
-          results: { ...state.results, [result.id]: result },
+          results: Object.fromEntries(
+            Object.entries({ ...state.results, [result.id]: result }).slice(
+              -MAX_HISTORY,
+            ),
+          ),
           history: state.preferences.keepHistory
-            ? [metadata(result), ...state.history].slice(0, 200)
+            ? retainHistory([metadata(result), ...state.history])
             : state.history,
         })),
       deleteRecord: (id) =>
         set((state) => {
           const results = { ...state.results };
+          const corrections = { ...state.corrections };
           delete results[id];
-          return { results, history: state.history.filter((r) => r.id !== id) };
+          delete corrections[id];
+          return {
+            results,
+            corrections,
+            history: state.history.filter((r) => r.id !== id),
+          };
         }),
       clearHistory: () => set({ history: [], results: {}, corrections: {} }),
       completeLesson: (id) =>
@@ -100,12 +105,21 @@ export const useAppStore = create<AppState>()(
       }),
       onRehydrateStorage: () => (_state, error) => {
         // Deferred to avoid touching the store before initialization if a storage adapter is synchronous.
-        queueMicrotask(() =>
+        queueMicrotask(() => {
+          const state = useAppStore.getState();
+          const history = retainHistory(state.history);
+          const retained = new Set(history.map((r) => r.id));
           useAppStore.setState({
             hydrated: true,
             storageError: Boolean(error),
-          }),
-        );
+            history,
+            corrections: Object.fromEntries(
+              Object.entries(state.corrections).filter(([id]) =>
+                retained.has(id),
+              ),
+            ),
+          });
+        });
       },
     },
   ),

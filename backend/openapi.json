@@ -1,0 +1,1649 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "SmishGuard API",
+    "version": "1.0.0",
+    "description": "Metadata-only installation service and transient SMS-model inference. No cloud SMS inbox. Staff operations use separate Django Admin sessions/CSRF."
+  },
+  "paths": {
+    "/api/v1/installations": {
+      "post": {
+        "operationId": "registerInstallation",
+        "security": [],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Credential"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Registration"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/installations/me": {
+      "delete": {
+        "operationId": "revokeInstallation",
+        "security": [
+          {
+            "InstallationBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/installations/me/credentials/rotate": {
+      "post": {
+        "operationId": "rotateCredential",
+        "security": [
+          {
+            "InstallationBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Credential"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analyses": {
+      "post": {
+        "operationId": "analyzeText",
+        "security": [
+          {
+            "InstallationBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalysisInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/capabilities": {
+      "get": {
+        "operationId": "readCapabilities",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Capabilities"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/feedback/me": {
+      "post": {
+        "operationId": "submitMetadataFeedback",
+        "security": [
+          {
+            "InstallationBearer": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feedback"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Idempotent replay of the same event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feedback"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackInput"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "readOwnFeedback",
+        "security": [
+          {
+            "InstallationBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/feedback/me/{identifier}": {
+      "delete": {
+        "operationId": "deleteOwnFeedback",
+        "security": [
+          {
+            "InstallationBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/lessons": {
+      "get": {
+        "operationId": "readPublishedLessons",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lessons"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/lessons/{slug}": {
+      "get": {
+        "operationId": "readPublishedLesson",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lesson"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled error; no payload or secret echo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 60
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "InstallationBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Per-installation opaque credential; not a human account or a JWT."
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "request_id": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "request_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "Registration": {
+        "type": "object",
+        "properties": {
+          "app_version": {
+            "type": "string",
+            "maxLength": 30,
+            "pattern": "^[0-9A-Za-z._-]{1,30}$"
+          },
+          "consent_version": {
+            "type": "string",
+            "enum": [
+              "2026-10-22"
+            ]
+          },
+          "cloud_analysis_consent": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "app_version",
+          "consent_version",
+          "cloud_analysis_consent"
+        ],
+        "additionalProperties": false
+      },
+      "Credential": {
+        "type": "object",
+        "properties": {
+          "credential": {
+            "type": "string",
+            "description": "One-time installation bearer secret. Store only in Keystore-backed storage; never log."
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "installation_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "credential",
+          "expires_at",
+          "installation_id"
+        ],
+        "additionalProperties": false
+      },
+      "AnalysisInput": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 5000,
+            "minLength": 1,
+            "description": "Non-whitespace JSON string. Body must also fit 32 KiB."
+          },
+          "cloud_analysis_consent": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "text",
+          "cloud_analysis_consent"
+        ],
+        "additionalProperties": false
+      },
+      "FeedbackInput": {
+        "type": "object",
+        "properties": {
+          "client_event_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "model_version": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "risk": {
+            "type": "string",
+            "enum": [
+              "low",
+              "review",
+              "high"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "false_positive",
+              "false_negative",
+              "unclear"
+            ]
+          },
+          "feedback_consent": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "client_event_id",
+          "model_version",
+          "risk",
+          "reason",
+          "feedback_consent"
+        ],
+        "additionalProperties": false
+      },
+      "Empty": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "CompletedAnalysis": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "backend_model"
+            ]
+          },
+          "model_version": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "coverage": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "safety_guarantee": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "completed"
+            ]
+          },
+          "risk": {
+            "type": "string",
+            "enum": [
+              "low",
+              "review",
+              "high"
+            ]
+          },
+          "policy_version": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "model_estimate": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "indicators": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                "description": {
+                  "type": "string",
+                  "maxLength": 2000
+                }
+              },
+              "required": [
+                "title",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "domains": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "string",
+              "maxLength": 253
+            }
+          },
+          "advice": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "indicator_note": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "request_id",
+          "mode",
+          "model_version",
+          "coverage",
+          "safety_guarantee",
+          "status",
+          "risk",
+          "policy_version",
+          "model_estimate",
+          "indicators",
+          "domains",
+          "advice",
+          "indicator_note"
+        ],
+        "additionalProperties": false
+      },
+      "UnsupportedAnalysis": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "backend_model"
+            ]
+          },
+          "model_version": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "coverage": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "safety_guarantee": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "unsupported"
+            ]
+          },
+          "risk": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              null
+            ]
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "request_id",
+          "mode",
+          "model_version",
+          "coverage",
+          "safety_guarantee",
+          "status",
+          "risk",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "AnalysisResponse": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/CompletedAnalysis"
+          },
+          {
+            "$ref": "#/components/schemas/UnsupportedAnalysis"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "status",
+          "mapping": {
+            "completed": "#/components/schemas/CompletedAnalysis",
+            "unsupported": "#/components/schemas/UnsupportedAnalysis"
+          }
+        }
+      },
+      "Feedback": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "client_event_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "model_version": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "risk": {
+            "type": "string",
+            "enum": [
+              "low",
+              "review",
+              "high"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "new",
+              "reviewed"
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "client_event_id",
+          "model_version",
+          "risk",
+          "reason",
+          "status",
+          "created_at"
+        ],
+        "additionalProperties": false
+      },
+      "FeedbackPage": {
+        "type": "object",
+        "properties": {
+          "next": {
+            "type": "string",
+            "nullable": true
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true
+          },
+          "results": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "$ref": "#/components/schemas/Feedback"
+            }
+          }
+        },
+        "required": [
+          "next",
+          "previous",
+          "results"
+        ],
+        "additionalProperties": false
+      },
+      "Lesson": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "duration": {
+            "type": "integer"
+          },
+          "sections": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "object",
+              "properties": {
+                "heading": {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                "body": {
+                  "type": "string",
+                  "maxLength": 2000
+                }
+              },
+              "required": [
+                "heading",
+                "body"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "question": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "options": {
+            "type": "array",
+            "maxItems": 6,
+            "items": {
+              "type": "string",
+              "maxLength": 500
+            }
+          },
+          "correct_index": {
+            "type": "integer"
+          },
+          "explanation": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "summary",
+          "category",
+          "duration",
+          "sections",
+          "question",
+          "options",
+          "correct_index",
+          "explanation",
+          "revision"
+        ],
+        "additionalProperties": false
+      },
+      "Lessons": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "maxItems": 50,
+            "items": {
+              "$ref": "#/components/schemas/Lesson"
+            }
+          }
+        },
+        "required": [
+          "results"
+        ],
+        "additionalProperties": false
+      },
+      "Capabilities": {
+        "type": "object",
+        "properties": {
+          "api_version": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "consent_version": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "max_characters": {
+            "type": "integer"
+          },
+          "max_body_bytes": {
+            "type": "integer"
+          },
+          "modes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 30
+            }
+          },
+          "coverage": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "stores_message_bodies": {
+            "type": "boolean"
+          },
+          "automatic_sms": {
+            "type": "boolean"
+          },
+          "whatsapp_access": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "api_version",
+          "consent_version",
+          "max_characters",
+          "max_body_bytes",
+          "modes",
+          "coverage",
+          "stores_message_bodies",
+          "automatic_sms",
+          "whatsapp_access"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
