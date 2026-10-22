@@ -1,5 +1,5 @@
-const backendUrl = process.env.EXPO_PUBLIC_API_URL ?? "";
 import { parseLessons } from "./content-contract";
+const backendUrl = process.env.EXPO_PUBLIC_API_URL ?? "";
 
 export async function refreshLessons() {
   let url: URL;

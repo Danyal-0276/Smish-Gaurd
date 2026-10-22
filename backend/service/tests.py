@@ -7,7 +7,7 @@ from datetime import timedelta
 from unittest.mock import patch
 from django.contrib.auth import get_user_model
 from django.db import DatabaseError, close_old_connections
-from django.test import TestCase, TransactionTestCase, override_settings
+from django.test import SimpleTestCase, TestCase, TransactionTestCase, override_settings
 from django.utils import timezone
 from rest_framework.test import APIClient
 from rest_framework.exceptions import Throttled
@@ -346,3 +346,31 @@ class QuotaConcurrencyTests(TransactionTestCase):
                 admitted = list(pool.map(attempt, range(8)))
         self.assertEqual(sum(admitted), 3)
         self.assertEqual(QuotaBucket.objects.get().count, 3)
+
+class ResultAdviceTests(SimpleTestCase):
+    def test_advice_changes_with_model_risk(self):
+        from .inference import analyze
+        from unittest.mock import Mock
+
+        expected = {
+            "high_phishing_risk": ("high", "Do not open links"),
+            "suspicious": ("review", "Pause before responding"),
+            "low_detected_risk": ("low", "No strong phishing signal"),
+        }
+        for verdict, (risk, instruction) in expected.items():
+            predictor = Mock()
+            predictor.predict.return_value = {
+                "status": "completed", "verdict": verdict,
+                "model_version": "synthetic-unit-test", "language_coverage": "English",
+                "policy_version": "1", "model_estimate": 0.5,
+                "observed_indicators": [], "indicator_note": "Observed rules only",
+            }
+            with patch("service.inference.get_predictor", return_value=predictor):
+                result = analyze("Synthetic unit-test input", uuid.uuid4())
+            self.assertEqual(result["risk"], risk)
+            self.assertIn(instruction, result["advice"])
+
+    def test_automatic_sms_consent_version_is_accepted(self):
+        from .serializers import RegistrationSerializer
+        form = RegistrationSerializer(data={"app_version": "0.2.0", "consent_version": "2026-10-23", "cloud_analysis_consent": True})
+        self.assertTrue(form.is_valid(), form.errors)
