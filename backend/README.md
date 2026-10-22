@@ -1,5 +1,7 @@
 # SmishGuard backend
 
+> **23 October 2026 update:** Android SMS inbox access, offline rules, encrypted pending checks, background model sync and private notifications are now implemented in source. The demo/online selector and sample data have been removed. Follow [the current SMS protection guide](../docs/SMS_PROTECTION.md); older implementation-status sections below are historical. Real-phone acceptance remains required.
+
 Python 3.12, Django/DRF, PostgreSQL and the local evaluated model. Implemented: installation credentials/rotation/revocation, strict transient analysis, shared atomic quotas, published lessons, owner-scoped consented feedback and an audited staff console. No server SMS inbox or mobile-user accounts.
 
 Run from the repository root:

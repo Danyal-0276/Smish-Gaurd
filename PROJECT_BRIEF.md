@@ -1,12 +1,20 @@
 # SmishGuard project brief
 
+## Current implementation — 23 October 2026
+
+Android now has a local Expo/Kotlin SMS module: permission setup, real received-inbox import and sender grouping, incoming broadcast handling, offline keyword/link observations, encrypted local message copies and a persistent network-constrained model queue. Dummy messages and the demo/online mode selector have been removed. Results use bold, concise actions, expandable reasons, completed-model risk counts and a seven-day report chart. The hollow-shield/S logo and core palette remain unchanged.
+
+Automatic uploads require informed setup consent, can be paused, and send text without sender/SIM identifiers. Detected OTP/code text stays local. Offline findings are not trained-model results; model reports arrive when the backend is reachable. Staff cannot browse SMS. Local copies expire after 30 days, with 5,000 messages maximum. Incoming/background operation remains subject to Android permission, installer, battery and protected-message behavior.
+
+See [SMS_PROTECTION.md](docs/SMS_PROTECTION.md) for current architecture, rebuild/run instructions, limits and device acceptance checks. Older scope/milestone descriptions below are retained as project history and are superseded where they conflict.
+
 **Academic title:** SmishGuard An Explainable Android SMS Phishing Detection and Awareness System
 
 **Working app name:** SmishGuard
 
 **Previous name:** Weightminer
 
-**Last updated:** 22 October 2026
+**Last updated:** 23 October 2026
 
 **Delivery:** Android APK for a university capstone demonstration
 

@@ -1,5 +1,7 @@
 # SmishGuard backend and staff operations handoff
 
+> **23 October 2026 update:** Android SMS inbox access, offline rules, encrypted pending checks, background model sync and private notifications are now implemented in source. The demo/online selector and sample data have been removed. Follow [the current SMS protection guide](SMS_PROTECTION.md); older implementation-status sections below are historical. Real-phone acceptance remains required.
+
 Implemented 22 October 2026. This guide describes the running code; BACKEND_ROADMAP.md retains the earlier design and future milestones. No mobile UI was launched during this implementation.
 
 ## What is implemented

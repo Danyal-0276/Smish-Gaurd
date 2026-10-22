@@ -1,5 +1,7 @@
 # SmishGuard frontend handoff
 
+> **23 October 2026 update:** Android SMS inbox access, offline rules, encrypted pending checks, background model sync and private notifications are now implemented in source. The demo/online selector and sample data have been removed. Follow [the current SMS protection guide](SMS_PROTECTION.md); older implementation-status sections below are historical. Real-phone acceptance remains required.
+
 The application is a React Native TypeScript project built with Expo SDK 58 and Expo Router. It uses native development builds so a future Kotlin SMS module is possible. Expo Go is not the delivery workflow. No paid Expo service or account is required to run the local web preview or use local Android builds.
 
 ## Design

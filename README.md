@@ -6,7 +6,7 @@ Repository: [Danyal-0276/Smish-Gaurd](https://github.com/Danyal-0276/Smish-Gaurd
 
 Start with [PROJECT_BRIEF.md](PROJECT_BRIEF.md). It is the living project description and decision record to share with the documentation collaborator. The earlier working name was Weightminer.
 
-Next implementation work is organized in [the secure backend roadmap](docs/BACKEND_ROADMAP.md): API contracts, installation isolation, database privileges, model integration, native SMS milestones, and security/load acceptance tests.
+Current Android workflow and USB installation: [SMS protection guide](docs/SMS_PROTECTION.md). Earlier implementation work is organized in [the secure backend roadmap](docs/BACKEND_ROADMAP.md): API contracts, installation isolation, database privileges, model integration, native SMS milestones, and security/load acceptance tests.
 
 ## Workspace
 
@@ -22,9 +22,9 @@ docs/
   decisions/                Detailed technical decision records
 ```
 
-The mobile directory contains the Expo/React Native frontend with separate demo and consented online-model modes. The backend contains protected APIs, local model inference, restricted PostgreSQL roles and a small staff operations console. Start with [the backend run guide](docs/BACKEND_GUIDE.md), [client update](docs/CLIENT_UPDATE.md), [local setup](docs/SETUP.md) and [frontend handoff](docs/FRONTEND_GUIDE.md). The ML directory contains the executed notebook, reports and inference package; see [ml/README.md](ml/README.md). Original supplied files remain unchanged; hashes are recorded in `docs/analysis/source-file-manifest.json`.
+The mobile directory contains the Expo/React Native frontend with real SMS inbox access, offline checks and consented automatic model reports. The backend contains protected APIs, local model inference, restricted PostgreSQL roles and a small staff operations console. Start with [the backend run guide](docs/BACKEND_GUIDE.md), [client update](docs/CLIENT_UPDATE.md), [local setup](docs/SETUP.md) and [frontend handoff](docs/FRONTEND_GUIDE.md). The ML directory contains the executed notebook, reports and inference package; see [ml/README.md](ml/README.md). Original supplied files remain unchanged; hashes are recorded in `docs/analysis/source-file-manifest.json`.
 
-Selected stack: Expo development builds with React Native and TypeScript, native Android integration in Kotlin where necessary, Python Django with Django REST Framework, and PostgreSQL. SQLite stores local app metadata. Installed versions are recorded in the lockfiles and setup guide.
+Selected stack: Expo development builds with React Native and TypeScript, native Android integration in Kotlin where necessary, Python Django with Django REST Framework, and PostgreSQL. Native SQLite stores encrypted local message copies, queue state and reports; Zustand stores preferences and lesson progress. Installed versions are recorded in the lockfiles and setup guide.
 
 No end-user registration. Local-first history. No collection of the owner's phone number, SIM serial, IMSI, or IMEI. Optional cloud analysis requires consent; this differs from fully on-device processing.
 

@@ -1,5 +1,7 @@
 # Local development setup
 
+> **23 October 2026 update:** Android SMS inbox access, offline rules, encrypted pending checks, background model sync and private notifications are now implemented in source. The demo/online selector and sample data have been removed. Follow [the current SMS protection guide](SMS_PROTECTION.md); older implementation-status sections below are historical. Real-phone acceptance remains required.
+
 ## Verified tools
 
 On 22 October 2026: Node 24.18.0, npm 11.16.0, Java/Javac 17.0.17, PostgreSQL/psql 18.4, ADB 37, Android platforms 35/36/36.1 and build-tools 35/36 were initially installed. The native build additionally installed the required Android platform 37.0 and build-tools 37 using already-accepted SDK licenses. PostgreSQL is running and accepts TCP connections. ADB starts successfully outside the restricted execution sandbox. No Android device is attached and no Android virtual device is currently configured.
