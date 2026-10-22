@@ -26,7 +26,7 @@ export default function Activity() {
   const filtered = history.filter(
     (r) =>
       (filter === "all" || r.risk === filter) &&
-      `${riskDisplay[r.risk].short} ${r.origin === "sample" ? "sample message" : "manual demo check"} ${new Date(r.createdAt).toLocaleDateString()} ${new Date(r.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}`
+      `${riskDisplay[r.risk].short} ${r.origin === "sample" ? "sample message" : r.mode === "backend_model" ? "online model check" : "manual demo check"} ${new Date(r.createdAt).toLocaleDateString()} ${new Date(r.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}`
         .toLowerCase()
         .includes(query.toLowerCase()),
   );

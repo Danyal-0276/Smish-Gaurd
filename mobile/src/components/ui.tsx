@@ -366,7 +366,7 @@ export function RecordRow({
         router.push({ pathname: "/result/[id]", params: { id: record.id } })
       }
       accessibilityRole="button"
-      accessibilityLabel={`${risk.short}, ${record.origin === "sample" ? "sample message" : "manual demo check"}`}
+      accessibilityLabel={`${risk.short}, ${record.origin === "sample" ? "sample message" : record.mode === "backend_model" ? "online model check" : "manual demo check"}`}
       style={({ pressed }) => ({
         flexDirection: "row",
         alignItems: "center",
@@ -391,7 +391,7 @@ export function RecordRow({
       </View>
       <View style={{ flex: 1, gap: 3 }}>
         <Txt style={{ fontFamily: fonts.bold, fontSize: 13 }}>
-          {record.origin === "sample" ? "Sample message" : "Manual demo check"}
+          {record.origin === "sample" ? "Sample message" : record.mode === "backend_model" ? "Online model check" : "Manual demo check"}
         </Txt>
         <Txt variant="small" color={colors.muted}>
           {record.characterCount} characters ·{" "}

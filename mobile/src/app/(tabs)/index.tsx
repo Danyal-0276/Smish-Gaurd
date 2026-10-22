@@ -24,6 +24,7 @@ import { useAppStore } from "../../store/app-store";
 export default function Home() {
   const history = useAppStore((s) => s.history);
   const storageError = useAppStore((s) => s.storageError);
+  const online = useAppStore((s) => s.preferences.cloudAnalysis) ?? false;
   const flagged = history.filter((r) => r.risk !== "low").length;
   return (
     <Screen style={{ gap: 28 }}>
@@ -48,7 +49,7 @@ export default function Home() {
       </View>
       <Enter>
         <View style={{ gap: 12 }}>
-          <Pill label="SMS SAFETY · DEMO" />
+          <Pill label={online ? "SMS SAFETY · ONLINE MODE" : "SMS SAFETY · DEMO"} />
           <Txt variant="display" style={styles.headline}>
             Think before{"\n"}you{" "}
             <Txt variant="display" color={colors.brand} style={styles.headline}>
@@ -105,7 +106,7 @@ export default function Home() {
           <View style={{ flex: 1, gap: 4, paddingLeft: 24 }}>
             <Txt style={styles.number}>{String(flagged).padStart(2, "0")}</Txt>
             <Txt variant="small" color={colors.muted}>
-              Demo warnings
+              Saved warnings
             </Txt>
           </View>
         </View>
@@ -153,7 +154,7 @@ export default function Home() {
       <Notice icon={LockKeyhole}>
         {storageError
           ? "Storage is unavailable. Changes may not survive a restart."
-          : "Demo checks only. No SMS access or live protection. Your text stays in this session."}
+          : online ? "Online checks send selected text to our backend. No SMS inbox access or automatic protection." : "Demo checks only. No SMS access or live protection. Your text stays in this session."}
       </Notice>
     </Screen>
   );

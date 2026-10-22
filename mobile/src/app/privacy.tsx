@@ -27,8 +27,8 @@ export default function Privacy() {
         },
         {
           Icon: CloudOff,
-          title: "No message uploads in this demo.",
-          body: "Checks are simulated locally. No messages are sent to a backend, model provider, or link-preview service.",
+          title: "Online analysis is your choice.",
+          body: "Demo checks stay local. If you enable the online model, text you deliberately check is sent to our Django backend for transient analysis. It is not saved in its database or used to retrain the model. Links are not opened.",
         },
         {
           Icon: LockKeyhole,

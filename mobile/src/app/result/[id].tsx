@@ -52,6 +52,7 @@ export default function ResultScreen() {
       </Screen>
     );
   const display = riskDisplay[item.risk];
+  const online = item.mode === "backend_model";
   const Icon = display.icon;
   return (
     <Screen>
@@ -88,7 +89,7 @@ export default function ResultScreen() {
             <Icon size={31} strokeWidth={1.5} color={display.color} />
           </View>
           <Pill
-            label={`${display.short.toUpperCase()} · DEMO RESULT`}
+            label={`${display.short.toUpperCase()} · ${online ? "MODEL RESULT" : "DEMO RESULT"}`}
             tone={
               item.risk === "high"
                 ? "danger"
@@ -104,7 +105,7 @@ export default function ResultScreen() {
             color={colors.muted}
             style={{ textAlign: "center", fontSize: 13 }}
           >
-            {item.risk === "low"
+            {online ? "A model assessment, not proof of safety or sender identity. Verify unexpected requests through a trusted channel." : item.risk === "low"
               ? "No configured demo patterns were found. This is not a guarantee of safety."
               : "Some demo patterns deserve your attention. Take a moment to verify the request."}
           </Txt>
@@ -200,7 +201,7 @@ export default function ResultScreen() {
         </>
       ) : (
         <Card>
-          <Txt variant="title">Your message stayed private.</Txt>
+          <Txt variant="title">Message text wasn’t saved.</Txt>
           <Txt color={colors.muted}>
             We kept this result’s metadata, but not the message text. Paste it
             again if you want to review the details.
@@ -240,8 +241,7 @@ export default function ResultScreen() {
         onPress={() => router.replace("/(tabs)/scan")}
       />
       <Notice>
-        Simulated result, not a trained-model prediction. Your correction stays
-        local and is not used to retrain a model.
+        {online ? `Model: ${item.modelVersion ?? "version unavailable"}. English-oriented benchmark; mistakes are possible. Text was processed transiently by the backend. Corrections stay local.` : "Simulated result, not a trained-model prediction. Your correction stays local and is not used to retrain a model."}
       </Notice>
       <ConfirmSheet
         visible={confirm}

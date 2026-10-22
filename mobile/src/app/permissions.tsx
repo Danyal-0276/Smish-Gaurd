@@ -33,6 +33,12 @@ export default function Permissions() {
           ready: true,
         },
         {
+          Icon: ScanLine,
+          title: "Online model checks",
+          body: "Available in the rebuilt Android app after cloud consent and backend configuration. Each deliberate check sends selected text to our service. This is not automatic SMS protection.",
+          ready: true,
+        },
+        {
           Icon: MessageSquare,
           title: "Incoming SMS screening",
           body: "Not connected yet. This build cannot read, monitor, or quarantine your messages.",

@@ -20,10 +20,12 @@ import {
   SettingRow,
   ConfirmSheet,
   Notice,
+  Button,
 } from "../../components/ui";
 import { BrandMark } from "../../components/brand";
 import { colors, fonts } from "../../theme/tokens";
 import { useAppStore } from "../../store/app-store";
+import { resetOnlineInstallation } from "../../services/online-service";
 
 export default function Settings() {
   const preferences = useAppStore((s) => s.preferences);
@@ -31,6 +33,19 @@ export default function Settings() {
   const clear = useAppStore((s) => s.clearHistory);
   const reset = useAppStore((s) => s.resetDemo);
   const [confirm, setConfirm] = useState<"clear" | "reset" | null>(null);
+  const [serviceConfirm, setServiceConfirm] = useState(false);
+  const [serviceError, setServiceError] = useState("");
+  const [resettingService, setResettingService] = useState(false);
+  async function resetService() {
+    setResettingService(true);
+    setServiceError("");
+    try {
+      await resetOnlineInstallation();
+      update({ cloudAnalysis: false });
+    } catch (error) {
+      setServiceError(error instanceof Error ? error.message : "Could not reset the online connection. Try again when the backend is available.");
+    } finally { setResettingService(false); }
+  }
   return (
     <Screen>
       <View style={{ gap: 8 }}>
@@ -80,6 +95,13 @@ export default function Settings() {
         <Txt variant="label" color={colors.muted}>
           PRIVACY & PROTECTION
         </Txt>
+        <Card>
+          <Txt variant="title">Online analysis</Txt>
+          <Txt variant="small" color={colors.muted}>{preferences.cloudAnalysis ? "Enabled for messages you deliberately check. Text is processed by our Django service, not saved in its database." : "Off. Checks use the local demo until you enable the online model from Check."}</Txt>
+          {preferences.cloudAnalysis && <Button label="Turn online analysis off" tone="secondary" onPress={() => update({ cloudAnalysis: false })} />}
+          <Button label="Reset online connection" tone="secondary" loading={resettingService} disabled={resettingService} onPress={() => setServiceConfirm(true)} />
+          {!!serviceError && <Txt variant="small" color={colors.danger} accessibilityRole="alert">{serviceError}</Txt>}
+        </Card>
         <Card style={{ paddingVertical: 4 }}>
           <SettingRow
             icon={ShieldCheck}
@@ -137,8 +159,7 @@ export default function Settings() {
         </Txt>
       </View>
       <Notice>
-        Cloud analysis, real SMS access, and account credentials are not used by
-        this frontend demo.
+        Online checks require separate consent and a secure installation credential. No personal account, SMS inbox access, or automatic uploads are used.
       </Notice>
       <ConfirmSheet
         visible={confirm !== null}
@@ -156,6 +177,7 @@ export default function Settings() {
         onClose={() => setConfirm(null)}
         onConfirm={confirm === "clear" ? clear : reset}
       />
+      <ConfirmSheet visible={serviceConfirm} title="Reset online connection?" body="Revoke this installation's service credential and remove its server feedback metadata. Local history stays on this phone. The backend must be reachable to confirm revocation." confirmLabel="Revoke connection" onClose={() => setServiceConfirm(false)} onConfirm={() => { void resetService(); }} />
     </Screen>
   );
 }
