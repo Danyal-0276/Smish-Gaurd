@@ -31,6 +31,7 @@ const config: ExpoConfig = {
     name: "SmishGuard",
   },
   plugins: [
+    "expo-secure-store",
     "./plugins/with-short-cmake-paths",
     "expo-router",
     "expo-font",

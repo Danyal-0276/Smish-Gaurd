@@ -83,4 +83,4 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
 # No automatic trust in X-Forwarded-For/Proto. Configure the actual trusted
 # deployment boundary deliberately before using a reverse proxy.
-LOGGING = {"version": 1, "disable_existing_loggers": False, "filters": {"safe_request": {"()": "service.middleware.SafeRequestFilter"}}, "handlers": {"safe_console": {"class": "logging.StreamHandler", "filters": ["safe_request"]}}, "loggers": {"django.request": {"handlers": ["safe_console"], "propagate": False}, "django.server": {"handlers": ["safe_console"], "propagate": False}}}
+LOGGING = {"version": 1, "disable_existing_loggers": False, "filters": {"safe_request": {"()": "service.logging.SafeRequestFilter"}}, "handlers": {"safe_console": {"class": "logging.StreamHandler", "filters": ["safe_request"]}}, "loggers": {"django.request": {"handlers": ["safe_console"], "propagate": False}, "django.server": {"handlers": ["safe_console"], "propagate": False}}}
