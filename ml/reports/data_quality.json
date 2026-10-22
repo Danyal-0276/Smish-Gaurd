@@ -1,0 +1,16 @@
+{
+  "raw_rows": 5971,
+  "source_csv_sha256": "649844f1c62a6b27e145eaf17a65f7010c56c390e11a794ea8329993a05ba71e",
+  "rows_with_replacement_character": 145,
+  "normalized_label_counts": {
+    "ham": 4844,
+    "smishing": 638,
+    "spam": 489
+  },
+  "invalid_or_empty_rows_removed": 0,
+  "normalized_duplicate_rows": 140,
+  "conflicting_text_groups": 34,
+  "conflicting_rows_removed": 68,
+  "same_label_duplicate_rows_removed": 106,
+  "clean_rows": 5797
+}

@@ -1,0 +1,6 @@
+{
+  "similarity_threshold": 0.9,
+  "groups": 5401,
+  "largest_group": 14,
+  "method": "masked-template char TF-IDF cosine connected components"
+}

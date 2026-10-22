@@ -1,0 +1,8 @@
+{
+  "test_messages": 1160,
+  "completed": 1157,
+  "abstained": 3,
+  "smishing_abstained": 0,
+  "coverage": 0.9974137931034482,
+  "guard": "coarse Latin-script and letter-count check; not language detection"
+}

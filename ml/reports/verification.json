@@ -1,0 +1,9 @@
+{
+  "notebook_code_cells": 45,
+  "embedded_chart_outputs": 12,
+  "template_partition_overlap": false,
+  "dataset_checksum": "passed",
+  "three_model_reload": "passed",
+  "invalid_input_checks": "passed",
+  "tampered_model_rejection": "passed"
+}

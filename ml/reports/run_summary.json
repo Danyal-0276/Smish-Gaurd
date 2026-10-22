@@ -1,0 +1,34 @@
+{
+  "selected_algorithm": "multinomial_nb",
+  "clean_rows": 5797,
+  "test_rows": 1160,
+  "test_metrics": {
+    "accuracy": 0.9612068965517241,
+    "precision": 0.7401574803149606,
+    "recall": 0.8867924528301887,
+    "f1": 0.8068669527896996,
+    "false_positive_rate": 0.031309297912713474,
+    "average_precision": 0.9024811980135006,
+    "roc_auc": 0.985965414772117,
+    "brier_score": 0.03055634383571044,
+    "tn": 1021,
+    "fp": 33,
+    "fn": 12,
+    "tp": 94
+  },
+  "risk_band_metrics": {
+    "high_risk_recall": 0.8867924528301887,
+    "alert_recall_including_suspicious": 0.8962264150943396,
+    "benign_alert_rate_including_suspicious": 0.03415559772296015,
+    "suspicious_referral_rate": 0.0034482758620689655,
+    "non_suspicious_coverage": 0.996551724137931
+  },
+  "latency": {
+    "samples": 100,
+    "median_ms": 2.5797499692998827,
+    "p95_ms": 4.571920004673301,
+    "scope": "warm model only on development CPU"
+  },
+  "figure_count": 12,
+  "artifact_path": "artifacts\\selected"
+}

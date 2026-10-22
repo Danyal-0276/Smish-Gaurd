@@ -1,0 +1,59 @@
+{
+  "seed": 42,
+  "dataset_sha256": "649844f1c62a6b27e145eaf17a65f7010c56c390e11a794ea8329993a05ba71e",
+  "grouping": {
+    "similarity_threshold": 0.9,
+    "groups": 5401,
+    "largest_group": 14,
+    "method": "masked-template char TF-IDF cosine connected components"
+  },
+  "selection_metric": "validation average_precision; ties F1, name",
+  "winner": "multinomial_nb",
+  "thresholds": {
+    "logistic_regression": {
+      "lower": 0.045,
+      "upper": 0.09
+    },
+    "multinomial_nb": {
+      "lower": 0.07499999999999998,
+      "upper": 0.14999999999999997
+    },
+    "linear_svm": {
+      "lower": 0.065,
+      "upper": 0.13
+    }
+  },
+  "max_validation_fpr": 0.05,
+  "split_counts": [
+    {
+      "partition": "train",
+      "rows": 3477,
+      "groups": 3240,
+      "smishing": 316,
+      "non_smishing": 3161
+    },
+    {
+      "partition": "validation",
+      "rows": 1160,
+      "groups": 1083,
+      "smishing": 106,
+      "non_smishing": 1054
+    },
+    {
+      "partition": "test",
+      "rows": 1160,
+      "groups": 1078,
+      "smishing": 106,
+      "non_smishing": 1054
+    }
+  ],
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "pandas": "3.0.6",
+    "joblib": "1.6.0"
+  },
+  "fit_scope": "training only; group-aware internal calibration; no post-test refit"
+}

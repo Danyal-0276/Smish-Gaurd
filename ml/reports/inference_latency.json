@@ -1,0 +1,6 @@
+{
+  "samples": 100,
+  "median_ms": 2.5797499692998827,
+  "p95_ms": 4.571920004673301,
+  "scope": "warm model only on development CPU"
+}

@@ -1,0 +1,44 @@
+{
+  "frontend": {
+    "workflow": "Expo SDK 58 development builds",
+    "react_native": "0.88.0",
+    "typescript_check": "passed",
+    "lint": "passed",
+    "unit_tests": 3,
+    "expo_doctor": "20/20 passed",
+    "web_export": "passed",
+    "interactive_browser_checks": [
+      "onboarding",
+      "simulated high/low results",
+      "metadata retained without entered text",
+      "quiz wrong-answer retry and completion",
+      "history search + risk filter",
+      "confirmation cancellation",
+      "preference reload persistence"
+    ]
+  },
+  "backend": {
+    "python": "3.12",
+    "django": "5.2.18",
+    "foundation_checks": "passed",
+    "unit_tests": 2,
+    "local_model_runtime": "load and inference passed",
+    "postgres_server": "running, accepting TCP",
+    "postgres_project_connection": "pending local credentials",
+    "business_api": "not implemented"
+  },
+  "android": {
+    "java": "17.0.17",
+    "sdk_compile": 37,
+    "device_or_avd": "none",
+    "native_build": "pending: Windows path-length failure in Reanimated; shortening CMake staging paths"
+  },
+  "audit": {
+    "high_advisory_chains": 19,
+    "root_packages": [
+      "braces",
+      "node-forge"
+    ],
+    "status": "no patched latest version available in current registry; no forced Expo downgrade"
+  }
+}

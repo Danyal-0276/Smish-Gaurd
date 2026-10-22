@@ -1,0 +1,58 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.jks
+*.keystore
+*.p12
+
+# JavaScript / React Native
+node_modules/
+.expo/
+.gradle/
+android/local.properties
+**/build/
+dist/
+*.apk
+*.aab
+
+# Python / Django
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.sqlite3
+
+# Private/large research data and generated models
+docs/references/
+docs/analysis/*.txt
+docs/analysis/source-figures.png
+ml/data/
+ml/artifacts/
+*.joblib
+*.pkl
+*.onnx
+*.tflite
+ml/.tmp/
+ml/.jupyter/
+ml/.matplotlib/
+*.egg-info/
+.ipynb_checkpoints/
+.setup/
+backend/staticfiles/
+mobile/android/
+mobile/ios/
+
+# Logs, database dumps, system files
+*.log
+*.dump
+*.sql
+.DS_Store
+Thumbs.db

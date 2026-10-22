@@ -1,0 +1,4 @@
+target,observed,met
+Accuracy >= 95%,0.9612068965517241,True
+High-risk recall >= 95%,0.8867924528301887,False
+High-risk FPR <= 5%,0.031309297912713474,True
