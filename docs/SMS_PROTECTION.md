@@ -4,7 +4,7 @@ This is the current Android implementation and supersedes the older demo/online-
 
 ## Run the updated build over USB
 
-Use one Metro server. The Windows `start:usb` helper binds IPv4 loopback and advertises `127.0.0.1:8081`; it prevents a second server on the same port and avoids stale tunnel URLs in lazy bundle requests. If the development client remembers an old tunnel, return to its launcher and connect to `http://127.0.0.1:8081`.
+Use one Metro server. The Windows `start:usb` helper binds IPv4 loopback and advertises `127.0.0.1:8081`; it prevents a second server on the same port and avoids stale tunnel URLs in lazy bundle requests. If the development client remembers an old Wi-Fi/tunnel URL, run `npm run open:usb` from `mobile/` with Metro running. This explicitly opens the app at `http://127.0.0.1:8081` using the SDK development-client link; it does not grant permissions.
 
 Restart the backend after updating these files. The supplied Waitress server does not hot reload:
 

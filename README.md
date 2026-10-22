@@ -229,7 +229,7 @@ If a current APK already exists, install it from the project root without rebuil
 adb install -r .\mobile\android\app\build\outputs\apk\debug\app-debug.apk
 ```
 
-This install command does not grant permissions or open the app. Open SmishGuard yourself and complete setup. APKs are not included in the Git repository, so a fresh clone must build one first. Repeat USB forwarding after reconnecting the phone or restarting ADB.
+This install command does not grant permissions or open the app. Open SmishGuard yourself and complete setup. If the development client remembers an old Wi-Fi/tunnel address, run `npm run open:usb` from `mobile/` after starting Metro. That command explicitly opens the app at the USB loopback URL and does not grant permissions. APKs are not included in the Git repository, so a fresh clone must build one first. Repeat USB forwarding after reconnecting the phone or restarting ADB.
 
 **For use away from USB:** deploy the backend behind HTTPS and configure a reachable API URL in the app. This repository's local server is loopback-only. Public hosting and a release-signed, standalone APK have not been delivered.
 
