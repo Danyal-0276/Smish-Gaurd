@@ -34,7 +34,7 @@ const config: ExpoConfig = {
     name: "SmishGuard",
   },
   plugins: [
-    "expo-secure-store",
+    ["expo-secure-store", { configureAndroidBackup: false }],
     "./plugins/with-sms-privacy",
     "./plugins/with-short-cmake-paths",
     "expo-router",

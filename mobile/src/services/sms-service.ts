@@ -75,7 +75,9 @@ export async function startProtection(cloud: boolean) {
     await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
     );
-  await native.configure(process.env.EXPO_PUBLIC_API_URL ?? "", cloud);
+  const endpoint = process.env.EXPO_PUBLIC_API_URL ?? "";
+  if (cloud && !endpoint) throw new Error("The model backend address is missing. Configure mobile/.env and restart Metro.");
+  await native.configure(endpoint, cloud);
   await native.refresh(false);
   await refreshSms();
 }
