@@ -2,4 +2,4 @@ from django.http import JsonResponse
 
 
 def health(request):
-    return JsonResponse({"status": "ok", "service": "smishguard-backend", "stage": "foundation"})
+    return JsonResponse({"status": "ok", "service": "smishguard-backend", "stage": "api"})
