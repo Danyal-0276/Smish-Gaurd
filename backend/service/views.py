@@ -1,5 +1,3 @@
-import hashlib
-import uuid
 from django.conf import settings
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -10,7 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .credentials import issue, revoke, rotate
-from .inference import analyze, get_predictor
+from .inference import analyze
 from .models import Feedback, Installation, Lesson
 from .quotas import consume, peer
 from .serializers import (

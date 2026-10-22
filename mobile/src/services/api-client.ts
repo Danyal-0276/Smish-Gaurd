@@ -226,7 +226,13 @@ export function createApiClient(
       const result = await request(
         "feedback/me",
         "POST",
-        { client_event_id: payload.client_event_id, model_version: payload.model_version, risk: payload.risk, reason: payload.reason, feedback_consent: true },
+        {
+          client_event_id: payload.client_event_id,
+          model_version: payload.model_version,
+          risk: payload.risk,
+          reason: payload.reason,
+          feedback_consent: true,
+        },
         token,
       );
       if (!object(result) || !string(result.id, 100))

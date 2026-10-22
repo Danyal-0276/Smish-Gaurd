@@ -216,10 +216,13 @@ class ApiSecurityTests(TestCase):
     @override_settings(ANALYSIS_PER_MINUTE=1)
     def test_inference_quota_is_enforced_with_retry_after(self):
         payload = {"text": "12345", "cloud_analysis_consent": True}
-        self.assertEqual(
-            self.client.post("/api/v1/analyses", payload, format="json").status_code, 200
-        )
-        response = self.client.post("/api/v1/analyses", payload, format="json")
+        # Both admissions must be in the same fixed window, even when the
+        # test suite happens to run across a real wall-clock minute boundary.
+        with patch("service.quotas.timezone.now", return_value=timezone.now()):
+            self.assertEqual(
+                self.client.post("/api/v1/analyses", payload, format="json").status_code, 200
+            )
+            response = self.client.post("/api/v1/analyses", payload, format="json")
         self.assertEqual(response.status_code, 429)
         self.assertIn("Retry-After", response)
 
@@ -338,7 +341,8 @@ class QuotaConcurrencyTests(TransactionTestCase):
             finally:
                 close_old_connections()
 
-        with ThreadPoolExecutor(max_workers=4) as pool:
-            admitted = list(pool.map(attempt, range(8)))
+        with patch("service.quotas.timezone.now", return_value=timezone.now()):
+            with ThreadPoolExecutor(max_workers=4) as pool:
+                admitted = list(pool.map(attempt, range(8)))
         self.assertEqual(sum(admitted), 3)
         self.assertEqual(QuotaBucket.objects.get().count, 3)

@@ -12,7 +12,13 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         try:
             with connection.cursor() as cursor:
-                cursor.execute("SELECT 1")
+                cursor.execute(
+                    "SELECT rolsuper, rolcreatedb, rolcreaterole, has_schema_privilege(current_user, 'public', 'CREATE'), has_database_privilege(current_user, current_database(), 'CREATE') FROM pg_roles WHERE rolname=current_user"
+                )
+                if any(cursor.fetchone()):
+                    raise ValueError(
+                        "The serving role must not have administrative/schema creation privileges."
+                    )
             predictor = get_predictor()
             if not ModelRelease.objects.filter(
                 pk=predictor.metadata["model_version"], checksum=predictor.metadata["model_sha256"]

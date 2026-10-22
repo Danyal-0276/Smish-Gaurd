@@ -10,7 +10,7 @@
     "ui_refresh": {
       "direction": "Trifid references: white, electric blue, black, yellow accents; floating dock",
       "logo_geometry": "three vector paths unchanged",
-      "checks": "TypeScript, lint, and existing three tests pass; key text contrast checked",
+      "checks": "TypeScript and lint pass; 16 current tests pass; key text contrast checked",
       "visual_device_check": "pending; app not launched at user request",
       "old_previews": "docs/previews images show superseded green design"
     },
@@ -40,7 +40,9 @@
     "shared_quota": "PostgreSQL atomic row-lock admissions tested across concurrent connections; fails closed on DB failure",
     "wsgi_http": "bounded Waitress server health check passed on ephemeral loopback port, listener closed",
     "retention": "local metadata age checked on load/save; server metadata cleanup on supplied launcher startup/hourly",
-    "openapi": "backend/openapi.json generated; no private configuration included"
+    "openapi": "backend/openapi.json generated; no private configuration included",
+    "production_boundary": "Local verified service only; public TLS/proxy/staff-MFA/load and penetration testing remain deployment work",
+    "tests": "23 passed; migration consistency and runtime readiness passed"
   },
   "android": {
     "java": "17.0.17",

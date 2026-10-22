@@ -90,10 +90,19 @@ DATABASES = {
         "OPTIONS": {
             "connect_timeout": 5,
             "options": "-c statement_timeout=5000 -c lock_timeout=3000",
+            "sslmode": env("POSTGRES_SSLMODE", "prefer" if DEBUG else "verify-full"),
         },
         "TEST": {"NAME": "smishguard_test"},
     }
 }
+if env("POSTGRES_SSLROOTCERT"):
+    DATABASES["default"]["OPTIONS"]["sslrootcert"] = env("POSTGRES_SSLROOTCERT")
+if (
+    not DEBUG
+    and DATABASES["default"]["HOST"] not in {"127.0.0.1", "localhost", "::1"}
+    and DATABASES["default"]["OPTIONS"]["sslmode"] != "verify-full"
+):
+    raise ImproperlyConfigured("Remote production PostgreSQL requires verified TLS.")
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": f"django.contrib.auth.password_validation.{n}"}
     for n in [

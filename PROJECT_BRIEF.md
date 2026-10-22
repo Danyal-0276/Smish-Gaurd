@@ -64,7 +64,7 @@ There is no public directory of users, installation identifiers, phone numbers, 
 
 ## 5. Frontend features
 
-Implementation update: the current mock-data frontend covers welcome, Home, Check, Result, Activity, Learn, quizzes, Settings, privacy/protection status, confirmations, and empty/error states. It uses the preserved conversation-shield identity and the approved white, electric-blue, black, and yellow direction. [Frontend handoff](docs/FRONTEND_GUIDE.md) documents actual behavior; entries below remain the wider product scope, not a claim that native SMS or every proposed cloud feature is completed.
+Implementation update: the current frontend covers welcome, Home, Check, Result, Activity, Learn, quizzes, Settings, privacy/protection status, confirmations, and empty/error states. It uses the preserved conversation-shield identity and the approved white, electric-blue, black, and yellow direction. [Frontend handoff](docs/FRONTEND_GUIDE.md) documents actual behavior; entries below remain the wider product scope, not a claim that native SMS or every proposed cloud feature is completed.
 
 ### Core features
 
@@ -119,7 +119,7 @@ Suggested navigation: Home, Scan, History, Learn, Settings. Result details are o
 - Lightweight signed/authenticated rule updates and update compatibility checks.
 - Separate restricted URL-reputation integration after evaluating privacy, SSRF, redirects, and timeout behavior. No arbitrary URL fetching in the first version.
 
-Start with one modular Django deployment. The next plan uses private Redis for atomic quotas shared across workers before public deployment; a single-process development service is not a public security deployment. Celery, microservices, and a separate model-serving cluster remain unnecessary until a demonstrated job or load warrants them. See [the backend roadmap](docs/BACKEND_ROADMAP.md) for request guards, schemas, and acceptance gates.
+Start with one modular Django deployment. The implemented service uses shared PostgreSQL transactions/row locks for atomic quotas across workers; Redis is a measured-load optimization rather than a required local service. A single-process development service is not a public security deployment. Celery, microservices, and a separate model-serving cluster remain unnecessary until a demonstrated job or load warrants them. See [the backend roadmap](docs/BACKEND_ROADMAP.md) for request guards, schemas, and acceptance gates.
 
 ## 7. Privacy and isolation without user accounts
 
