@@ -43,8 +43,14 @@ export default function Settings() {
       await resetOnlineInstallation();
       update({ cloudAnalysis: false });
     } catch (error) {
-      setServiceError(error instanceof Error ? error.message : "Could not reset the online connection. Try again when the backend is available.");
-    } finally { setResettingService(false); }
+      setServiceError(
+        error instanceof Error
+          ? error.message
+          : "Could not reset the online connection. Try again when the backend is available.",
+      );
+    } finally {
+      setResettingService(false);
+    }
   }
   return (
     <Screen>
@@ -97,10 +103,34 @@ export default function Settings() {
         </Txt>
         <Card>
           <Txt variant="title">Online analysis</Txt>
-          <Txt variant="small" color={colors.muted}>{preferences.cloudAnalysis ? "Enabled for messages you deliberately check. Text is processed by our Django service, not saved in its database." : "Off. Checks use the local demo until you enable the online model from Check."}</Txt>
-          {preferences.cloudAnalysis && <Button label="Turn online analysis off" tone="secondary" onPress={() => update({ cloudAnalysis: false })} />}
-          <Button label="Reset online connection" tone="secondary" loading={resettingService} disabled={resettingService} onPress={() => setServiceConfirm(true)} />
-          {!!serviceError && <Txt variant="small" color={colors.danger} accessibilityRole="alert">{serviceError}</Txt>}
+          <Txt variant="small" color={colors.muted}>
+            {preferences.cloudAnalysis
+              ? "Enabled for messages you deliberately check. Text is processed by our Django service, not saved in its database."
+              : "Off. Checks use the local demo until you enable the online model from Check."}
+          </Txt>
+          {preferences.cloudAnalysis && (
+            <Button
+              label="Turn online analysis off"
+              tone="secondary"
+              onPress={() => update({ cloudAnalysis: false })}
+            />
+          )}
+          <Button
+            label="Reset online connection"
+            tone="secondary"
+            loading={resettingService}
+            disabled={resettingService}
+            onPress={() => setServiceConfirm(true)}
+          />
+          {!!serviceError && (
+            <Txt
+              variant="small"
+              color={colors.danger}
+              accessibilityRole="alert"
+            >
+              {serviceError}
+            </Txt>
+          )}
         </Card>
         <Card style={{ paddingVertical: 4 }}>
           <SettingRow
@@ -159,7 +189,9 @@ export default function Settings() {
         </Txt>
       </View>
       <Notice>
-        Online checks require separate consent and a secure installation credential. No personal account, SMS inbox access, or automatic uploads are used.
+        Online checks require separate consent and a secure installation
+        credential. No personal account, SMS inbox access, or automatic uploads
+        are used.
       </Notice>
       <ConfirmSheet
         visible={confirm !== null}
@@ -177,7 +209,16 @@ export default function Settings() {
         onClose={() => setConfirm(null)}
         onConfirm={confirm === "clear" ? clear : reset}
       />
-      <ConfirmSheet visible={serviceConfirm} title="Reset online connection?" body="Revoke this installation's service credential and remove its server feedback metadata. Local history stays on this phone. The backend must be reachable to confirm revocation." confirmLabel="Revoke connection" onClose={() => setServiceConfirm(false)} onConfirm={() => { void resetService(); }} />
+      <ConfirmSheet
+        visible={serviceConfirm}
+        title="Reset online connection?"
+        body="Revoke this installation's service credential and remove its server feedback metadata. Local history stays on this phone. The backend must be reachable to confirm revocation."
+        confirmLabel="Revoke connection"
+        onClose={() => setServiceConfirm(false)}
+        onConfirm={() => {
+          void resetService();
+        }}
+      />
     </Screen>
   );
 }

@@ -49,7 +49,9 @@ export default function Home() {
       </View>
       <Enter>
         <View style={{ gap: 12 }}>
-          <Pill label={online ? "SMS SAFETY · ONLINE MODE" : "SMS SAFETY · DEMO"} />
+          <Pill
+            label={online ? "SMS SAFETY · ONLINE MODE" : "SMS SAFETY · DEMO"}
+          />
           <Txt variant="display" style={styles.headline}>
             Think before{"\n"}you{" "}
             <Txt variant="display" color={colors.brand} style={styles.headline}>
@@ -154,7 +156,9 @@ export default function Home() {
       <Notice icon={LockKeyhole}>
         {storageError
           ? "Storage is unavailable. Changes may not survive a restart."
-          : online ? "Online checks send selected text to our backend. No SMS inbox access or automatic protection." : "Demo checks only. No SMS access or live protection. Your text stays in this session."}
+          : online
+            ? "Online checks send selected text to our backend. No SMS inbox access or automatic protection."
+            : "Demo checks only. No SMS access or live protection. Your text stays in this session."}
       </Notice>
     </Screen>
   );

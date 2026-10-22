@@ -43,11 +43,13 @@ export default function Privacy() {
         </View>
       ))}
       <Card style={{ backgroundColor: colors.brandSoft }}>
-        <Txt variant="title">When cloud analysis is added</Txt>
+        <Txt variant="title">You choose each online check</Txt>
         <Txt color={colors.brand} style={{ fontSize: 13 }}>
-          We’ll explain what is sent and ask for explicit consent first. A
-          server-side model needs the message text to analyze it; that is
-          different from keeping everything on your phone.
+          Online mode asks for consent before sending text. The backend sees
+          that text to classify it; HTTPS protects transit in deployment. Local
+          USB development uses loopback HTTP. Turning online analysis off
+          stops future uploads. Resetting the online connection revokes the
+          installation credential when the backend is reachable.
         </Txt>
       </Card>
       <Button

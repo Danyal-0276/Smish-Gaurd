@@ -39,7 +39,7 @@ try:
             set_key(str(migration_file), key, value)
         for key, value in {"POSTGRES_USER": "smishguard_migrator", "POSTGRES_PASSWORD": roles["smishguard_migrator"], "POSTGRES_HOST": connection["host"], "POSTGRES_PORT": connection["port"], "POSTGRES_DB": "smishguard_test"}.items():
             set_key(str(test_file), key, value)
-        for key, value in {"POSTGRES_USER": "smishguard_app", "POSTGRES_PASSWORD": roles["smishguard_app"], "POSTGRES_DB": "smishguard_dev", "INSTALLATION_PEPPER": config.get("INSTALLATION_PEPPER") or secrets.token_urlsafe(48), "QUOTA_PEPPER": config.get("QUOTA_PEPPER") or secrets.token_urlsafe(48)}.items():
+        for key, value in {"POSTGRES_USER": "smishguard_app", "POSTGRES_PASSWORD": roles["smishguard_app"], "POSTGRES_DB": "smishguard_dev", "DJANGO_SECRET_KEY": config.get("DJANGO_SECRET_KEY") if config.get("DJANGO_SECRET_KEY", "").startswith("generate-") is False and len(config.get("DJANGO_SECRET_KEY", "")) >= 32 else secrets.token_urlsafe(48), "INSTALLATION_PEPPER": config.get("INSTALLATION_PEPPER") or secrets.token_urlsafe(48), "QUOTA_PEPPER": config.get("QUOTA_PEPPER") or secrets.token_urlsafe(48)}.items():
             set_key(str(runtime), key, value)
         for name, password in roles.items():
             if not db.execute("SELECT 1 FROM pg_roles WHERE rolname=%s", (name,)).fetchone():

@@ -35,7 +35,8 @@ export default function Scan() {
   const updatePreferences = useAppStore((s) => s.updatePreferences);
   const addResult = useAppStore((s) => s.addResult);
   const mutation = useMutation({
-    mutationFn: (value: string) => online ? analyzeOnline(value, true) : scanRepository.analyze(value),
+    mutationFn: (value: string) =>
+      online ? analyzeOnline(value, true) : scanRepository.analyze(value),
     retry: false,
     onSuccess: (result) => {
       addResult(result);
@@ -70,9 +71,40 @@ export default function Scan() {
         </Txt>
       </View>
       <View style={{ flexDirection: "row", gap: 10 }}>
-        {[{ label: "Demo", active: !online, action: () => updatePreferences({ cloudAnalysis: false }) }, { label: "Online model", active: online, action: () => setConsentPrompt(true) }].map((mode) => (
-          <Pressable key={mode.label} accessibilityRole="radio" accessibilityState={{ checked: mode.active }} disabled={mutation.isPending} onPress={mode.action} style={{ flex: 1, paddingVertical: 13, alignItems: "center", backgroundColor: mode.active ? colors.brand : colors.paper, borderWidth: 1, borderColor: colors.line, borderRadius: 99 }}>
-            <Txt variant="small" color={mode.active ? colors.paper : colors.ink}>{mode.label}</Txt>
+        {[
+          {
+            label: "Demo",
+            active: !online,
+            action: () => updatePreferences({ cloudAnalysis: false }),
+          },
+          {
+            label: "Online model",
+            active: online,
+            action: () => setConsentPrompt(true),
+          },
+        ].map((mode) => (
+          <Pressable
+            key={mode.label}
+            accessibilityRole="radio"
+            accessibilityState={{ checked: mode.active }}
+            disabled={mutation.isPending}
+            onPress={mode.action}
+            style={{
+              flex: 1,
+              paddingVertical: 13,
+              alignItems: "center",
+              backgroundColor: mode.active ? colors.brand : colors.paper,
+              borderWidth: 1,
+              borderColor: colors.line,
+              borderRadius: 99,
+            }}
+          >
+            <Txt
+              variant="small"
+              color={mode.active ? colors.paper : colors.ink}
+            >
+              {mode.label}
+            </Txt>
           </Pressable>
         ))}
       </View>
@@ -165,7 +197,9 @@ export default function Scan() {
         <Button
           label={
             mutation.isPending
-              ? online ? "Checking with the model…" : "Checking demo patterns…"
+              ? online
+                ? "Checking with the model…"
+                : "Checking demo patterns…"
               : "Check this message"
           }
           icon={ScanLine}
@@ -177,7 +211,9 @@ export default function Scan() {
           }}
         />
         <Notice icon={LockKeyhole}>
-          {online ? "Your text is sent to our Django service for analysis and is not saved there. History keeps metadata only." : "Text stays in this demo session. History saves the result, not the message."}
+          {online
+            ? "Your text is sent to our Django service for analysis and is not saved there. History keeps metadata only."
+            : "Text stays in this demo session. History saves the result, not the message."}
         </Notice>
       </View>
       <View style={{ gap: 12 }}>
@@ -219,12 +255,28 @@ export default function Scan() {
         ))}
       </View>
       <View style={{ gap: 10 }}>
-        <Pill label={online ? "ONLINE MODEL · ENGLISH-ORIENTED" : "SIMULATED CHECK"} tone={online ? "neutral" : "amber"} />
+        <Pill
+          label={online ? "ONLINE MODEL · ENGLISH-ORIENTED" : "SIMULATED CHECK"}
+          tone={online ? "neutral" : "amber"}
+        />
         <Txt variant="small" color={colors.muted}>
-          {online ? "Uses the evaluated backend model, not a safety guarantee. Unsupported text gets no verdict. No SMS inbox access or website visits." : "Results are simulated, not a security verdict. This demo cannot read incoming SMS or open links."}
+          {online
+            ? "Uses the evaluated backend model, not a safety guarantee. Unsupported text gets no verdict. No SMS inbox access or website visits."
+            : "Results are simulated, not a security verdict. This demo cannot read incoming SMS or open links."}
         </Txt>
       </View>
-      <ConfirmSheet visible={consentPrompt} title="Enable online analysis?" body="Messages you deliberately check will be sent to our Django backend, where the model processes them transiently. Text is not saved in its database. The model is evaluated on English-oriented SMS data and can miss phishing. This does not grant SMS inbox access. You can switch back to Demo at any time." confirmLabel="I agree — use online analysis" confirmTone="primary" onClose={() => setConsentPrompt(false)} onConfirm={() => { updatePreferences({ cloudAnalysis: true }); mutation.reset(); }} />
+      <ConfirmSheet
+        visible={consentPrompt}
+        title="Enable online analysis?"
+        body="Messages you deliberately check will be sent to our Django backend, where the model processes them transiently. Text is not saved in its database. The model is evaluated on English-oriented SMS data and can miss phishing. This does not grant SMS inbox access. You can switch back to Demo at any time."
+        confirmLabel="I agree — use online analysis"
+        confirmTone="primary"
+        onClose={() => setConsentPrompt(false)}
+        onConfirm={() => {
+          updatePreferences({ cloudAnalysis: true });
+          mutation.reset();
+        }}
+      />
     </Screen>
   );
 }

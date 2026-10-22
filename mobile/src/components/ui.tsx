@@ -391,7 +391,11 @@ export function RecordRow({
       </View>
       <View style={{ flex: 1, gap: 3 }}>
         <Txt style={{ fontFamily: fonts.bold, fontSize: 13 }}>
-          {record.origin === "sample" ? "Sample message" : record.mode === "backend_model" ? "Online model check" : "Manual demo check"}
+          {record.origin === "sample"
+            ? "Sample message"
+            : record.mode === "backend_model"
+              ? "Online model check"
+              : "Manual demo check"}
         </Txt>
         <Txt variant="small" color={colors.muted}>
           {record.characterCount} characters ·{" "}

@@ -79,8 +79,8 @@ export default function Welcome() {
           color={colors.muted}
           style={{ textAlign: "center" }}
         >
-          You’re exploring a demo. Checks are simulated; live SMS protection is
-          not connected.
+          Start with local demo checks. Online model checks are optional and
+          ask for consent. Incoming SMS protection is not connected yet.
         </Txt>
         <Pressable
           accessibilityRole="link"

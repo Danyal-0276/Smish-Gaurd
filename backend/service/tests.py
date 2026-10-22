@@ -139,6 +139,19 @@ class ApiSecurityTests(TestCase):
         self.client.force_login(staff)
         self.assertEqual(self.client.get("/admin/service/installation/").status_code, 403)
 
+    def test_staff_dashboard_and_credential_admin_exclusion(self):
+        staff = get_user_model().objects.create_superuser(username="operator", password="synthetic-test-only")
+        self.client.force_login(staff)
+        result = self.client.get("/admin/")
+        self.assertEqual(result.status_code, 200)
+        self.assertContains(result, "A clearer view of the service")
+        self.assertNotContains(result, self.token)
+        self.assertEqual(self.client.get("/admin/service/installationcredential/").status_code, 404)
+
+    def test_numeric_text_and_nonboolean_consent_are_rejected(self):
+        for payload in [{"text": 12345, "cloud_analysis_consent": True}, {"text": "A sample text", "cloud_analysis_consent": "true"}]:
+            self.assertEqual(self.client.post("/api/v1/analyses", payload, format="json").status_code, 400)
+
     @override_settings(DEBUG=False, SECURE_SSL_REDIRECT=False)
     def test_non_tls_api_rejected_in_deployment_mode(self):
         self.assertEqual(self.client.get("/api/v1/capabilities").status_code, 403)
