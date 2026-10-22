@@ -1,0 +1,5 @@
+# Expo's generated mobile/.gitignore may contain an unanchored android/ rule.
+# This local module's native source must be kept in version control.
+!android/
+android/build/
+android/.gradle/

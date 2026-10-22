@@ -1,15 +1,14 @@
 # SmishGuard mobile workspace
 
-React Native TypeScript frontend using Expo SDK 58 development builds, Expo Router, Reanimated, Zustand, TanStack Query, SQLite, Manrope, Lucide, and an original SVG identity. Native Android folders are generated from `app.config.ts`.
+Current delivery: Android SMS permission setup, received-inbox conversations, incoming message handling, offline observations, encrypted local storage, a persistent backend-analysis queue and private notifications. No demo mode or seeded messages. The original shield/S logo and primary blue/white/yellow palette are preserved; report cards now lead with a bold outcome and one next action.
 
-Source of scope and decisions: [project brief](../PROJECT_BRIEF.md).
+See [SMS protection setup and acceptance](../docs/SMS_PROTECTION.md). Restart Django after the backend update and rebuild/install the APK; a Metro refresh cannot add native SMS features. Browser/Expo Go cannot read SMS.
 
-Run the frontend preview from this directory with `npm run web`. It uses explicitly labelled mock data and does not require Django or PostgreSQL. For an Android development build, connect a phone or configure an emulator, then run `powershell -File scripts/android.ps1`. That script also handles the short Java temporary-path workaround needed on this Windows host.
+The local native module is in `modules/smishguard-sms/`. Generated `android/` is ignored; keep the module source and config plugins. Android WorkManager performs background jobs without a running JavaScript UI after setup. This development APK still needs Metro to display its screens.
 
-Implemented: animated startup, onboarding, Home, Check, Result, Activity, Learn, quizzes, Settings and privacy/protection states. Demo mode stays local. Optional online mode asks for consent and uses the protected Django model API; SecureStore holds an origin-bound installation credential. Metadata feedback requires separate consent; published lessons refresh only on request. Native history uses SQLite, web uses localStorage, and saved records exclude message text/domains. History is capped at 200 with 30-day expiry checked on load/save. Live SMS and WhatsApp access remain future work.
+Offline findings use local rules, not the trained classifier. Consented automatic model checks send eligible text to Django when reachable; no sender number or SIM identifier is uploaded. Pending bodies and senders use Android Keystore encryption. Reports are limited to 5,000 messages/30 days. The Reports page has a virtualized feed, completed-model risk counts and a seven-day completion chart.
 
-Rebuild once after this backend integration for `expo-secure-store`. Set the public API URL from `.env.example`, reverse USB port 8000, and follow [the backend/phone guide](../docs/BACKEND_GUIDE.md). Online model checks require native secure storage and intentionally do not run in the web preview.
+Run JavaScript checks with `npm run check` and `npm run lint`. Native rules/endpoint tests: `android/gradlew.bat :smishguard-sms:testDebugUnitTest` (use the project Windows Java temporary-path setup). Full native build: `npx expo prebuild --platform android --no-install`, then `powershell -ExecutionPolicy Bypass -File scripts/android.ps1 --device --no-bundler`.
 
-Checks: `npm run check`, `npm run lint`, `npx expo-doctor`, `npm run export:web`. See [frontend handoff](../docs/FRONTEND_GUIDE.md) and [setup guide](../docs/SETUP.md) for architecture, feature boundaries, and dependency audit findings.
+Runtime phone permission, provider, multipart, background/reboot, notification and reconnect acceptance is separate from compilation/unit-test evidence. No public hosting, release signing or store submission has been performed.
 
-Editable brand files are in `assets/brand/`; regenerate the PNG icon/splash assets using `node scripts/generate-brand.cjs`. No EAS cloud build, store release, or external hosting has been submitted.

@@ -1,21 +1,18 @@
 # SmishGuard — client progress update
 
-The first backend and small staff operations console are implemented. The mobile app now has an optional online checking flow connected to the trained Python model, alongside its clearly labelled demo mode.
+Updated 23 October 2026.
 
-What the client can be shown after the Android rebuild:
+The Android implementation now reads real received SMS after permission, groups conversations by sender, gives immediate offline observations and queues eligible text for automatic checks by the trained backend model. It also handles incoming SMS broadcasts and private warning notifications. Demo messages and the demo/online mode selector have been removed.
 
-- Paste a message, choose online analysis, review the privacy explanation and receive a real model assessment with warning indicators and a model version.
-- Keep result metadata locally, without retaining the message text in saved app history or a server inbox.
-- Optionally share correction metadata with staff through a separate consent step.
-- Open the staff console to review that metadata, revoke an installation, inspect the registered model results, and edit/publish safety lessons.
-- Refresh published lessons in the app and see the staff-edited content.
+Reports show a bold assessment, one recommended action and expandable reasons. The dashboard counts completed model assessments and charts report activity over seven days. Counts come from local reports; the app does not claim every flagged message is a confirmed scam or that low-risk messages are guaranteed safe.
 
-No phone-user signup, owner phone number, SIM identifier or contact list is required. Each installation has separate credentials; staff authentication is separate. Database credentials remain on the backend. The backend runs the trained model itself, so a paid third-party model host is not required.
+SMS bodies and sender names are encrypted in local app storage, with a 30-day retention period and 5,000-message limit. Automatic uploads require setup consent and can be paused. Detected OTP/code messages remain local. The backend receives text for transient analysis without receiving sender numbers, contacts or SIM identifiers. There is no end-user account or profile.
 
-Security evidence includes PostgreSQL-backed tests for installation isolation, revoked/expired credentials, strict inputs, shared concurrent quotas, unavailable-model behavior, staff access and metadata expiry. The actual restricted runtime role was checked separately. These checks are evidence for the tested scenarios, not a guarantee that the service is production-certified.
+The Django staff workspace remains a small operations console: anonymous installation management/revocation, model metadata, safety lesson editing/publishing and existing consented feedback records. It does not expose anyone’s SMS inbox. Database credentials stay on the server and each installation authenticates separately.
 
-The app must be rebuilt once for the new secure credential-storage native module, then tested on the intended phone. Existing/incoming SMS scanning and optional WhatsApp notification previews are the next platform milestones; they are not working features in this delivery yet. Public hosting, production hardening/load testing, and a standalone customer APK remain separate delivery steps.
+The new native code must be installed in a rebuilt APK. Unit tests and build checks are being recorded separately from real-phone acceptance. Permission approval, inbox reconciliation, multipart/new SMS, offline/reconnect, notifications and background behavior must be checked on the demonstration phone before claiming verified automatic protection.
 
-The staff panel is an operations console, not a customer-contact CRM and not a way to browse anyone's SMS. The model can make mistakes; a low-risk result does not guarantee safety.
+The model remains English-oriented and can make mistakes. Offline checks are rule observations, not trained-model inference. A laptop/USB backend is not reachable from arbitrary phones over the internet. Public HTTPS deployment, a release-signed standalone APK and production validation remain separate steps.
 
-Technical run/setup instructions: [BACKEND_GUIDE.md](BACKEND_GUIDE.md). Never include local staff/database passwords in this client update.
+Technical details and installation: [SMS_PROTECTION.md](SMS_PROTECTION.md). Never share local staff/database credentials with the documentation handoff.
+
