@@ -1128,7 +1128,8 @@
           "consent_version": {
             "type": "string",
             "enum": [
-              "2026-10-22"
+              "2026-10-22",
+              "2026-10-23"
             ]
           },
           "cloud_analysis_consent": {
@@ -1627,6 +1628,9 @@
           "automatic_sms": {
             "type": "boolean"
           },
+          "android_client_sms_queue": {
+            "type": "boolean"
+          },
           "whatsapp_access": {
             "type": "boolean"
           }
@@ -1640,6 +1644,7 @@
           "coverage",
           "stores_message_bodies",
           "automatic_sms",
+          "android_client_sms_queue",
           "whatsapp_access"
         ],
         "additionalProperties": false

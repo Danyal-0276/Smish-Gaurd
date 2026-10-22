@@ -47,9 +47,16 @@ export default function RootLayout() {
   useEffect(() => {
     if (!hydrated) return;
     void refreshSms(true);
-    const foreground = AppState.addEventListener("change", state => { if (state === "active") void refreshSms(true); });
-    const timer = setInterval(() => { if (AppState.currentState === "active") void refreshSms(); }, 5000);
-    return () => { foreground.remove(); clearInterval(timer); };
+    const foreground = AppState.addEventListener("change", (state) => {
+      if (state === "active") void refreshSms(true);
+    });
+    const timer = setInterval(() => {
+      if (AppState.currentState === "active") void refreshSms();
+    }, 5000);
+    return () => {
+      foreground.remove();
+      clearInterval(timer);
+    };
   }, [hydrated]);
   const [introDone, setIntroDone] = useState(false);
   const ready = (fontsReady || Boolean(fontError)) && hydrated;

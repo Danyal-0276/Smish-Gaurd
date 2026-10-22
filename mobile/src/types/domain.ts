@@ -1,5 +1,8 @@
 export type Risk = "low" | "review" | "high";
-export interface Preferences { haptics: boolean; reduceMotion: boolean }
+export interface Preferences {
+  haptics: boolean;
+  reduceMotion: boolean;
+}
 export interface Lesson {
   id: string;
   title: string;

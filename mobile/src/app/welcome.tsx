@@ -45,7 +45,8 @@ export default function Welcome() {
           </Txt>
         </Txt>
         <Txt color={colors.muted} style={{ marginTop: 14 }}>
-          Scan your inbox, check new arrivals, and receive model reports when connected.
+          Scan your inbox, check new arrivals, and receive model reports when
+          connected.
         </Txt>
       </Enter>
       <View style={{ gap: 15 }}>
@@ -75,7 +76,8 @@ export default function Welcome() {
           color={colors.muted}
           style={{ textAlign: "center" }}
         >
-          Next, choose your permissions and whether pending messages may be sent automatically for model analysis.
+          Next, choose your permissions and whether pending messages may be sent
+          automatically for model analysis.
         </Txt>
         <Pressable
           accessibilityRole="link"
