@@ -11,6 +11,8 @@ const metadata = ({
   origin,
   indicatorCount,
   characterCount,
+  mode,
+  modelVersion,
 }: ScanResult): ScanRecord => ({
   id,
   risk,
@@ -18,6 +20,8 @@ const metadata = ({
   origin,
   indicatorCount,
   characterCount,
+  mode,
+  modelVersion,
 });
 interface AppState {
   hydrated: boolean;
@@ -52,6 +56,7 @@ export const useAppStore = create<AppState>()(
         keepHistory: true,
         reduceMotion: false,
         notifications: false,
+        cloudAnalysis: false,
       },
       finishOnboarding: () => set({ onboarded: true }),
       updatePreferences: (value) =>

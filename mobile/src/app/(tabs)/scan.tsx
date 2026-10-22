@@ -18,19 +18,25 @@ import {
   Notice,
   Card,
   Enter,
+  ConfirmSheet,
 } from "../../components/ui";
 import { colors, fonts } from "../../theme/tokens";
 import { sampleMessages } from "../../features/scan/demo-engine";
 import { scanRepository } from "../../services/scan-repository";
 import { useAppStore } from "../../store/app-store";
 import { ScanProgress } from "../../components/scan-progress";
+import { analyzeOnline } from "../../services/online-service";
 
 export default function Scan() {
   const [text, setText] = useState("");
   const [clipboardError, setClipboardError] = useState("");
+  const [consentPrompt, setConsentPrompt] = useState(false);
+  const online = useAppStore((s) => s.preferences.cloudAnalysis) ?? false;
+  const updatePreferences = useAppStore((s) => s.updatePreferences);
   const addResult = useAppStore((s) => s.addResult);
   const mutation = useMutation({
-    mutationFn: (value: string) => scanRepository.analyze(value),
+    mutationFn: (value: string) => online ? analyzeOnline(value, true) : scanRepository.analyze(value),
+    retry: false,
     onSuccess: (result) => {
       addResult(result);
       router.push({ pathname: "/result/[id]", params: { id: result.id } });
@@ -62,6 +68,13 @@ export default function Scan() {
         <Txt color={colors.muted}>
           Paste a message to explore its warning signs.
         </Txt>
+      </View>
+      <View style={{ flexDirection: "row", gap: 10 }}>
+        {[{ label: "Demo", active: !online, action: () => updatePreferences({ cloudAnalysis: false }) }, { label: "Online model", active: online, action: () => setConsentPrompt(true) }].map((mode) => (
+          <Pressable key={mode.label} accessibilityRole="radio" accessibilityState={{ checked: mode.active }} disabled={mutation.isPending} onPress={mode.action} style={{ flex: 1, paddingVertical: 13, alignItems: "center", backgroundColor: mode.active ? colors.brand : colors.paper, borderWidth: 1, borderColor: colors.line, borderRadius: 99 }}>
+            <Txt variant="small" color={mode.active ? colors.paper : colors.ink}>{mode.label}</Txt>
+          </Pressable>
+        ))}
       </View>
       <Enter>
         <Card style={{ padding: 18, gap: 16 }}>
@@ -148,11 +161,11 @@ export default function Scan() {
         </Txt>
       )}
       <View style={{ gap: 12 }}>
-        {mutation.isPending && <ScanProgress />}
+        {mutation.isPending && !online && <ScanProgress />}
         <Button
           label={
             mutation.isPending
-              ? "Checking demo patterns…"
+              ? online ? "Checking with the model…" : "Checking demo patterns…"
               : "Check this message"
           }
           icon={ScanLine}
@@ -164,7 +177,7 @@ export default function Scan() {
           }}
         />
         <Notice icon={LockKeyhole}>
-          Text stays in this session. History saves the result, not the message.
+          {online ? "Your text is sent to our Django service for analysis and is not saved there. History keeps metadata only." : "Text stays in this demo session. History saves the result, not the message."}
         </Notice>
       </View>
       <View style={{ gap: 12 }}>
@@ -206,12 +219,12 @@ export default function Scan() {
         ))}
       </View>
       <View style={{ gap: 10 }}>
-        <Pill label="SIMULATED CHECK" tone="amber" />
+        <Pill label={online ? "ONLINE MODEL · ENGLISH-ORIENTED" : "SIMULATED CHECK"} tone={online ? "neutral" : "amber"} />
         <Txt variant="small" color={colors.muted}>
-          Results are simulated, not a security verdict. This demo cannot read
-          incoming SMS or open links.
+          {online ? "Uses the evaluated backend model, not a safety guarantee. Unsupported text gets no verdict. No SMS inbox access or website visits." : "Results are simulated, not a security verdict. This demo cannot read incoming SMS or open links."}
         </Txt>
       </View>
+      <ConfirmSheet visible={consentPrompt} title="Enable online analysis?" body="Messages you deliberately check will be sent to our Django backend, where the model processes them transiently. Text is not saved in its database. The model is evaluated on English-oriented SMS data and can miss phishing. This does not grant SMS inbox access. You can switch back to Demo at any time." confirmLabel="I agree — use online analysis" confirmTone="primary" onClose={() => setConsentPrompt(false)} onConfirm={() => { updatePreferences({ cloudAnalysis: true }); mutation.reset(); }} />
     </Screen>
   );
 }

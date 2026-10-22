@@ -501,6 +501,7 @@ export function ConfirmSheet({
   confirmLabel,
   onConfirm,
   onClose,
+  confirmTone = "danger",
 }: {
   visible: boolean;
   title: string;
@@ -508,6 +509,7 @@ export function ConfirmSheet({
   confirmLabel: string;
   onConfirm: () => void;
   onClose: () => void;
+  confirmTone?: "primary" | "danger";
 }) {
   const reduced = useAppStore((s) => s.preferences.reduceMotion);
   const systemReduced = useReducedMotion();
@@ -548,7 +550,7 @@ export function ConfirmSheet({
           <Txt color={colors.muted}>{body}</Txt>
           <Button
             label={confirmLabel}
-            tone="danger"
+            tone={confirmTone}
             onPress={() => {
               onConfirm();
               onClose();
