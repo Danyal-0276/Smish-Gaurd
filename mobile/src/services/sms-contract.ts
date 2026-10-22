@@ -1,4 +1,10 @@
 import { validateAssessment, type ModelAssessment } from "./api-client";
+import type { Risk } from "../types/domain";
+export function resultCopy(risk: Risk, model: boolean) {
+  if (risk === "high") return { title: model ? "Likely phishing." : "Warning signs found.", action: "Don’t tap links or share codes. Verify through the official app." };
+  if (risk === "review") return { title: "Check before you act.", action: "Contact the sender through a number you already trust." };
+  return { title: model ? "Low detected risk." : "No rule signals found.", action: "Unexpected request? Verify it before replying." };
+}
 export function parseSmsReport(raw:string|null):ModelAssessment|null {
   if (!raw) return null;
   try { return validateAssessment(JSON.parse(raw)); } catch { return null; }
@@ -8,11 +14,11 @@ export function localReasons(raw:string):string[] {
 }
 export function queueLabel(state:string):string {
   switch(state) {
-    case "completed": return "Model report ready · offline observations retained";
-    case "pending": return "Offline report ready · queued for model analysis";
-    case "paused": return "Offline report ready · automatic uploads paused";
-    case "local_only": return "Offline only · detected OTP/code text is excluded from uploads";
-    case "unsupported": return "Offline report retained · no model verdict is available for this text";
+    case "completed": return "Model report ready";
+    case "pending": return "Model check queued · offline check ready";
+    case "paused": return "Offline check ready · uploads paused";
+    case "local_only": return "Code message · kept on this phone";
+    case "unsupported": return "No model verdict · offline check only";
     default: return "Offline report available";
   }
 }
