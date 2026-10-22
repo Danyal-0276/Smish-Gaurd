@@ -6,6 +6,8 @@ export interface SmsStatus {
   total: number; pending: number; completed: number; flagged: number;
   enabled: boolean; cloud: boolean; smsGranted: boolean; receiveGranted: boolean;
   notificationsGranted: boolean; hasOlder: boolean; connection: string;
+  modelHigh: number; modelReview: number; modelLow: number;
+  days: { day: string; count: number }[];
 }
 export interface SmsThread { id: string; sender: string; received: number; count: number; pending: number }
 export interface SmsMessage {
