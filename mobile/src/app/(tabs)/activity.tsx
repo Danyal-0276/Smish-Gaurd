@@ -10,9 +10,10 @@ export default function Reports() {
       style={{ flex: 1, paddingHorizontal: 0, paddingBottom: 0 }}
     >
       <SmsFeed
-        header={
+        filterable
+        header={<Txt variant="heading">Your reports.</Txt>}
+        summary={
           <>
-            <Txt variant="heading">Your reports.</Txt>
             {status && <SmsMetrics status={status} />}
             <Notice>
               {status?.pending ?? 0} messages waiting for model reports.

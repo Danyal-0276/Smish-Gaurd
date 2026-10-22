@@ -245,6 +245,8 @@ If access is denied, setup remains available through Settings. Android SMS permi
 
 ### Read a report
 
+In **Reports**, search by sender, number or message text, then choose **All**, **High risk**, **Review** or **Low risk**. Filters combine across the latest 200 loaded reports and use the outcome shown on each card (model result when ready, otherwise offline findings). **Reset filters** restores the full recent list. Search stays on the phone.
+
 Open a conversation or the **Reports** tab. Each message has its own outcome:
 
 - **Offline check:** Immediate local observations. No matching rules does not mean the message is safe.

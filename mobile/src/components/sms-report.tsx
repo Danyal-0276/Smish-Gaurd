@@ -10,6 +10,7 @@ import {
 import Animated, { FadeIn } from "react-native-reanimated";
 import { Card, Txt, ConfirmSheet } from "./ui";
 import { colors, fonts } from "../theme/tokens";
+import { reportRisk } from "../services/report-filters";
 import {
   refreshSms,
   smsNative,
@@ -33,7 +34,7 @@ export function SmsReport({
   const [confirm, setConfirm] = useState(false);
   const [error, setError] = useState("");
   const report = parseSmsReport(message.report);
-  const risk = report?.risk ?? message.localRisk;
+  const risk = reportRisk(message);
   const copy = resultCopy(risk, Boolean(report));
   const background =
     risk === "high"

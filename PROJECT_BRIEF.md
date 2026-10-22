@@ -2,6 +2,8 @@
 
 ## Current implementation — 23 October 2026
 
+Reports now supports All / High risk / Review / Low risk filters and local sender/message search over the latest 200 loaded reports. Search and risk filters combine, use the model result when available (offline finding otherwise), show matching counts and provide reset/empty states. Search terms are not persisted or transmitted.
+
 Android now has a local Expo/Kotlin SMS module: permission setup, real received-inbox import and sender grouping, incoming broadcast handling, offline keyword/link observations, encrypted local message copies and a persistent network-constrained model queue. Dummy messages and the demo/online mode selector have been removed. Results use bold, concise actions, expandable reasons, completed-model risk counts and a seven-day report chart. The hollow-shield/S logo and core palette remain unchanged.
 
 Automatic uploads require informed setup consent, can be paused, and send text without sender/SIM identifiers. Detected OTP/code text stays local. Offline findings are not trained-model results; model reports arrive when the backend is reachable. Staff cannot browse SMS. Local copies expire after 30 days, with 5,000 messages maximum. Incoming/background operation remains subject to Android permission, installer, battery and protected-message behavior.
