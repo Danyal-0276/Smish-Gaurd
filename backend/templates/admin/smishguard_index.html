@@ -1,0 +1,6 @@
+{% extends "admin/index.html" %}
+{% block content %}
+<section class="sg-intro"><span class="sg-eyebrow">STAFF WORKSPACE</span><h2>A clearer view of the service.</h2><p>Manage learning content, review consented metadata feedback and revoke service access. Personal SMS bodies and usable installation credentials are not stored or shown here.</p></section>
+{% if smishguard_summary %}<div class="sg-summary">{% for label,count in smishguard_summary %}<section><strong>{{ count }}</strong><span>{{ label }}</span></section>{% endfor %}</div>{% endif %}
+{{ block.super }}
+{% endblock %}
