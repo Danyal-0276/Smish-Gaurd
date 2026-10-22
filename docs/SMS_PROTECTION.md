@@ -40,14 +40,22 @@ The source build command also installs/opens the development client. Metro must 
 
 ## User experience
 
-1. Explain SMS reading and automatic model analysis before asking for Android permissions. Denial does not crash the app; settings and setup remain accessible. Contacts, owner number and SIM identifiers are not requested.
+1. Explain SMS reading and automatic model analysis before asking for Android permissions. Denial does not crash the app; settings and setup remain accessible. Contacts and SIM identifiers are not requested; optional own-number permission is separate in My profile.
 2. Import the newest 200 received inbox messages. Conversations group by sender, while assessments belong to individual messages. Load older messages in pages of 200, up to the 5,000-message local cap. Sender grouping is not number-reputation checking.
 3. Immediately generate genuine offline rule observations. These are keyword/link checks, not the trained model, and are labelled accordingly. Lack of matching rules does not establish safety.
 4. Queue eligible text for the trained backend model when automatic reports are enabled. Android WorkManager waits for connectivity, retries failures with backoff, and respects server Retry-After limits. No server failure creates a simulated verdict. New arrivals and pasted messages take priority over backlog.
-5. Retain offline findings alongside the model report. Unsupported text keeps its offline findings and receives no model verdict. High-risk incoming offline findings trigger local warnings; high-risk model results update a private report notification. Notification content contains no sender or message body.
+5. Retain offline findings alongside the model report. Unsupported text keeps its offline findings and receives no model verdict. High-risk incoming offline findings trigger local warnings; completed model batches update one private summary notification, including high-risk counts. Notification content contains no sender or message body.
 6. Present a bold result, one recommended action, message preview and expandable reasons. Risk counts include completed model reports only. A seven-day chart counts completed model reports retained on this phone. No fabricated accuracy, saved-money, blocked-attacks or protection-percentage metrics.
 
-## Native implementation
+## Optional device profile
+
+Settings → My profile saves an optional display name and international-format phone number, encrypted under Android Keystore in private preferences. This profile is local-only and is never attached to model requests or exposed to staff. Deleting the profile removes that ciphertext without deleting reports.
+
+“Use this phone’s number” requests READ_PHONE_NUMBERS only when tapped. Android 13+ uses the default SMS subscription’s `SubscriptionManager.getPhoneNumber`; supported older versions use the compatibility API. The carrier may return nothing, a number in a different format, or an outdated number. The user reviews/edits it before saving; manual entry is always available. The app does not enumerate SIMs, request READ_PHONE_STATE, or collect SIM serials/IMSI/IMEI.
+
+Every saved number is labelled **unverified**. Number availability and accuracy are not guaranteed; Android explicitly requires [additional verification for security-sensitive use](https://developer.android.com/reference/android/telephony/SubscriptionManager#getPhoneNumber(int)). Future ownership verification would require a separate consented OTP challenge service with expiry, attempt/rate limits and anti-enumeration controls. It would prove possession at that time, not authenticate the sender of arbitrary SMS. Sender reputation/spoofing checks are separate features; this version does not claim them.
+
+## Native implementation details
 
 `mobile/modules/smishguard-sms/` is an autolinked local Expo/Kotlin module. It has a received-SMS provider reader, protected SMS_RECEIVED broadcast receiver, SQLite repository, Android Keystore encryption, private notifications and WorkManager tasks. It runs independently of JavaScript/Metro for incoming/offline/background work once configured. Debug UI still requires Metro because this is a development APK.
 
@@ -86,3 +94,7 @@ Use the intended demonstration phone and do not share screenshots containing pri
 - [WorkManager persistent work](https://developer.android.com/develop/background-work/background-tasks/persistent-work).
 
 Public Play distribution, full on-device trained-model inference, WhatsApp access, a release-signed standalone APK, push services and production hosting are not part of this implementation.
+
+## Build and automated verification
+
+The final Android 0.2.0 arm64-v8a development APK built successfully. Six native policy/rule/profile tests, fourteen JavaScript contract/transport tests and twenty-three backend regression tests passed. TypeScript, ESLint and diff whitespace checks passed. The packaged manifest contains READ_SMS, RECEIVE_SMS, POST_NOTIFICATIONS and READ_PHONE_NUMBERS. Evidence: [setup/sms-verification.json](setup/sms-verification.json). No app UI was opened and no private SMS was read during verification; the phone acceptance checks above remain pending.

@@ -39,6 +39,10 @@ export interface SmsMessage {
   report: string | null;
 }
 interface NativeSms {
+  profile(): Promise<{ name: string; phone: string }>;
+  saveProfile(name: string, phone: string): Promise<void>;
+  deleteProfile(): Promise<void>;
+  suggestPhoneNumber(): Promise<string>;
   status(): Promise<SmsStatus>;
   configure(endpoint: string, cloud: boolean): Promise<SmsStatus>;
   refresh(older: boolean): Promise<SmsStatus>;
@@ -76,7 +80,10 @@ export async function startProtection(cloud: boolean) {
       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
     );
   const endpoint = process.env.EXPO_PUBLIC_API_URL ?? "";
-  if (cloud && !endpoint) throw new Error("The model backend address is missing. Configure mobile/.env and restart Metro.");
+  if (cloud && !endpoint)
+    throw new Error(
+      "The model backend address is missing. Configure mobile/.env and restart Metro.",
+    );
   await native.configure(endpoint, cloud);
   await native.refresh(false);
   await refreshSms();
@@ -91,7 +98,7 @@ let refreshing = false;
 export async function refreshSms(importInbox = false, older = false) {
   if (refreshing) return;
   refreshing = true;
-  useSmsStore.setState({ busy: true });
+  if (importInbox) useSmsStore.setState({ busy: true });
   try {
     const native = smsNative();
     const status = importInbox
@@ -108,6 +115,6 @@ export async function refreshSms(importInbox = false, older = false) {
     });
   } finally {
     refreshing = false;
-    useSmsStore.setState({ busy: false });
+    if (importInbox) useSmsStore.setState({ busy: false });
   }
 }

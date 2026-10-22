@@ -44,6 +44,16 @@ export default function Privacy() {
           SmishGuard.
         </Txt>
       </Card>
+      <Card>
+        <Txt variant="title">Optional profile</Txt>
+        <Txt color={colors.muted}>
+          A display name and phone number may be saved encrypted on this phone.
+          Phone-number access is requested only when you choose to fill the
+          number from your device. The number is unverified and is never added
+          to model requests or shown to staff. Delete it separately in My
+          profile.
+        </Txt>
+      </Card>
       <Notice>
         No WhatsApp access, message blocking, personal account, contact-book
         access or SIM tracking. Release connections require HTTPS; local USB

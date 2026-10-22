@@ -8,6 +8,34 @@ class SmishGuardSmsModule : Module() {
   private fun context() = appContext.reactContext ?: throw Exceptions.ReactContextLost()
   override fun definition() = ModuleDefinition {
     Name("SmishGuardSms")
+    AsyncFunction("profile") {
+      SmsRepository(context()).use { repo ->
+        val value = repo.prefs.getString("profile", null)
+        val data = if (value == null) org.json.JSONObject() else org.json.JSONObject(PrivateCipher.decrypt(value, "profile:v1"))
+        mapOf("name" to data.optString("name", ""), "phone" to data.optString("phone", ""))
+      }
+    }
+    AsyncFunction("saveProfile") { name: String, phone: String ->
+      require(SmsPolicy.validProfile(name, phone)) { "Use a name up to 60 characters and an international phone number, such as +923001234567" }
+      SmsRepository(context()).use { repo ->
+        val data = org.json.JSONObject().put("name", name.trim()).put("phone", phone)
+        repo.prefs.edit().putString("profile", PrivateCipher.encrypt(data.toString(), "profile:v1")).commit()
+      }
+    }
+    AsyncFunction("deleteProfile") { SmsRepository(context()).use { it.prefs.edit().remove("profile").commit() } }
+    AsyncFunction("suggestPhoneNumber") {
+      if (android.os.Build.VERSION.SDK_INT < 26 || context().checkSelfPermission(android.Manifest.permission.READ_PHONE_NUMBERS) != android.content.pm.PackageManager.PERMISSION_GRANTED) ""
+      else try {
+        if (android.os.Build.VERSION.SDK_INT >= 33) {
+          val subscription = android.telephony.SubscriptionManager.getDefaultSmsSubscriptionId()
+          if (android.telephony.SubscriptionManager.isValidSubscriptionId(subscription)) context().getSystemService(android.telephony.SubscriptionManager::class.java).getPhoneNumber(subscription).take(64) else ""
+        } else {
+          @Suppress("DEPRECATION")
+          val number = context().getSystemService(android.telephony.TelephonyManager::class.java).line1Number
+          number?.take(64) ?: ""
+        }
+      } catch (_: Exception) { "" }
+    }
     AsyncFunction("status") { SmsRepository(context()).use { it.summary() } }
     AsyncFunction("configure") { endpoint: String, cloud: Boolean ->
       SmsRepository(context()).use { repo ->

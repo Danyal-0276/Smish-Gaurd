@@ -14,7 +14,7 @@ export const lessons: Lesson[] = [
       },
       {
         heading: "Verify somewhere else",
-        body: "Open the organizationâ€™s official app yourself, or call a number you already trust. Avoid using contact details supplied by the suspicious message.",
+        body: "Open the organization’s official app yourself, or call a number you already trust. Avoid using contact details supplied by the suspicious message.",
       },
       {
         heading: "You can leave a message unanswered",
@@ -24,20 +24,20 @@ export const lessons: Lesson[] = [
     question:
       "A text says your bank account will close in 10 minutes. What is the best next step?",
     options: [
-      "Use the textâ€™s link immediately",
-      "Open the bankâ€™s official app independently",
+      "Use the text’s link immediately",
+      "Open the bank’s official app independently",
       "Reply with your PIN",
     ],
     correctIndex: 1,
     explanation:
-      "An independently opened official channel helps you verify the claim without relying on the senderâ€™s link.",
+      "An independently opened official channel helps you verify the claim without relying on the sender’s link.",
   },
   {
     id: "links",
     title: "Look beyond the link",
     category: "LINK SAFETY",
     duration: 3,
-    summary: "Learn what a domain tells youâ€”and what it cannot prove.",
+    summary: "Learn what a domain tells you—and what it cannot prove.",
     sections: [
       {
         heading: "Read the actual domain",
@@ -75,7 +75,7 @@ export const lessons: Lesson[] = [
       },
       {
         heading: "Check the sign-in yourself",
-        body: "Use the official app to review account activity. If you think your details were exposed, change your password through that app and follow the providerâ€™s account recovery guidance.",
+        body: "Use the official app to review account activity. If you think your details were exposed, change your password through that app and follow the provider’s account recovery guidance.",
       },
     ],
     question:

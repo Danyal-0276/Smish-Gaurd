@@ -131,7 +131,9 @@ class FeedbackList(ProtectedView):
 
                 raise AuthenticationFailed()
             row, created = Feedback.objects.get_or_create(
-                installation=install, client_event_id=data.pop("client_event_id"), defaults=data
+                installation=install,
+                client_event_id=data.pop("client_event_id"),
+                defaults=data,
             )
             if not created and any(getattr(row, k) != v for k, v in data.items()):
                 raise ValidationError("Event already exists with different metadata.")
@@ -157,4 +159,6 @@ class LessonList(APIView):
 
 class LessonDetail(LessonList):
     def get(self, request, slug):
-        return Response(LessonOutput(get_object_or_404(Lesson, slug=slug, published=True)).data)
+        return Response(
+            LessonOutput(get_object_or_404(Lesson, slug=slug, published=True)).data
+        )

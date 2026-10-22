@@ -1,0 +1,50 @@
+{
+  "date_local": "2026-10-23",
+  "timezone": "Asia/Karachi",
+  "app_version": "0.2.0",
+  "target": "Android arm64-v8a development APK",
+  "apk": "mobile/android/app/build/outputs/apk/debug/app-debug.apk",
+  "apk_sha256": "f6727972c9e198e5b47e4a7d8e74e295b392d00fb93416ec4ebb5618bf39f11e",
+  "apk_build": "passed",
+  "native_tests": {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0
+  },
+  "javascript_tests": {
+    "tests": 14,
+    "failures": 0
+  },
+  "typescript": "passed",
+  "eslint": "passed",
+  "backend_tests": {
+    "tests": 23,
+    "failures": 0,
+    "database": "dedicated PostgreSQL test database"
+  },
+  "manifest_verified": [
+    "READ_SMS",
+    "RECEIVE_SMS",
+    "POST_NOTIFICATIONS",
+    "READ_PHONE_NUMBERS"
+  ],
+  "phone_app_launched": false,
+  "private_sms_read_during_verification": false,
+  "pending_acceptance": [
+    "runtime permission grant on Pixel 7",
+    "real inbox import and grouping",
+    "multipart incoming SMS and deduplication",
+    "offline queue restart/reconnect",
+    "background/reboot restrictions",
+    "private notifications",
+    "encrypted storage and retention on target device",
+    "optional own-number lookup/manual profile"
+  ],
+  "limitations": [
+    "offline checks are rules, not trained-model inference",
+    "USB development backend requires laptop and reverse forwarding",
+    "phone numbers are unverified and local-only",
+    "no sender authenticity/reputation implementation",
+    "no public hosting or release signing"
+  ]
+}

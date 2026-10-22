@@ -78,9 +78,8 @@ export default function Check() {
         </Txt>
       )}
       <Notice>
-        Local rules run immediately. When automatic model reports are enabled,
-        this message is queued for the backend. There is no simulated result or
-        demo mode.
+        Offline checks run immediately. Eligible messages get a model report
+        automatically when connected and uploads are enabled.
       </Notice>
     </Screen>
   );

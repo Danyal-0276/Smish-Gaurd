@@ -60,7 +60,10 @@ schemas = {
             "client_event_id": {"type": "string", "format": "uuid"},
             "model_version": text(100),
             "risk": {"type": "string", "enum": ["low", "review", "high"]},
-            "reason": {"type": "string", "enum": ["false_positive", "false_negative", "unclear"]},
+            "reason": {
+                "type": "string",
+                "enum": ["false_positive", "false_negative", "unclear"],
+            },
             "feedback_consent": {"type": "boolean", "enum": [True]},
         }
     ),
@@ -202,7 +205,11 @@ operation(
 )
 operation("/api/v1/installations/me", "delete", "revokeInstallation", status="204")
 operation(
-    "/api/v1/installations/me/credentials/rotate", "post", "rotateCredential", "Credential", "Empty"
+    "/api/v1/installations/me/credentials/rotate",
+    "post",
+    "rotateCredential",
+    "Credential",
+    "Empty",
 )
 operation("/api/v1/analyses", "post", "analyzeText", "AnalysisResponse", "AnalysisInput")
 operation("/api/v1/capabilities", "get", "readCapabilities", "Capabilities", public=True)

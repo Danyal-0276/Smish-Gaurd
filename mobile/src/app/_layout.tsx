@@ -104,6 +104,7 @@ export default function RootLayout() {
                 <Stack.Screen name="lesson/[id]" />
                 <Stack.Screen name="privacy" />
                 <Stack.Screen name="permissions" />
+                <Stack.Screen name="profile" />
                 <Stack.Screen name="sms/[id]" />
               </Stack>
             )}

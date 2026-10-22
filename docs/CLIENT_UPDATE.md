@@ -10,9 +10,11 @@ SMS bodies and sender names are encrypted in local app storage, with a 30-day re
 
 The Django staff workspace remains a small operations console: anonymous installation management/revocation, model metadata, safety lesson editing/publishing and existing consented feedback records. It does not expose anyone’s SMS inbox. Database credentials stay on the server and each installation authenticates separately.
 
-The new native code must be installed in a rebuilt APK. Unit tests and build checks are being recorded separately from real-phone acceptance. Permission approval, inbox reconciliation, multipart/new SMS, offline/reconnect, notifications and background behavior must be checked on the demonstration phone before claiming verified automatic protection.
+The new native code must be installed in a rebuilt APK. The development APK builds successfully; six native tests, fourteen JavaScript tests and twenty-three backend tests passed. These checks are separate from real-phone acceptance. Permission approval, inbox reconciliation, multipart/new SMS, offline/reconnect, notifications and background behavior must be checked on the demonstration phone before claiming verified automatic protection.
 
 The model remains English-oriented and can make mistakes. Offline checks are rule observations, not trained-model inference. A laptop/USB backend is not reachable from arbitrary phones over the internet. Public HTTPS deployment, a release-signed standalone APK and production validation remain separate steps.
 
 Technical details and installation: [SMS_PROTECTION.md](SMS_PROTECTION.md). Never share local staff/database credentials with the documentation handoff.
 
+
+An optional My profile page saves a name and number encrypted on the phone. Own-number permission can fill an available SIM/carrier number, with manual entry as fallback. It stays labelled unverified. Profiles are not uploaded or visible to staff; sender authenticity/reputation and verified OTP ownership are future features.

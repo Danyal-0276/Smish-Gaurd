@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal object SmsNotifications {
-  fun warning(context: Context, id: String, model: Boolean) {
+  fun warning(context: Context, id: String, model: Boolean, completed: Int = 0, high: Int = 0) {
     val manager = context.getSystemService(NotificationManager::class.java)
     manager.createNotificationChannel(NotificationChannel("sms-risk", "SMS safety warnings", NotificationManager.IMPORTANCE_HIGH).apply { lockscreenVisibility = Notification.VISIBILITY_PRIVATE })
     if (!manager.areNotificationsEnabled()) return
@@ -26,8 +26,8 @@ internal object SmsNotifications {
     val tap = PendingIntent.getActivity(context, id.hashCode(), launch, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     val notification = Notification.Builder(context, "sms-risk")
       .setSmallIcon(android.R.drawable.ic_dialog_alert)
-      .setContentTitle(if (model) "SMS model report ready" else "SMS needs a closer look")
-      .setContentText(if (model) "A model check flagged a message. Open SmishGuard to review." else "Offline checks found warning signs. Open SmishGuard to review.")
+      .setContentTitle(if (model && high > 0) "SMS model checks need attention" else if (model) "SMS model reports ready" else "SMS needs a closer look")
+      .setContentText(if (model) "$completed reports updated · $high high-risk assessments. Open SmishGuard." else "Offline checks found warning signs. Open SmishGuard to review.")
       .setVisibility(Notification.VISIBILITY_PRIVATE).setContentIntent(tap).setOnlyAlertOnce(true).setAutoCancel(true).build()
     try { manager.notify(if (model) 1307 else id.hashCode(), notification) } catch (_: SecurityException) { /* Permission can change mid-delivery. */ }
   }
@@ -116,6 +116,8 @@ internal class ModelHttp(private val context: Context, private val base: String)
 class ModelWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
   override fun doWork(): Result {
     if (!running.compareAndSet(false, true)) return Result.retry()
+    var completedBatch = 0
+    var highBatch = 0
     try {
       SmsRepository(applicationContext).use { repo ->
         repo.prune()
@@ -162,7 +164,10 @@ class ModelWorker(context: Context, params: WorkerParameters) : Worker(context, 
           listOf("status", "mode", "risk", "model_version", "policy_version", "coverage", "indicators", "domains", "advice", "request_id").forEach { key -> if (data.has(key)) report.put(key, data.get(key)) }
           val values = android.content.ContentValues().apply { put("state", if (unsupported) "unsupported" else "completed"); put("report", report.toString()); put("checked", System.currentTimeMillis()); if (!unsupported) put("model_risk", data.getString("risk")) }
           val updated = repo.writableDatabase.update("messages", values, "id=? AND state='pending'", arrayOf(id))
-          if (updated > 0 && !unsupported && data.optString("risk") == "high") SmsNotifications.warning(applicationContext, id, true)
+          if (updated > 0 && !unsupported) {
+            completedBatch++
+            if (data.optString("risk") == "high") highBatch++
+          }
           connection(repo, "Connected · model reports updating")
         }
         // Bounded batches and WorkManager backoff avoid overwhelming protected APIs.
@@ -171,7 +176,10 @@ class ModelWorker(context: Context, params: WorkerParameters) : Worker(context, 
     } catch (_: Exception) {
       SmsRepository(applicationContext).use { connection(it, "Waiting for backend · offline reports available") }
       return Result.retry()
-    } finally { running.set(false) }
+    } finally {
+      running.set(false)
+      if (completedBatch > 0) SmsNotifications.warning(applicationContext, "model-summary", true, completedBatch, highBatch)
+    }
   }
   private fun connection(repo: SmsRepository, value: String) { repo.prefs.edit().putString("connection", value).apply() }
   private fun wait(repo: SmsRepository, response: HttpResult) {

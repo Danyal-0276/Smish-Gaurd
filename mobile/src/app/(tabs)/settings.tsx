@@ -5,6 +5,7 @@ import {
   ShieldCheck,
   Activity,
   Trash2,
+  UserRound,
 } from "lucide-react-native";
 import {
   Screen,
@@ -37,6 +38,12 @@ export default function Settings() {
     <Screen>
       <Txt variant="heading">Your controls.</Txt>
       <Card>
+        <SettingRow
+          icon={UserRound}
+          title="My profile"
+          description="Optional name & phone number"
+          onPress={() => router.push("/profile")}
+        />
         <Txt variant="title">SMS protection</Txt>
         <Txt color={colors.muted}>
           {status?.connection ?? "Complete protection setup to begin."}

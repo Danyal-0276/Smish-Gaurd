@@ -29,10 +29,14 @@ class ApiSecurityTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.a = Installation.objects.create(
-            app_version="test", consent_version="2026-10-22", cloud_consent_at=timezone.now()
+            app_version="test",
+            consent_version="2026-10-22",
+            cloud_consent_at=timezone.now(),
         )
         self.b = Installation.objects.create(
-            app_version="test", consent_version="2026-10-22", cloud_consent_at=timezone.now()
+            app_version="test",
+            consent_version="2026-10-22",
+            cloud_consent_at=timezone.now(),
         )
         self.token = issue(self.a)["credential"]
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
@@ -43,7 +47,10 @@ class ApiSecurityTests(TestCase):
     def test_protected_scan_requires_installation(self):
         self.client.credentials()
         self.assertEqual(
-            self.client.post("/api/v1/analyses", {"text": "hello"}, format="json").status_code, 401
+            self.client.post(
+                "/api/v1/analyses", {"text": "hello"}, format="json"
+            ).status_code,
+            401,
         )
 
     def test_registration_requires_consent_and_rejects_owner_fields(self):
@@ -75,14 +82,20 @@ class ApiSecurityTests(TestCase):
             )
 
     def test_rotated_and_expired_credentials_rejected(self):
-        rotated = self.client.post("/api/v1/installations/me/credentials/rotate", {}, format="json")
-        self.assertEqual(rotated.status_code, 200)
-        self.assertEqual(self.client.post("/api/v1/analyses", {}, format="json").status_code, 401)
-        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + rotated.json()["credential"])
-        InstallationCredential.objects.filter(revoked_at__isnull=True, installation=self.a).update(
-            expires_at=timezone.now() - timedelta(seconds=1)
+        rotated = self.client.post(
+            "/api/v1/installations/me/credentials/rotate", {}, format="json"
         )
-        self.assertEqual(self.client.post("/api/v1/analyses", {}, format="json").status_code, 401)
+        self.assertEqual(rotated.status_code, 200)
+        self.assertEqual(
+            self.client.post("/api/v1/analyses", {}, format="json").status_code, 401
+        )
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + rotated.json()["credential"])
+        InstallationCredential.objects.filter(
+            revoked_at__isnull=True, installation=self.a
+        ).update(expires_at=timezone.now() - timedelta(seconds=1))
+        self.assertEqual(
+            self.client.post("/api/v1/analyses", {}, format="json").status_code, 401
+        )
 
     def test_reset_revokes_credentials_and_only_deletes_own_feedback(self):
         own = Feedback.objects.create(
@@ -153,7 +166,9 @@ class ApiSecurityTests(TestCase):
     def test_payload_limits_and_wrong_types_fail_without_echo(self):
         for value in ["", "   ", "x" * 5001, [], {}, None]:
             response = self.client.post(
-                "/api/v1/analyses", {"text": value, "cloud_analysis_consent": True}, format="json"
+                "/api/v1/analyses",
+                {"text": value, "cloud_analysis_consent": True},
+                format="json",
             )
             self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -163,12 +178,16 @@ class ApiSecurityTests(TestCase):
             413,
         )
         self.assertEqual(
-            self.client.post("/api/v1/analyses", "plain", content_type="text/plain").status_code,
+            self.client.post(
+                "/api/v1/analyses", "plain", content_type="text/plain"
+            ).status_code,
             415,
         )
         canary = "PRIVATE_CANARY_OTP_123456"
         response = self.client.post(
-            "/api/v1/analyses", {"text": canary, "cloud_analysis_consent": False}, format="json"
+            "/api/v1/analyses",
+            {"text": canary, "cloud_analysis_consent": False},
+            format="json",
         )
         self.assertNotIn(canary, response.content.decode())
 
@@ -186,14 +205,17 @@ class ApiSecurityTests(TestCase):
         self.assertIn(response.json()["risk"], ["low", "review", "high"])
         self.assertNotIn("text", response.json())
         unsupported = self.client.post(
-            "/api/v1/analyses", {"text": "12345", "cloud_analysis_consent": True}, format="json"
+            "/api/v1/analyses",
+            {"text": "12345", "cloud_analysis_consent": True},
+            format="json",
         )
         self.assertEqual(unsupported.json()["status"], "unsupported")
         self.assertIsNone(unsupported.json()["risk"])
 
     def test_inference_failure_is_unavailable_not_low_risk(self):
         with patch(
-            "service.inference.get_predictor", side_effect=RuntimeError("PRIVATE_MODEL_PATH")
+            "service.inference.get_predictor",
+            side_effect=RuntimeError("PRIVATE_MODEL_PATH"),
         ):
             response = self.client.post(
                 "/api/v1/analyses",
@@ -220,7 +242,8 @@ class ApiSecurityTests(TestCase):
         # test suite happens to run across a real wall-clock minute boundary.
         with patch("service.quotas.timezone.now", return_value=timezone.now()):
             self.assertEqual(
-                self.client.post("/api/v1/analyses", payload, format="json").status_code, 200
+                self.client.post("/api/v1/analyses", payload, format="json").status_code,
+                200,
             )
             response = self.client.post("/api/v1/analyses", payload, format="json")
         self.assertEqual(response.status_code, 429)
@@ -261,7 +284,9 @@ class ApiSecurityTests(TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertContains(result, "A clearer view of the service")
         self.assertNotContains(result, self.token)
-        self.assertEqual(self.client.get("/admin/service/installationcredential/").status_code, 404)
+        self.assertEqual(
+            self.client.get("/admin/service/installationcredential/").status_code, 404
+        )
 
     def test_numeric_text_and_nonboolean_consent_are_rejected(self):
         for payload in [
@@ -269,7 +294,8 @@ class ApiSecurityTests(TestCase):
             {"text": "A sample text", "cloud_analysis_consent": "true"},
         ]:
             self.assertEqual(
-                self.client.post("/api/v1/analyses", payload, format="json").status_code, 400
+                self.client.post("/api/v1/analyses", payload, format="json").status_code,
+                400,
             )
 
     def test_staff_login_rate_limit_and_csrf_boundary(self):
@@ -289,7 +315,9 @@ class ApiSecurityTests(TestCase):
     @override_settings(DEBUG=False, SECURE_SSL_REDIRECT=False)
     def test_non_tls_api_rejected_in_deployment_mode(self):
         self.assertEqual(self.client.get("/api/v1/capabilities").status_code, 403)
-        self.assertEqual(self.client.get("/api/v1/capabilities", secure=True).status_code, 200)
+        self.assertEqual(
+            self.client.get("/api/v1/capabilities", secure=True).status_code, 200
+        )
 
     def test_log_filter_removes_payload_and_traceback(self):
         record = logging.LogRecord(
@@ -347,6 +375,7 @@ class QuotaConcurrencyTests(TransactionTestCase):
         self.assertEqual(sum(admitted), 3)
         self.assertEqual(QuotaBucket.objects.get().count, 3)
 
+
 class ResultAdviceTests(SimpleTestCase):
     def test_advice_changes_with_model_risk(self):
         from .inference import analyze
@@ -360,10 +389,14 @@ class ResultAdviceTests(SimpleTestCase):
         for verdict, (risk, instruction) in expected.items():
             predictor = Mock()
             predictor.predict.return_value = {
-                "status": "completed", "verdict": verdict,
-                "model_version": "synthetic-unit-test", "language_coverage": "English",
-                "policy_version": "1", "model_estimate": 0.5,
-                "observed_indicators": [], "indicator_note": "Observed rules only",
+                "status": "completed",
+                "verdict": verdict,
+                "model_version": "synthetic-unit-test",
+                "language_coverage": "English",
+                "policy_version": "1",
+                "model_estimate": 0.5,
+                "observed_indicators": [],
+                "indicator_note": "Observed rules only",
             }
             with patch("service.inference.get_predictor", return_value=predictor):
                 result = analyze("Synthetic unit-test input", uuid.uuid4())
@@ -372,5 +405,12 @@ class ResultAdviceTests(SimpleTestCase):
 
     def test_automatic_sms_consent_version_is_accepted(self):
         from .serializers import RegistrationSerializer
-        form = RegistrationSerializer(data={"app_version": "0.2.0", "consent_version": "2026-10-23", "cloud_analysis_consent": True})
+
+        form = RegistrationSerializer(
+            data={
+                "app_version": "0.2.0",
+                "consent_version": "2026-10-23",
+                "cloud_analysis_consent": True,
+            }
+        )
         self.assertTrue(form.is_valid(), form.errors)

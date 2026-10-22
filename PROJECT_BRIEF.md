@@ -6,6 +6,8 @@ Android now has a local Expo/Kotlin SMS module: permission setup, real received-
 
 Automatic uploads require informed setup consent, can be paused, and send text without sender/SIM identifiers. Detected OTP/code text stays local. Offline findings are not trained-model results; model reports arrive when the backend is reachable. Staff cannot browse SMS. Local copies expire after 30 days, with 5,000 messages maximum. Incoming/background operation remains subject to Android permission, installer, battery and protected-message behavior.
 
+An optional **My profile** page stores a display name and phone number encrypted on the device. Own-number lookup asks for READ_PHONE_NUMBERS only when selected; unavailable numbers can be entered manually. All numbers remain unverified. The profile is not sent to the backend and does not authenticate SMS senders. Future OTP ownership verification/reputation requires separate design and consent.
+
 See [SMS_PROTECTION.md](docs/SMS_PROTECTION.md) for current architecture, rebuild/run instructions, limits and device acceptance checks. Older scope/milestone descriptions below are retained as project history and are superseded where they conflict.
 
 **Academic title:** SmishGuard An Explainable Android SMS Phishing Detection and Awareness System

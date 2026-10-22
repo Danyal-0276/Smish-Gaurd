@@ -10,7 +10,13 @@ import {
   type SmsMessage,
 } from "../services/sms-service";
 import { colors } from "../theme/tokens";
-export function SmsFeed({ thread = "", header }: { thread?: string; header?: ReactElement }) {
+export function SmsFeed({
+  thread = "",
+  header,
+}: {
+  thread?: string;
+  header?: ReactElement;
+}) {
   const [messages, setMessages] = useState<SmsMessage[]>([]);
   const [error, setError] = useState("");
   const busy = useSmsStore((s) => s.busy);
@@ -24,29 +30,37 @@ export function SmsFeed({ thread = "", header }: { thread?: string; header?: Rea
       setError(e instanceof Error ? e.message : "Could not load reports.");
     }
   }, [thread]);
-  useFocusEffect(useCallback(() => {
-    queueMicrotask(() => void load());
-    const timer = setInterval(() => {
-      if (AppState.currentState === "active") void load();
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [load, busy]));
+  useFocusEffect(
+    useCallback(() => {
+      if (!busy) queueMicrotask(() => void load());
+      const timer = setInterval(() => {
+        if (AppState.currentState === "active") void load();
+      }, 5000);
+      return () => clearInterval(timer);
+    }, [load, busy]),
+  );
   return (
     <FlatList
       data={messages}
-      keyExtractor={message=>message.id}
+      keyExtractor={(message) => message.id}
       initialNumToRender={5}
       maxToRenderPerBatch={5}
       windowSize={5}
-      contentContainerStyle={{paddingHorizontal:24,paddingBottom:130,gap:18}}
-      ListHeaderComponent={<View style={{gap:20}}>{header}{!!error && <Txt color={colors.danger}>{error}</Txt>}</View>}
-      renderItem={({item:message})=>(
-        <SmsReport
-          message={message}
-          onDelete={() => void load()}
-        />
+      contentContainerStyle={{
+        paddingHorizontal: 24,
+        paddingBottom: 130,
+        gap: 18,
+      }}
+      ListHeaderComponent={
+        <View style={{ gap: 20 }}>
+          {header}
+          {!!error && <Txt color={colors.danger}>{error}</Txt>}
+        </View>
+      }
+      renderItem={({ item: message }) => (
+        <SmsReport message={message} onDelete={() => void load()} />
       )}
-      ListEmptyComponent={(
+      ListEmptyComponent={
         <Card>
           <Txt color={colors.muted}>
             No local reports here yet. Allow SMS access and refresh your inbox
@@ -58,13 +72,15 @@ export function SmsFeed({ thread = "", header }: { thread?: string; header?: Rea
             onPress={() => void load()}
           />
         </Card>
-      )}
-      ListFooterComponent={!!messages.length ? (
-        <Txt variant="small" color={colors.muted}>
-          Showing up to 200 recent reports
-          {thread ? " in this conversation" : ""}.
-        </Txt>
-      ) : null}
+      }
+      ListFooterComponent={
+        !!messages.length ? (
+          <Txt variant="small" color={colors.muted}>
+            Showing up to 200 recent reports
+            {thread ? " in this conversation" : ""}.
+          </Txt>
+        ) : undefined
+      }
     />
   );
 }

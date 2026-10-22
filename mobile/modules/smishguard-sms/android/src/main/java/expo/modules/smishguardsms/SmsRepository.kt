@@ -13,7 +13,7 @@ import org.json.JSONObject
 import java.security.MessageDigest
 import java.util.UUID
 
-internal class SmsRepository(val context: Context) : SQLiteOpenHelper(context, "smishguard-sms.db", null, 1) {
+internal class SmsRepository(val context: Context) : SQLiteOpenHelper(context, "smishguard-sms.db", null, 2) {
   val prefs = context.getSharedPreferences("smishguard.sms.settings", Context.MODE_PRIVATE)
   override fun onCreate(db: SQLiteDatabase) {
     db.execSQL("CREATE TABLE messages (id TEXT PRIMARY KEY, provider_id TEXT UNIQUE, thread_key TEXT NOT NULL, sender TEXT NOT NULL, body TEXT NOT NULL, received INTEGER NOT NULL, imported INTEGER NOT NULL, source TEXT NOT NULL, local_risk TEXT NOT NULL, reasons TEXT NOT NULL, state TEXT NOT NULL, report TEXT, model_risk TEXT, checked INTEGER NOT NULL DEFAULT 0, retry_at INTEGER NOT NULL DEFAULT 0)")
@@ -22,7 +22,14 @@ internal class SmsRepository(val context: Context) : SQLiteOpenHelper(context, "
     db.execSQL("CREATE TABLE dismissed (provider_id TEXT PRIMARY KEY, expires INTEGER NOT NULL)")
   }
   companion object { private val ingestionLock = Any() }
-  override fun onUpgrade(db: SQLiteDatabase, old: Int, new: Int) = Unit
+  override fun onUpgrade(db: SQLiteDatabase, old: Int, new: Int) {
+    if (old < 2) {
+      val columns = mutableSetOf<String>()
+      db.rawQuery("PRAGMA table_info(messages)", null).use { c -> while (c.moveToNext()) columns.add(c.getString(1)) }
+      if ("model_risk" !in columns) db.execSQL("ALTER TABLE messages ADD COLUMN model_risk TEXT")
+      if ("checked" !in columns) db.execSQL("ALTER TABLE messages ADD COLUMN checked INTEGER NOT NULL DEFAULT 0")
+    }
+  }
   fun allowed(permission: String) = context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
   fun enabled() = prefs.getBoolean("enabled", false)
   fun cloud() = enabled() && prefs.getBoolean("cloud", false) && allowed(Manifest.permission.READ_SMS)

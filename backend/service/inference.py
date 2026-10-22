@@ -64,9 +64,11 @@ def analyze(text, request_id):
             "risk": None,
             "message": "This input is outside the evaluated model coverage or has insufficient text.",
         }
-    risk = {"low_detected_risk": "low", "suspicious": "review", "high_phishing_risk": "high"}[
-        raw["verdict"]
-    ]
+    risk = {
+        "low_detected_risk": "low",
+        "suspicious": "review",
+        "high_phishing_risk": "high",
+    }[raw["verdict"]]
     domains = []
     for link in re.findall(r"(?:https?://|www\.)[^\s<>]+", text, flags=re.I)[:20]:
         try:

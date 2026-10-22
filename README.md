@@ -26,7 +26,7 @@ The mobile directory contains the Expo/React Native frontend with real SMS inbox
 
 Selected stack: Expo development builds with React Native and TypeScript, native Android integration in Kotlin where necessary, Python Django with Django REST Framework, and PostgreSQL. Native SQLite stores encrypted local message copies, queue state and reports; Zustand stores preferences and lesson progress. Installed versions are recorded in the lockfiles and setup guide.
 
-No end-user registration. Local-first history. No collection of the owner's phone number, SIM serial, IMSI, or IMEI. Optional cloud analysis requires consent; this differs from fully on-device processing.
+No end-user registration. Local-first history. An optional encrypted local profile may contain a user-confirmed phone number; it is unverified and is not uploaded. No SIM serial, IMSI or IMEI is collected. Optional cloud analysis requires consent; this differs from fully on-device processing.
 
 ## Documentation workflow
 

@@ -3,6 +3,7 @@ package expo.modules.smishguardsms
 import java.net.URI
 
 internal object SmsPolicy {
+  fun validProfile(name: String, phone: String) = name.length <= 60 && name.none { it.isISOControl() } && (phone.isEmpty() || Regex("\\+[1-9][0-9]{6,14}").matches(phone))
   fun validEndpoint(base: String, debug: Boolean): Boolean = try {
     val uri = URI(base)
     val local = uri.host in listOf("localhost", "127.0.0.1", "10.0.2.2")

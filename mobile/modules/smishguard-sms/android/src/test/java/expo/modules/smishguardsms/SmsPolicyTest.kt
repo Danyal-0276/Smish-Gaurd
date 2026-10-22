@@ -4,6 +4,13 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class SmsPolicyTest {
+  @Test fun profileIsOptionalAndNeverTreatsArbitraryInputAsAVerifiedIdentity() {
+    assertTrue(SmsPolicy.validProfile("", ""))
+    assertTrue(SmsPolicy.validProfile("Danyal", "+923001234567"))
+    assertFalse(SmsPolicy.validProfile("x".repeat(61), "+923001234567"))
+    assertFalse(SmsPolicy.validProfile("Name", "03 not a number"))
+    assertFalse(SmsPolicy.validProfile("Name", "+0123456789"))
+  }
   @Test fun linkAloneDoesNotProvePhishing() {
     assertEquals("review", OfflineRules.inspect("Read the notes at https://university.example/notes").risk)
     assertEquals("low", OfflineRules.inspect("Meet me at the library after lunch").risk)

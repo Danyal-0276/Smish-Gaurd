@@ -38,7 +38,7 @@ export default function Home() {
         <Txt color={colors.paper}>
           {status?.enabled
             ? status.connection
-            : "Give permission to read your inbox and check messages. No sample messages are loaded."}
+            : "Allow SMS access to check the messages on this phone."}
         </Txt>
         <Button
           label={
