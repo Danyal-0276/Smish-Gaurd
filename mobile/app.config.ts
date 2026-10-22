@@ -11,7 +11,11 @@ const config: ExpoConfig = {
   android: {
     package: "com.smishguard.app",
     allowBackup: false,
-    permissions: ["android.permission.READ_SMS", "android.permission.RECEIVE_SMS", "android.permission.POST_NOTIFICATIONS"],
+    permissions: [
+      "android.permission.READ_SMS",
+      "android.permission.RECEIVE_SMS",
+      "android.permission.POST_NOTIFICATIONS",
+    ],
     adaptiveIcon: {
       foregroundImage: "./assets/brand/adaptive-foreground.png",
       backgroundColor: "#0064EF",
@@ -31,6 +35,7 @@ const config: ExpoConfig = {
   },
   plugins: [
     "expo-secure-store",
+    "./plugins/with-sms-privacy",
     "./plugins/with-short-cmake-paths",
     "expo-router",
     "expo-font",
