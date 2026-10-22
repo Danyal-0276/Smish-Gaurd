@@ -38,6 +38,10 @@ The script scopes a short temporary path to the process to avoid a Windows Java 
 
 The standard equivalent is `npm run android`. A development APK needs Metro (`npm start`) for JavaScript. A separately signed/internal release build is required for a standalone customer APK; `eas.json` includes a preview APK profile but no remote build has been submitted.
 
+### Windows Ninja path-length fix
+
+The SDK's CMake 3.22.1 includes Ninja 1.10.2. It failed while building `react_codegen_rngesturehandler_codegen` with `Filename longer than 260 characters`, despite Windows long-path support already being enabled. The Android helper now provisions official Ninja 1.13.2 under `.setup/tools/`, verifies pinned archive and executable SHA-256 hashes, and the Expo config plugin selects it through `CMAKE_MAKE_PROGRAM`. The installed Android SDK is not modified. This follows the [Reanimated Windows guide](https://docs.swmansion.com/react-native-reanimated/docs/guides/building-on-windows/), which recommends Ninja 1.12 or newer. Run `scripts/setup-ninja.ps1` before direct Gradle builds; `scripts/android.ps1` does this automatically. No dependency downgrade or global cache deletion is needed.
+
 ## Backend foundation
 
 `backend/.env` exists locally with a generated Django secret and blank database password. Do not paste credentials in chat or commit that file. Fill `POSTGRES_USER` and `POSTGRES_PASSWORD` for your local PostgreSQL installation.

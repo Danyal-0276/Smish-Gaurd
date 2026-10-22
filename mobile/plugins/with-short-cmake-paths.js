@@ -15,6 +15,11 @@ subprojects { subproject ->
       // this user flag to its normal security/compiler flags.
       if (System.getProperty('os.name').toLowerCase().contains('windows')) {
         subproject.android.externalNativeBuild.cmake.buildStagingDirectory = rootProject.file("../../.setup/cxx/" + subproject.name)
+        def ninja = rootProject.file("../../.setup/tools/ninja-1.13.2/ninja.exe")
+        if (!ninja.exists()) {
+          throw new GradleException("Run mobile/scripts/setup-ninja.ps1 before building on Windows.")
+        }
+        subproject.android.defaultConfig.externalNativeBuild.cmake.arguments "-DCMAKE_MAKE_PROGRAM=" + ninja.absolutePath.replace('\\\\', '/')
         subproject.android.defaultConfig.externalNativeBuild.cmake.arguments '-DCMAKE_CXX_FLAGS=--driver-mode=g++'
       }
     }
