@@ -3,7 +3,7 @@ import type { ExpoConfig } from "expo/config";
 const config: ExpoConfig = {
   name: "SmishGuard",
   slug: "smishguard",
-  version: "0.1.0",
+  version: "0.2.0",
   scheme: "smishguard",
   orientation: "portrait",
   userInterfaceStyle: "light",
@@ -11,14 +11,13 @@ const config: ExpoConfig = {
   android: {
     package: "com.smishguard.app",
     allowBackup: false,
+    permissions: ["android.permission.READ_SMS", "android.permission.RECEIVE_SMS", "android.permission.POST_NOTIFICATIONS"],
     adaptiveIcon: {
       foregroundImage: "./assets/brand/adaptive-foreground.png",
       backgroundColor: "#0064EF",
       monochromeImage: "./assets/brand/monochrome.png",
     },
     blockedPermissions: [
-      "android.permission.READ_SMS",
-      "android.permission.RECEIVE_SMS",
       "android.permission.READ_PHONE_STATE",
       "android.permission.READ_CONTACTS",
     ],
@@ -47,6 +46,6 @@ const config: ExpoConfig = {
     ],
   ],
   experiments: { typedRoutes: true },
-  extra: { dataMode: "demo" },
+  extra: { dataMode: "device-sms" },
 };
 export default config;

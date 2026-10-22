@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Platform } from "react-native";
+import { View, StyleSheet, Platform, AppState } from "react-native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
@@ -26,6 +26,8 @@ import { Txt } from "../components/ui";
 import { colors } from "../theme/tokens";
 import { useAppStore } from "../store/app-store";
 
+import { refreshSms } from "../services/sms-service";
+
 void SplashScreen.preventAutoHideAsync().catch(() => {});
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 60_000 } },
@@ -42,6 +44,13 @@ export default function RootLayout() {
   const hydrated = useAppStore((s) => s.hydrated);
   const reduced = useAppStore((s) => s.preferences.reduceMotion);
   const systemReduced = useReducedMotion();
+  useEffect(() => {
+    if (!hydrated) return;
+    void refreshSms(true);
+    const foreground = AppState.addEventListener("change", state => { if (state === "active") void refreshSms(true); });
+    const timer = setInterval(() => { if (AppState.currentState === "active") void refreshSms(); }, 5000);
+    return () => { foreground.remove(); clearInterval(timer); };
+  }, [hydrated]);
   const [introDone, setIntroDone] = useState(false);
   const ready = (fontsReady || Boolean(fontError)) && hydrated;
   useEffect(() => {
@@ -88,6 +97,7 @@ export default function RootLayout() {
                 <Stack.Screen name="lesson/[id]" />
                 <Stack.Screen name="privacy" />
                 <Stack.Screen name="permissions" />
+                <Stack.Screen name="sms/[id]" />
               </Stack>
             )}
             {!introDone && (

@@ -4,10 +4,8 @@ import { Eye, Fingerprint, ShieldCheck } from "lucide-react-native";
 import { Screen, Txt, Button, Enter, Pill } from "../components/ui";
 import { BrandMark, ShieldIllustration } from "../components/brand";
 import { colors, fonts } from "../theme/tokens";
-import { useAppStore } from "../store/app-store";
 
 export default function Welcome() {
-  const finish = useAppStore((s) => s.finishOnboarding);
   return (
     <Screen style={{ gap: 28, paddingBottom: 44 }}>
       <View
@@ -47,13 +45,12 @@ export default function Welcome() {
           </Txt>
         </Txt>
         <Txt color={colors.muted} style={{ marginTop: 14 }}>
-          Learn the signs of SMS phishing, explore a message, and make an
-          informed next move.
+          Scan your inbox, check new arrivals, and receive model reports when connected.
         </Txt>
       </Enter>
       <View style={{ gap: 15 }}>
         {[
-          { Icon: Eye, text: "Clear reasons behind each demo result." },
+          { Icon: Eye, text: "Real SMS, immediate offline observations." },
           { Icon: Fingerprint, text: "No account. No phone number required." },
           { Icon: ShieldCheck, text: "Your history stays on this device." },
         ].map(({ Icon, text }) => (
@@ -70,8 +67,7 @@ export default function Welcome() {
         <Button
           label="Get started"
           onPress={() => {
-            finish();
-            router.replace("/(tabs)");
+            router.push("/permissions");
           }}
         />
         <Txt
@@ -79,8 +75,7 @@ export default function Welcome() {
           color={colors.muted}
           style={{ textAlign: "center" }}
         >
-          Start with local demo checks. Online model checks are optional and ask
-          for consent. Incoming SMS protection is not connected yet.
+          Next, choose your permissions and whether pending messages may be sent automatically for model analysis.
         </Txt>
         <Pressable
           accessibilityRole="link"

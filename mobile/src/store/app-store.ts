@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { demoResults, lessons as bundledLessons } from "../data/fixtures";
+import { lessons as bundledLessons } from "../data/fixtures";
 import { metadataStorage } from "../services/storage";
 import {
   retainHistory,
@@ -32,7 +32,6 @@ interface AppState {
   clearHistory(): void;
   completeLesson(id: string): void;
   correct(id: string): void;
-  resetDemo(): void;
 }
 export const useAppStore = create<AppState>()(
   persist(
@@ -40,8 +39,8 @@ export const useAppStore = create<AppState>()(
       hydrated: false,
       storageError: false,
       onboarded: false,
-      history: demoResults.map(metadata),
-      results: Object.fromEntries(demoResults.map((r) => [r.id, r])),
+      history: [],
+      results: {},
       completedLessons: [],
       lessons: bundledLessons,
       setLessons: (lessons) => set({ lessons }),
@@ -86,15 +85,15 @@ export const useAppStore = create<AppState>()(
         })),
       correct: (id) =>
         set((state) => ({ corrections: { ...state.corrections, [id]: true } })),
-      resetDemo: () =>
-        set({
-          history: demoResults.map(metadata),
-          results: Object.fromEntries(demoResults.map((r) => [r.id, r])),
-        }),
+
     }),
     {
       name: "smishguard-metadata-v1",
-      version: 1,
+      version: 2,
+      migrate: (saved) => {
+        const value = saved as Partial<AppState>;
+        return { ...value, onboarded: false, history: [], corrections: {}, preferences: { haptics: true, keepHistory: true, reduceMotion: value.preferences?.reduceMotion ?? false, notifications: false, cloudAnalysis: false } };
+      },
       storage: createJSONStorage(() => metadataStorage),
       partialize: (state) => ({
         onboarded: state.onboarded,
