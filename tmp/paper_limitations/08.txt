@@ -1,0 +1,967 @@
+=== PDF PAGE 1 ===
+ARTICLE TEMPLATE
+A Multi-Transformer Framework for Short-Claim Fake News
+Detection with Affective Feature Ablation
+Ali Saeeda, Nauman Irshad Ali Shah b, Touseef Tahirc,*, Danyal Tanveerb, Abdullah
+Ahmedb and Muhammad Shahroz Butt b
+aDepartment of Software Engineering, Faculty of IT & CS, University of Central Punjab,
+Lahore, Pakistan; bDepartment of Computer Science, University of Central Punjab, Lahore,
+54000, Pakistan; cSchool of Computing, Engineering and the Built Environment, London,
+United Kingdom
+AR TICLE HISTOR Y
+Compiled October 25, 2026
+ABSTRACT
+Three recurrent problems have emerged on short-claim fake-news detection: am-
+biguous label mappings, unfair comparison with the long-article settings, and
+ill-defined contributions of affective features. We tackle these three issues using
+Multi-Transformer Sentimental LIAR: a controlled paradigm in which we compare
+RoBERTa, ELECTRA, BERT and DistilBERT on official LIAR partitions under
+one publicly revealed clear-label scheme. Text-only, sentiment, emotion, and joint
+affectiveness setting were measured and compared for its accuracy, precision, recall,
+F1 score, AUC of receiver operating characteristic curve, Matthew’s correlation
+coefficient, model size, training time respectively. With joint affective input ELEC-
+TRA has reached an accuracy of72.03%, an F1 score of 0.7626, and a Matthews
+correlation coefficient of 0.4247.However, with solely text input, ELECTRA reached
+82.03%accuracy, 0.8356 for F1 score and 0.6404 for Matthews correlation coefficient.
+It proves that affectives augmentation is context-aware depending on encoder’s ar-
+chitecture and sometimes can negatively affect its performance. DistilBERT obtains
+70.76% accuracy with 66.96 Million parameters, a suitable deployment model. A
+traceable claim screening is made possible via the reported method, well documented
+algorithm, Gradio UI, the result is kept as support for human judgment.
+KEYWORDS
+fake news detection; LIAR dataset; Sentimental LIAR; multi-transformer;
+ELECTRA; DistilBERT; sentiment and emotion ablation; Gradio deployment
+1. Introduction
+False and misleading claims burden journalism, platform moderation, public communi-
+cation, and political decision-making because harmful content can circulate faster than
+complete fact-checking reports ( 1–3, 25). Short claims are particularly difficult because
+they provide little context, contain weak discourse structure, and may use ambiguous or
+emotionally persuasive language ( 4–6). An automated classifier cannot establish factual
+truth by itself, but it can support early screening by ranking suspicious claims for human
+review.
+CONTACT Touseef Tahir. Email: Touseef.Tahir@roehampton.ac.uk
+
+=== PDF PAGE 2 ===
+Earlier studies demonstrate how strongly task definition affects performance. The
+original LIAR benchmark reported 27.4% accuracy, subsequent speaker-profile and meta-
+data extensions reported 41.5% and 45.7%, Sentimental LIAR reported approximately
+70%, and a hard binary LIAR benchmark reported approximately 62% ( 4–6). Word
+Embedding over Linguistic Features for Fake News Detection reported 96.73% accuracy
+for long news articles (7); however, a complete article contains much more evidence than
+an isolated claim, so this result is not directly comparable with LIAR.
+These studies leave three research gaps. First, inconsistent binary-label mappings make
+results difficult to compare. Second, short-claim and long-article results are sometimes
+presented together even though they measure different prediction problems. Third,
+affective features are often added without a matched text-only ablation across several
+transformer encoders, so their actual contribution remains uncertain.
+We address these gaps through one clear-label LIAR protocol, four matched trans-
+former encoders, and controlled text-only, sentiment-augmented, emotion-augmented,
+and joint affective experiments. The application supports newsroom triage, educational
+fact-checking exercises, moderation research, and model comparison. ELECTRA reaches
+72.03% accuracy with joint affective information and 82.03% with text alone. DistilBERT
+provides the preferred deployment balance at 70.76% accuracy with fewer parameters.
+Hypotheses..We test three hypotheses. First, matched encoders will produce different
+error profiles because their pre-training objectives differ. Second, sentiment and emotion
+features will not improve every encoder because they can duplicate contextual information
+or introduce noisy tokens. Third, DistilBERT will retain sufficient predictive performance
+for interactive deployment while using fewer parameters than the larger encoders.
+Illustrative claim types..The task receives short statements rather than complete
+articles. A clearly false example is “The United States Constitution requires the president
+to be born in Washington, D.C. ” A clearly real example is “A United States presidential
+term lasts four years. ” A context-dependent statement such as “Unemployment is at its
+lowest level ever” requires a date, population, and comparison period. Such ambiguity
+motivates careful label definition and human review.
+The next section reviews the relevant literature and identifies the precise gap addressed
+by the framework.
+2. Literature Review
+Fake-news detection is commonly understood as an inference problem built from three
+broad evidence families: the linguistic content of an item, the social context in which
+it is produced and propagated, and external knowledge used to verify its claims ( 1–
+3). Content-based methods examine lexical choice, syntax, semantics, writing style,
+and rhetorical framing, whereas context-based methods use information such as source
+credibility, user engagement, and diffusion structure (1, 2). Knowledge-based approaches
+instead compare a statement with trusted evidence or structured facts ( 2, 3). Evidence-
+grounded benchmarks such as FEVER make this distinction explicit by pairing supported
+or refuted decisions with textual evidence, rather than inferring veracity from claim
+wording alone (21). These families are complementary, but they are not interchangeable.
+Because LIAR consists of short political statements rather than complete articles or
+propagation graphs, the present study focuses on content-derived evidence and treats its
+2
+
+=== PDF PAGE 3 ===
+predictions as screening signals rather than completed fact verification (4,21).
+2.1. Short-claim fake news and the LIAR benchmark
+Wang introduced LIAR as a short political-claim dataset with six truthfulness grades
+and speaker metadata. The original hybrid convolutional neural network achieved 27.4%
+accuracy, illustrating the difficulty of six-class claim classification ( 4). Later speaker-
+profile and metadata methods reported 41.5% and 45.7% accuracy, while a hard binary
+benchmark reported approximately 62% ( 5, 6). These improvements are important, but
+differences in label conversion and feature availability prevent direct ranking. This study
+addresses that limitation by disclosing one binary mapping and evaluating every model
+on the same filtered partitions.
+2.2. Affective augmentation theory
+Sentiment and emotion describe rhetorical tone, but they do not provide external evidence
+that a proposition is true or false (12, 13). Prior linguistic analysis has identified stylistic
+and affective differences across unreliable news and political fact-checking categories,
+while FakeFlow models changes in affective information across a document ( 26, 30).
+Sentimental LIAR combined Bidirectional Encoder Representations from Transformers
+with affective and speaker-credit features and reported approximately 70% accuracy ( 5).
+These results motivate affect-aware modeling, but they do not establish that sentiment
+and emotion improve every transformer architecture. The unresolved gap is feature
+necessity: affective information must be compared with a text-only baseline under
+identical data and evaluation conditions. This study fills that gap through four controlled
+feature settings for every encoder.
+2.3. Explainability and multi-transformer ensembles
+The four selected transformer encoders use different learning strategies: bidirectional
+masked-token learning, optimized pre-training, replaced-token discrimination, and knowl-
+edge distillation (8–11). Previous single-model studies cannot show whether a reported
+gain arises from the feature design or the selected encoder. This study therefore uses a
+matched four-model comparison and reports accuracy, precision, recall, F1 score, area
+under the receiver operating characteristic curve, and Matthews correlation coefficient
+rather than relying on accuracy alone.
+2.4. Deployment and responsible use
+Interactive ML demos (Gradio) provide standardized claim-entry forms with metadata for
+model choice and affective diagnostics ( 17). Those interfaces answer a different scientific
+question,can a non-expert run the model?, from the notebook question,what Acc did
+seed 42 yield?Transparent release should additionally state intended use, evaluation
+conditions, and limitations, following the model-card principle for documented ML
+deployment (23). Multi-Transformer Sentimental LIAR therefore uses Gradio only as
+deployment context: compulsory claim text, optional affective display, and DistilBERT
+as the efficiency default.
+3
+
+=== PDF PAGE 4 ===
+2.5. Research gap
+Prior work leaves three linked limitations: inconsistent binary-label protocols, invalid
+comparison between short claims and long articles, and insufficient matched ablation
+of affective features across transformer architectures. We address these gaps with one
+disclosed LIAR label mapping, strict separation of article and claim results, and four
+controlled feature settings for each encoder.
+The methodology section converts these gaps into a formal task, a controlled feature
+design, and a matched multi-model architecture.
+3. Methodology
+The central problem addressed by this work is the absence of a scientifically honest
+short-claim decision-support stack that can:
+(1) Accept routine claim text required for fact-check screening;
+(2) Produce false or real screening scores from matched transformers without mixing
+long-article accuracy with short-claim accuracy; and
+(3) Determine whether sentiment and emotion descriptors improve performance beyond
+claim text alone.
+Formally, letDL ={(xi,y i)}NL
+i=1 be labeled LIAR claims with yi ∈ {0, 1}under
+protocol hard clear, and let S be the set of affective settings. The learning objective
+is to estimate p(y=1|˜xs) for each backbone m and setting s∈Swithout using any
+WELFake article row. Existing approaches solve only subsets of this problem ( 5, 6, 8).
+3.1. Framework design
+Framework design explains how the scientific components operate as one controlled
+system. It connects the prediction task, label definition, feature construction, transformer
+encoders, ablation conditions, evaluation rules, and deployment criterion. The design
+keeps the source data and target labels fixed while changing only the feature setting
+and encoder. This isolation is essential because an observed performance difference
+can otherwise result from a changed dataset, a different label mapping, or a different
+test partition rather than from the model itself. The framework therefore supports two
+comparisons: an architectural comparison among four encoders and a feature comparison
+among four input settings. Both comparisons use the same official partitions and the
+same binary task.
+The framework also separates predictive modeling from factual verification. It learns
+statistical associations from short claim text and optional affective descriptors, but
+it does not retrieve supporting documents or validate a proposition against external
+evidence. Evidence-aware systems such as DeClarE address a broader verification setting
+by combining claims with retrieved evidence ( 28). In contrast, the present framework
+is designed for early screening, controlled experimentation, and transparent model
+comparison. This boundary determines how the results and the Gradio output should
+be interpreted.
+3.1.1. Controlled feature settings
+This framework uses the same LIAR claims under four clearly described input conditions:
+4
+
+=== PDF PAGE 5 ===
+Table 1.Why Multi-Transformer Sentimental LIAR is structured differently from typical fake-news ML
+papers.
+Dimension Common prior practice This work
+Training / Acc table Mix LIAR with article Acc LIAR only in primary tables
+Primary call Single BERT/RoBERTa Matched 4 transformers
+Evaluation honesty Acc/F1 only; hide collapses Acc/F1/AUC/MCC; report MCC 0
+fail
+Binary protocol Undisclosed / mixed Explicit hard clear mapping
+Affective cues Optional / not ablated 4 controlled feature settings
+Feature honesty Hidden preprocessing VADER+NRC tag serialization dis-
+closed
+Deployment Notebook only Gradio efficiency-oriented demo
+Patient / claim form Partial fields Claim text compulsory; tags shown
+Reproducibility Partial configs Seed 42 locked export package
+•Text-only setting:the transformer receives only the claim text.
+•Sentiment-augmented setting:the claim is accompanied by Valence Aware
+Dictionary and Sentiment Reasoner sentiment descriptors (12).
+•Emotion-augmented setting:the claim is accompanied by National Research
+Council Emotion Lexicon descriptors (13).
+•Joint affective setting:the claim is accompanied by both sentiment and emotion
+descriptors (5).
+No row join between LIAR and WELFake is performed for supervised training.
+Primary Acc tables never write article-scale scores into LIAR cells. Table 1 summarizes
+the structural differences from common fake-news ML practice.
+System architecture.Figure 1 presents the complete theoretical workflow. The process
+begins with short political claims from the LIAR dataset. The original truthfulness
+grades are then converted through the disclosed clear-label rule. Sentiment and emotion
+descriptors are added as optional contextual information, after which each transformer
+encoder learns a claim representation and produces a classification score. Controlled ab-
+lation experiments test whether the affective descriptors improve or weaken performance.
+The resulting predictions are evaluated with complementary classification measures,
+and the efficient selected model is finally presented through the Gradio application for
+human-centered screening.
+3.1.2. Clear-label preprocessing
+Labeled LIAR rows undergo protocol hard clear filtering:
+Fake ={pants-fire,false},
+Real ={mostly-true,true}, (1)
+dropping barely-true and half-true. Class-weighted loss and validation-tuned thresh-
+olds keep decision points numerically stable (4,5).
+3.1.3. Affective construction and matched fine-tuning
+For claims, VADER and NRCLex produce tags concatenated as
+˜x= [s; SENT(s); EMO(s)].(2)
+5
+
+=== PDF PAGE 6 ===
+Figure 1.Complete Multi-Transformer Sentimental LIAR architecture: Dataset LIAR pipeline, joint affective
+setting Soft Affective main setting, text-only, sentiment-augmented, and emotion-augmented settings ablation,
+locked export, and Gradio interface.
+Each backbonem∈{RoBERTa,ELECTRA,BERT,DistilBERT}uses a unique configu-
+ration profile (learning rate, epochs, batch, dropout, seed offset) under global seed 42 ( 8–
+11).
+3.1.4. Model selection rationale
+The four encoders were selected because they represent complementary solutions to
+limitations observed in earlier text classifiers. Classical bag-of-words and shallow neural
+models have difficulty representing context, word order, negation, and long-range rela-
+tions within a claim. Transformer self-attention supplies the shared contextual foundation
+for the selected encoders ( 14). Bidirectional Encoder Representations from Transformers
+addresses this problem through bidirectional contextual pre-training, but its masked-
+language objective and computational cost do not guarantee the best short-claim decision
+boundary (8). Robustly Optimized Bidirectional Encoder Representations from Trans-
+formers improves the pre-training recipe and can strengthen contextual representations,
+although its larger parameter count increases resource demand ( 9). Efficiently Learn-
+ing an Encoder that Classifies Token Replacements Accurately uses replaced-token
+discrimination, which provides a learning signal at more token positions and may be
+advantageous when claims are short ( 11). Distilled Bidirectional Encoder Represen-
+tations from Transformers transfers knowledge from a larger teacher into a smaller
+model, making it suitable for interactive deployment, although compression can reduce
+predictive capacity (10). Evaluating all four models under matched conditions reveals
+whether performance differences arise from architecture rather than from inconsistent
+datasets or label rules.
+6
+
+=== PDF PAGE 7 ===
+Table 2.LIAR dataset definition and composition after clear-label conversion.
+Property Definition used in this work
+Source PolitiFact political claims distributed through the LIAR benchmark (4)
+Prediction unit One short English political claim
+Original target Six truthfulness grades: pants-fire, false, barely-true, half-true, mostly-true, and true
+Retained target Fake: pants-fire and false; Real: mostly-true and true
+Excluded
+records
+Barely-true, half-true, empty claims, and unlabeled records
+Available
+context
+Speaker, subject, party, job, location, and prior fact-check history; the controlled
+transformer comparison uses claim text and constructed affective descriptors
+External
+evidence
+No complete article or retrieved evidence is supplied to the classifier
+Evaluation role Training estimates parameters, validation selects stopping and thresholds, and testing
+provides final hold-out evaluation
+3.1.5. Prediction and transparent metric reporting
+Let pm(˜x) denote positive-class probability from model m. Predictions use a validation-
+tuned thresholdτm:
+ˆy=I
+[
+pm(˜x)≥τm
+]
+.(3)
+This study reports accuracy, precision, recall, F1 score, area under the receiver operating
+characteristic curve, and Matthews correlation coefficient jointly. The combined metric
+profile preserves differences among models, whereas accuracy-only headlines can hide
+complementary errors (6, 16). The emotion-only ELECTRA result with a Matthews
+correlation coefficient of zero is retained as a negative control.
+The score pm(˜x) is used for ranking and thresholding but is not automatically a
+calibrated probability of factual truth. Modern neural classifiers can be accurate yet
+overconfident, so probability calibration must be evaluated separately before confidence
+values are interpreted operationally (22).
+3.1.6. Deployment model criterion
+DistilBERT is the efficiency default (wsize priority) when Acc gaps to ELECTRA remain
+modest; ELECTRA remains the Acc leader on joint affective setting (10,11,17).
+3.2. Dataset and task design
+The LIAR benchmark contains short political claims, six truthfulness grades, and
+contextual metadata (4). The experiment uses claim text as the common prediction unit
+and applies the same clear-label conversion to the official training, validation, and test
+partitions. Table 2 defines the binary task, while Table 3 reports the retained sample
+counts.
+Retained LIAR partition counts.Table 3 reports the class distribution in the official
+training, validation, and test partitions after clear-label filtering.
+3.2.1. Study design
+The retrospective experiment retains the official LIAR partitions and fixes seed 42. The
+seed makes the reported run traceable but does not measure variation across repeated
+fine-tuning runs (24).
+7
+
+=== PDF PAGE 8 ===
+Table 3.Retained LIAR partition counts.
+Split N Fake Real Real ratio
+Train 6472 2834 3638 0.562
+Validation 799 379 420 0.526
+Test 790 341 449 0.568
+Total 8061 3554 4507 0.559
+Interpretation.The retained dataset contains 8061 claims: 3554 false and 4507 real. Training estimates model
+parameters, validation controls stopping and threshold selection, and testing provides final hold-out evaluation.
+The class ratios justify reporting balanced measures because accuracy alone can favor the larger class ( 4, 6, 19).
+3.2.2. Dataset and labels
+LIAR records contain a claim, a truthfulness grade, and contextual fields such as speaker,
+subject, party, job, location, and prior fact-check history ( 4). The false class combines
+pants-fire and false; the real class combines mostly-true and true. The experiment
+excludesbarely-true,half-true, empty claims, and unlabeled records.
+3.2.3. Partitioning and preprocessing
+The same filter is applied independently to the official training, validation, and test
+partitions. The test set contains N=790 claims. Preprocessing uses transformer tok-
+enization, class-weighted loss, early stopping, and validation-only threshold selection.
+Long-article results remain non-comparable context and are not included in supervised
+LIAR training (7).
+The methodology defines the data, target labels, features, and model family. The
+experimental setup now specifies how these components are trained and evaluated.
+4. Experimental Setup
+The experimental setup converts the methodology into a reproducible evaluation proce-
+dure. The methodology defines the data, labels, features, and model family; this section
+defines how the models are trained, how decisions are selected, and how performance
+is measured. All four encoders use the same retained claims and official partitions.
+The comparison therefore changes the encoder or feature setting without changing the
+underlying test population. This separation reduces confounding and ensures that later
+differences can be interpreted as model or feature effects rather than as consequences of
+inconsistent data preparation.
+The setup follows a strict training, validation, and testing sequence. Training data
+estimate model parameters. Validation data control early stopping and decision-threshold
+selection. Test data remain isolated until the final evaluation. The reported run uses
+seed 42 so that its outputs can be reproduced, but a single seed cannot estimate
+optimization variance. Repeated runs and complete configuration reporting remain
+necessary for stronger reproducibility claims (24,32).
+4.1. Training protocol
+All encoders use the same filtered LIAR partitions and a common transformer fine-tuning
+workflow (15). Training uses class-weighted loss, early stopping, and threshold selection
+on the validation partition. The test partition remains untouched until final evaluation.
+Seed 42 fixes the reported run. Because only one seed was executed, the experiment
+8
+
+=== PDF PAGE 9 ===
+establishes reproducibility for that run but does not estimate variation across random
+initializations (24).
+4.2. Evaluation measures
+We report accuracy, precision, recall, F1 score, area under the receiver operating char-
+acteristic curve, and Matthews correlation coefficient ( 16, 18, 19). Receiver operating
+characteristic curves and precision and recall curves describe threshold behavior. Param-
+eter counts and training time describe computational cost. Controlled ablation compares
+text-only, sentiment-augmented, emotion-augmented, and joint affective inputs.
+4.3. Statistical comparison
+Pairwise model comparison should use McNemar’s test on the same test claims ( 35).
+Let n01 denote claims classified correctly by model one and incorrectly by model two,
+and letn 10 denote the reverse disagreements. The continuity-corrected statistic is
+χ2 = (|n01−n10|−1)2
+n01 +n 10
+.(4)
+The available experiment summary preserves aggregate metrics and confusion matrices
+but not the paired claim-level prediction vectors required to calculate n01 and n10. We
+therefore do not report a fabricated significance value. A future evaluation export must
+retain claim identifiers, labels, and predictions for every model so that McNemar p-values
+and confidence intervals can be computed.
+4.4. Probability calibration
+The models produce scores for ranking and thresholding. These scores are not automati-
+cally calibrated probabilities of truth. Calibration should be measured on held-out data
+with reliability diagrams, expected calibration error, the Brier score, and calibration-
+sensitive comparison of learning algorithms before an interface displays probability
+language ( 22, 36, 37). The current application presents model scores as screening
+outputs and avoids interpreting them as verified confidence.
+This setup separates model design from evaluation decisions. The next section reports
+the locked numerical results without changing the protocol after observing the test set.
+5. Results
+This section reports the complete evidence for the four transformer encoders. It first
+presents the joint affective comparison, then examines text-only, sentiment-augmented,
+emotion-augmented, and joint affective ablations. Receiver operating characteristic
+and precision and recall curves describe threshold behavior, while parameter counts
+and training times support the deployment decision. Under the joint affective setting,
+ELECTRA achieves72.03%accuracy, an F1 score of 0.7626, an area under the receiver
+operating characteristic curve of 0.7909, and a Matthews correlation coefficient of
+0.4247. The strongest overall result is ELECTRA with text alone at82.03%accuracy.
+9
+
+=== PDF PAGE 10 ===
+Table 4.Primary joint affective results for this study.
+Metric Value
+ELECTRA Acc / F1 / AUC / MCC 72.03/ 0.7626 /
+0.7909 / 0.4247
+DistilBERT Acc / F1 70.76 / 0.7508
+RoBERTa Acc / Recall 70.38 / 0.8196
+BERT Acc / F1 69.87 / 0.7413
+TestN 790
+Split seed / protocol 42 / hard clear
+Deploy backbone DistilBERT
+(66.96M)
+Table 5.Multi-model metric ranking for the joint affective setting.
+Rank Model Acc (%) Prec Rec F1 AUC MCC
+1 ELECTRA 72.03 0.7365 0.7906 0.7626 0.7909 0.4247
+2 DistilBERT 70.76 0.7280 0.7751 0.7508 0.7701 0.3990
+3 RoBERTa 70.38 0.7063 0.8196 0.7588 0.7633 0.3877
+4 BERT 69.87 0.7240 0.7595 0.7413 0.7618 0.3818
+DistilBERT achieves70.76%accuracy and remains the preferred deployment model
+because of its smaller size.
+5.1. Primary joint affective results
+The primary joint affective analysis asks how the four encoders perform when claim text,
+sentiment descriptors, and emotion descriptors are supplied together. Table 4 presents
+the headline operating profile, test-set size, fixed seed, label protocol, and deployment
+choice. It provides a concise summary of the evidence but does not reduce evaluation
+to accuracy alone. The reported F1 score describes the balance between precision and
+recall at the selected threshold, the area under the receiver operating characteristic curve
+describes ranking across thresholds, and the Matthews correlation coefficient summarizes
+all four cells of the confusion matrix.
+Table 5 then gives the complete matched ranking. Every row uses the same joint
+affective representation, clear-label test claims, and evaluation rules. The table therefore
+supports direct comparison among encoders. ELECTRA leads most balanced measures,
+RoBERTa records the highest recall, and DistilBERT remains close to the larger encoders
+with fewer parameters. These differences show why the analytical leader, the recall-
+oriented model, and the deployment model need not be identical.
+5.2. Four-model hold-out comparison
+The hold-out comparison examines generalization on the untouched test partition after
+all training and threshold decisions have been completed. Table 5 lists every classifier
+under the shared joint affective setting. Because all encoders are evaluated on the same
+claims, their errors are comparable at the instance level even though paired prediction
+vectors are not available for a formal significance calculation. The numerical ranking
+should therefore be interpreted together with the metric pattern rather than as proof
+that a small score difference will persist across seeds or domains.
+Figures 2 and 3 expand the comparison into complementary views. The radar chart
+displays the shape of each model’s predictive profile and reveals whether a model gains
+10
+
+=== PDF PAGE 11 ===
+Figure 2.Radar metric profiles under the joint affective setting.
+one measure at the expense of another. The efficiency figure places predictive quality
+beside parameter count and training cost. Together, they separate three questions:
+which model provides the strongest balanced discrimination, which model emphasizes
+recovery of positive claims, and which model offers the most practical resource profile
+for interactive deployment.
+5.3. Ablation and error analysis
+The ablation analysis tests whether sentiment and emotion add useful information beyond
+the claim text already encoded by each transformer. It changes one feature condition at
+a time while preserving the label protocol and data partitions. This controlled design
+distinguishes a genuine feature contribution from a gain caused by a different dataset or
+test sample. Tables 6 to 8 report exact accuracy, F1 score, and Matthews correlation
+coefficient values for text-only, sentiment-augmented, emotion-augmented, and joint
+affective inputs. Figure 4 retains the grouped visual comparison so that architecture-
+specific patterns remain visible.
+The three measures answer different questions. Accuracy measures total correctness
+but can conceal class preference. The F1 score emphasizes the precision and recall
+balance for the positive class but excludes true negatives. The Matthews correlation
+coefficient incorporates the complete confusion matrix and exposes degenerate behavior.
+This distinction is essential for the ELECTRA emotion-only condition: its accuracy
+appears non-trivial, but its zero Matthews correlation coefficient indicates that the
+predictions contain no useful balanced association with the observed labels.
+Error analysis complements the aggregate ablation tables by examining the linguistic
+11
+
+=== PDF PAGE 12 ===
+Figure 3.Efficiency trade-offs between F1 score, model size, and training cost.
+Table 6.Ablation test accuracy (%) by model and feature
+setting.
+Model Text +Sent. +Emo. +Both
+ELECTRA 82.03 80.38 56.84 72.03
+BERT 79.24 76.71 69.24 69.87
+RoBERTa 70.63 70.00 71.77 70.38
+DistilBERT 70.89 69.24 67.22 70.76
+situations in which models fail. Short claims involving missing dates, quantities, compar-
+isons, negation, named entities, or emotionally charged wording can be difficult because
+the claim string does not contain enough evidence to resolve factuality. Behavioral tests
+based on controlled perturbations should be added in future runs to determine whether a
+prediction changes appropriately when a number, entity, negation, or temporal qualifier
+changes (40). This analysis explains why affective tags can help one encoder yet harm
+another: they can add rhetorical context, duplicate information already represented in
+contextual embeddings, or distract attention from fact-relevant lexical cues.
+5.4. Confusion matrices
+Class-specific error patterns.Figure 5 reports the four main joint affective confusion
+matrices. The integer cells are reconstructed from the locked class totals and the reported
+accuracy, precision, and recall values. They reproduce the published aggregate metrics but
+do not replace the missing claim-level prediction vectors required for paired significance
+testing.
+Table 7.Ablation test F1 by model and feature setting.
+Model Text +Sent. +Emo. +Both
+ELECTRA 0.8356 0.8313 0.7248 0.7626
+BERT 0.8080 0.7987 0.7508 0.7413
+RoBERTa 0.7537 0.7476 0.7536 0.7588
+DistilBERT 0.7553 0.7297 0.7305 0.7508
+12
+
+=== PDF PAGE 13 ===
+Table 8.Ablation test MCC by model and feature setting.
+Model Text +Sent. +Emo. +Both
+ELECTRA 0.6404 0.5980 0.0000 0.4247
+BERT 0.5870 0.5231 0.3632 0.3818
+RoBERTa 0.3947 0.3818 0.4233 0.3877
+DistilBERT 0.4001 0.3729 0.3211 0.3990
+Figure 4.Grouped ablation bars across the four feature settings.
+Figure 5.Reconstructed confusion matrices for the four main joint affective models.
+13
+
+=== PDF PAGE 14 ===
+Table 9.Representative claim patterns for misclassification analysis.
+Representative claim Error source Why the classifier can fail
+“Unemployment is at its lowest
+level ever. ”
+Missing time
+and population
+scope
+The sentence requires a date,
+geographic scope, population
+definition, and historical
+comparison. Lexical content alone
+cannot recover these conditions.
+“The bill did not increase income
+tax rates. ”
+Negation and
+policy detail
+A model can focus on “increase”
+and “tax rates” while
+underweighting the negation.
+Verification also requires the bill
+text.
+“Candidate A voted against the
+proposal supported by Candidate
+B. ”
+Entity and
+relation
+confusion
+Multiple people and opposing
+relations increase the risk of
+assigning the action to the wrong
+entity.
+“Officials called the report
+shocking, but its central statistic
+was correct. ”
+Affective
+distraction
+Strong emotion words can
+dominate the serialized tags even
+though the factual content
+remains correct.
+5.5. Qualitative error analysis
+Short claims fail for identifiable linguistic reasons. Numerical claims often omit a date,
+denominator, or comparison group. Negation can reverse a claim while preserving most of
+its vocabulary. Entity substitutions can make a linguistically plausible sentence factually
+wrong. Quoted speech can also cause the model to attribute a statement to the wrong
+speaker. Affective tags do not resolve these problems because none supplies external
+evidence.
+Representative misclassification patterns.Table 9 records concrete examples for
+qualitative audit. The aggregate result package does not retain the claim-level text
+and paired predictions needed to assert that these exact sentences were test-set errors.
+The table therefore presents representative error patterns rather than fabricated test
+instances.
+5.6. Why text-only ELECTRA performs best
+Results show that ELECTRA performs best without appended affective tags. Three
+mechanisms explain this outcome. First, replaced-token discrimination already trains
+ELECTRA to detect locally inconsistent wording, which is valuable for short claims (11).
+Second, sentiment and emotion descriptors repeat information that the contextual encoder
+can infer from the original text. This redundancy consumes sequence capacity without
+adding factual evidence. Third, serialized tags alter token positions and attention patterns.
+Noisy or weakly relevant emotion tokens can therefore shift the decision boundary away
+from the claim itself. The decline from 82.03% text-only accuracy to 72.03% joint affective
+accuracy supports this explanation. The result does not show that affect is always useless.
+It shows that feature value depends on the encoder, task, and serialization method.
+14
+
+=== PDF PAGE 15 ===
+Table 10.Comparison table.
+Study (name) Task / data Their reported This study Verdict
+Upadhyay &
+Behzadan
+(Sentimental
+LIAR) (5)
+LIAR + affect
+(standard map)
+≈70% accuracy 72.03% joint
+affective
+Complementary
+protocol
+Khan et al. (6) Hard LIAR
+binary
+≈62% accuracy 82.03% text-only Stronger under
+clear-label
+Wang LIAR (4) Dataset release 6-way grades Binary hard clear This study uses
+LIAR
+Verma et al.
+(WELFake) (7)
+Long articles High Acc band N/A on LIAR
+tables
+Different modality
+BERT / RoBERTa
+single papers (8,9)
+Text classification One backbone Four matched This study adds
+matched
+comparison
+The joint affective and text-only results use a different binary protocol from Sentimental LIAR; protocol
+disclosure is required for fair interpretation.
+5.7. Literature and capability comparison
+Tables 10 to 11 compare the framework with representative short-claim, affect-aware,
+transformer, and long-article systems ( 5–7). The comparison serves two purposes. First,
+it places the reported accuracy values within their correct task definitions. A six-class
+LIAR result, a binary LIAR result, and a long-article result use different target spaces and
+evidence conditions. Their numerical values cannot support a direct universal ranking.
+Second, the comparison examines methodological coverage. It asks whether each system
+discloses its label protocol, evaluates several encoders under matched conditions, tests
+affective features through ablation, reports balanced measures such as the Matthews
+correlation coefficient and the area under the receiver operating characteristic curve,
+and provides an accessible application.
+Table 10 therefore emphasizes construct validity rather than numerical competition.
+Sentimental LIAR provides the closest affect-aware comparison, but it uses a different
+label conversion. The Khan benchmark provides a difficult binary reference, while
+WELFake demonstrates the higher performance achievable when complete articles
+supply more linguistic evidence. The transformer rows show that using a strong encoder
+alone does not guarantee a fair comparison. Dataset control, label disclosure, feature
+control, and consistent evaluation remain necessary.
+Table 11 extends the analysis beyond accuracy. The proposed framework combines
+four elements that earlier pipelines usually address separately: matched transformer
+evaluation, explicit affective ablation, multi-measure reporting, and Gradio deployment.
+This combination supports an integration contribution. It does not claim that the
+individual encoders, sentiment lexicon, emotion lexicon, or interface technology are
+independently novel.
+5.8. Curve-level evidence
+Figures 6 and 7 examine model behavior across decision thresholds rather than at only
+one selected operating point. This analysis matters because accuracy, precision, recall,
+F1 score, and Matthews correlation coefficient depend on a particular threshold. Two
+models can produce similar threshold-specific scores while ranking claims differently
+across the full score range.
+The receiver operating characteristic curves compare the true-positive rate with the
+15
+
+=== PDF PAGE 16 ===
+Table 11.Capability comparison across named systems.
+System LIAR ML Multi-
+transformer
+Protocol
+honesty
+Affect
+ablation
+MCC/AUC Live demo
+Sentimental
+LIAR (5)
+Yes No (BERT) Partial Limited Partial No
+Khan
+benchmark (6)
+Yes Partial Strong No Partial No
+WELFake
+pipelines (7)
+No (articles) Often N/A No Often Acc Rare
+Single BERT
+papers (8)
+Sometimes No Unclear Rare Acc/F1 No
+This study Yes Yes hard clear Four
+feature
+settings
+Yes Gradio
+Table 12.Model efficiency under the joint affective setting.
+Model Params (M) Train (min) Acc (%)
+DistilBERT 66.96 3.28 70.76
+ELECTRA 109.48 7.44 72.03
+BERT 109.48 7.47 69.87
+RoBERTa 124.65 7.45 70.38
+false-positive rate. They show how rapidly each model recovers positive claims as the
+false-alarm rate increases. The area under the receiver operating characteristic curve
+summarizes ranking quality independently of one threshold. ELECTRA records the
+strongest joint affective area under the curve at 0.7909, which agrees with its leading F1
+score and Matthews correlation coefficient.
+The precision and recall curves answer a complementary operational question. They
+show how much precision the model retains as recall increases. This view directly exposes
+the false-positive burden among claims selected for review and is sensitive to class
+prevalence (20). RoBERTa reaches the highest recall at the selected threshold, while
+ELECTRA provides the strongest overall balance. DistilBERT remains competitive
+despite its smaller parameter count. Together, the two curve families show that no model
+dominates every possible screening objective. A newsroom that prioritizes maximum
+recovery can choose a different threshold or model from an application that prioritizes
+fewer false alarms.
+The curves are descriptive test evidence, not a basis for retrospective threshold
+optimization. Every operational threshold must be selected on validation data and fixed
+before final test evaluation. This rule prevents test-set leakage and preserves the reported
+results as an unbiased assessment of the chosen operating procedure.
+5.9. Efficiency board
+The efficiency comparison separates predictive quality from computational cost. Table 12
+reports model size and training time, while Table 13 identifies the strongest model for
+each evaluation objective.
+16
+
+=== PDF PAGE 17 ===
+Figure 6.Receiver operating characteristic curves for the joint affective models.
+Figure 7.Precision and recall curves for the joint affective models.
+17
+
+=== PDF PAGE 18 ===
+Table 13.Best model for each evaluation mea-
+sure.
+Metric Best model Value
+Accuracy ELECTRA 72.03%
+Precision ELECTRA 0.7365
+Recall RoBERTa 0.8196
+F1 ELECTRA 0.7626
+AUC ELECTRA 0.7909
+MCC ELECTRA 0.4247
+Smallest model DistilBERT 66.96M
+The results establish the predictive, error, and efficiency profiles. The discussion now
+interprets these findings against the hypotheses and prior literature.
+6. Discussion
+6.1. Scientific interpretation
+Matched multi-transformer evaluation reveals errors that a single-model accuracy score
+would hide (5, 6). ELECTRA achieves 72.03% accuracy with joint affective information
+and 82.03% with text alone. Sentimental LIAR reports approximately 70% under a
+different label mapping, while the higher WELFake result concerns long articles ( 5, 7).
+Keeping these tasks separate prevents an invalid comparison.
+6.2. Theoretical implications of affective augmentation
+Affective features can help when lexical sentiment captures rhetorical framing that the
+encoder underrepresents. They can hurt when the tags duplicate contextual information,
+exaggerate emotionally charged but truthful language, or introduce tokens unrelated to
+factuality (5, 12, 13). The results support the second hypothesis: feature value depends
+on the encoder. RoBERTa gains slightly in selected emotion-based conditions, whereas
+ELECTRA and BERT perform best with text alone. The evidence therefore rejects a
+universal claim that sentiment and emotion improve fake-news detection.
+6.3. Operational implications
+Model choice depends on the screening objective. ELECTRA provides the strongest over-
+all discrimination. RoBERTa provides the highest recall and suits settings where missed
+target claims carry the greatest cost. DistilBERT provides the strongest resource profile
+for interactive use. These roles should remain separate because analytical leadership,
+recall-oriented screening, and deployment efficiency optimize different objectives.
+6.4. Interpretation of the hypotheses
+The results support the first hypothesis because the encoders produce different metric
+and error profiles under matched conditions. They support the second hypothesis because
+affective augmentation helps some configurations but reduces ELECTRA performance.
+The deployment evidence supports the third hypothesis because DistilBERT retains
+18
+
+=== PDF PAGE 19 ===
+Figure 8.Gradio screening interface for claim analysis, affective diagnostics, and responsible-use guidance.
+70.76% accuracy with 66.96 million parameters. These findings connect architecture,
+feature design, and operational use without treating one metric as sufficient.
+The discussion establishes what the results mean. The next section translates the
+efficiency decision into an interactive screening workflow.
+7. Deployment
+Deployment translates the evaluated pipeline into an accessible inference workflow
+without changing the training data, evaluation protocol, or reported test results. Gradio
+exposes the selected DistilBERT model and affective diagnostics, while model-card-style
+documentation states the intended use, operating conditions, and limitations ( 17, 23).
+The classifier neither retrieves evidence nor produces calibrated truth probabilities. Its
+output supports screening and prioritization rather than final fact-checking (21,22).
+7.1. Model packaging
+The trained model is packaged with its label protocol, feature setting, intended screening
+use, evaluation measures, and limitations. This documentation follows the core model-
+card principle of making operating conditions explicit (23).
+7.2. Gradio interface
+The Gradio application requires claim text and returns a model label, a screening score,
+and affective diagnostics ( 17). Figure 8 shows the interface layout used to organize
+claim entry, DistilBERT inference, screening output, affective diagnostics, and the
+responsible-use warning.
+19
+
+=== PDF PAGE 20 ===
+7.3. End-to-end deployment process
+The deployment process follows the experimental sequence. The system filters LIAR
+claims with the clear-label rule, computes affective descriptors, applies the selected
+transformer, and displays the result for human review. Model selection considers predic-
+tive performance and computational cost together. The interface does not convert the
+classifier into an evidence-retrieval or truth-verification system.
+8. Limitations and Future Work
+This section defines the boundary of the reported evidence and converts each limitation
+into a concrete research direction. The results establish performance for one clear-label
+conversion of English political claims, one fixed random seed, and one in-domain test
+partition. They do not establish stability across repeated fine-tuning runs, calibrated
+probabilities, fairness across demographic or political subgroups, or generalization to
+other topics and languages. The deployed interface also remains a screening tool because
+the model does not retrieve evidence or verify claims against primary sources. Stating
+these limits prevents the strong in-domain results from being interpreted as universal
+fact-checking performance.
+8.1. Single-seed and statistical uncertainty
+The reported experiment uses one fixed seed. This design makes the run reproducible
+but does not quantify variation across random initializations ( 24, 32). Future work
+should repeat every model and feature setting across several seeds and report the mean,
+standard deviation, confidence interval, and rank stability. The next evaluation should
+also retain paired claim-level predictions so that McNemar tests can compare models
+without reconstructing invalid statistics from aggregate confusion matrices (35).
+8.2. Calibration and subgroup evaluation
+The study does not evaluate probability calibration or subgroup performance. Interface
+scores must therefore not be interpreted as calibrated probabilities of truth ( 22, 23).
+Future experiments should report reliability diagrams, expected calibration error, Brier
+score, and calibration before and after temperature scaling ( 36, 37). They should also
+report performance across speakers, topics, parties, and time periods when ethically
+and statistically appropriate. Dataset and model documentation should record these
+evaluations so that deployment conditions remain visible (23,34).
+8.3. Cross-domain generalizability
+LIAR contains English political claims from one fact-checking context. Performance can
+change for health misinformation, disaster rumors, financial claims, other countries, other
+languages, or complete news articles. The present results therefore establish in-domain
+short-claim performance only. Future work should test external claim datasets such as
+MultiFC, conduct temporal validation, and evaluate domain adaptation before deploy-
+ment outside the LIAR setting ( 27, 29, 31). It should also measure performance under
+explicit distribution shifts because pretrained transformers can lose accuracy outside the
+20
+
+=== PDF PAGE 21 ===
+training distribution, and compression does not guarantee equal robustness (38). A struc-
+tured benchmark design similar to WILDS would help separate temporal, geographic,
+topical, and source shifts instead of reporting one combined external score (39).
+8.4. Evidence and application limits
+The system does not retrieve primary sources, model multimodal evidence, or verify
+numerical claims against external databases. Affective tag serialization also provides a
+simple auxiliary representation rather than learned multimodal fusion. Future work should
+combine claim classification with evidence retrieval and ranking, following evidence-aware
+and benchmark-based fact-checking research ( 21, 28, 29). It should then evaluate how
+journalists and researchers use the output rather than assuming that interface availability
+proves practical benefit (33). Until then, outputs should support human review rather
+than replace it (1,2).
+8.5. Future research roadmap
+Future work should proceed in five stages. First, repeated multi-seed experiments
+should quantify optimization uncertainty and test whether encoder rankings remain
+stable (24, 32). Second, claim-level prediction records should support McNemar tests,
+bootstrap confidence intervals, and transparent error comparisons (35). Third, calibration
+experiments should compare raw scores, temperature scaling, reliability diagrams, and
+Brier scores before the interface uses probability language ( 22, 36, 37). Fourth, external
+evaluation should cover MultiFC, temporal splits, multilingual claims, and controlled
+distribution shifts ( 27, 38, 39). Fifth, behavioral test suites should perturb names,
+quantities, negation, dates, and emotional wording to reveal model invariances and
+brittle shortcuts that aggregate accuracy cannot expose (40).
+The longer-term system should integrate retrieval, evidence ranking, verdict predic-
+tion, and explanation while preserving the present distinction between screening and
+verification (21, 28, 29). Human-centered trials should measure review time, false-
+alarm burden, trust calibration, and correction quality for journalists, educators, and
+moderation researchers (33). These extensions would transform the current controlled
+classifier into a more complete and responsibly evaluated fact-checking assistant without
+overstating what claim text alone can establish.
+These limitations define the boundary of the contribution and motivate the final
+conclusion.
+9. Conclusion
+Multi-Transformer Sentimental LIAR integrates clear-label LIAR claims, sentiment and
+emotion descriptors, four matched transformer encoders, systematic ablation, and a
+Gradio application without mixing article and claim accuracy. ELECTRA achieves
+72.03% accuracy under the joint affective setting and 82.03% with text alone, demon-
+strating that affective augmentation is architecture-dependent. DistilBERT remains
+suitable for deployment at 70.76% accuracy with 66.96 million parameters. The study
+therefore provides a well-defined path from short-claim data to comparative evaluation
+and efficient interactive screening.
+21
+
+=== PDF PAGE 22 ===
+Data and code availability
+The LIAR dataset is publicly available from Wang ( 4), and the Sentimental LIAR
+extension is described by Upadhyay and Behzadan ( 5). The study materials include
+the implementation, trained-model documentation, evaluation summaries, and figure-
+generation procedures.
+References
+(1) Shu, K.; Sliva, A.; Wang, S.; Tang, J.; Liu, H. Fake news detection on social media: A
+data mining perspective.ACM SIGKDD Explor. Newsl.2017,19(1), 22–36.
+(2) Zhou, X.; Zafarani, R. A survey of fake news: Fundamental theories, detection methods,
+and opportunities.ACM Comput. Surv.2020,53(5), Art. no. 109.
+(3) Guo, B.;et al.The future of false information detection on social media: New perspectives
+and trends.ACM Comput. Surv.2022,55(3).
+(4) Wang, W. Y. Liar, liar pants on fire: A new benchmark dataset for fake news detection. In
+Proc. 55th Annu. Meeting Assoc. Comput. Linguistics (ACL), Vancouver, Canada,2017,
+pp. 422–426.
+(5) Upadhyay, B. P.; Behzadan, V. Sentimental LIAR: Extended corpus and deep learning
+models for fake claim classification. InProc. IEEE Int. Conf. Intell. Security Informat.
+(ISI),2020, pp. 1–6.
+(6) Khan, J. Y.; Khondaker, M. M. I.; Afroz, S.; Uddin, G.; Iqbal, A. A benchmark study
+of machine learning models for online fake news detection.Mach. Learn. Appl.2021,4,
+Art. no. 100032.
+(7) Verma, P. K.; Aggarwal, P.; Chatterjee, I. WELFake: Word embedding over linguistic
+features for fake news detection.IEEE Trans. Comput. Soc. Syst.Aug.2021,8(4),
+881–893.
+(8) Devlin, J.; Chang, M.-W.; Lee, K.; Toutanova, K. BERT: Pre-training of deep bidirectional
+transformers for language understanding. InProc. NAACL-HLT, Minneapolis, MN, USA,
+2019, pp. 4171–4186.
+(9) Liu, Y.;et al.RoBERTa: A robustly optimized BERT pretraining approach.arXiv preprint
+arXiv:1907.11692,2019.
+(10) Sanh, V.; Debut, L.; Chaumond, J.; Wolf, T. DistilBERT, a distilled version of BERT:
+Smaller, faster, cheaper and lighter.arXiv preprintarXiv:1910.01108,2019.
+(11) Clark, K.; Luong, M.-T.; Le, Q. V.; Manning, C. D. ELECTRA: Pre-training text encoders
+as discriminators rather than generators. InProc. Int. Conf. Learn. Represent. (ICLR),
+2020.
+(12) Hutto, C. J.; Gilbert, E. VADER: A parsimonious rule-based model for sentiment analysis
+of social media text. InProc. Int. AAAI Conf. Web Social Media (ICWSM), Vol.8, no. 1,
+2014, pp. 216–225.
+(13) Mohammad, S. M.; Turney, P. D. Crowdsourcing a word-emotion association lexicon.
+Comput. Intell.2013,29(3), 436–465.
+(14) Vaswani, A.;et al.Attention is all you need. InProc. NeurIPS,2017.
+(15) Wolf, T.;et al.Transformers: State-of-the-art natural language processing. InProc.
+EMNLP: System Demonstrations,2020, pp. 38–45.
+(16) Matthews, B. W. Comparison of the predicted and observed secondary structure of T4
+phage lysozyme.Biochim. Biophys. Acta1975,405(2), 442–451.
+(17) Gradio Team. Gradio: Build machine learning web apps. Documentation,2024. [Online].
+Available:https://www.gradio.app/
+(18) Fawcett, T. An introduction to ROC analysis.Pattern Recognit. Lett.2006,27(8),
+861–874.
+(19) Chicco, D.; Jurman, G. The advantages of the Matthews correlation coefficient (MCC)
+22
+
+=== PDF PAGE 23 ===
+over F1 score and accuracy in binary classification evaluation.BMC Genomics2020,21,
+Art. no. 6.
+(20) Saito, T.; Rehmsmeier, M. The precision and recall plot is more informative than the
+ROC plot when evaluating binary classifiers on imbalanced datasets.PLoS ONE2015,
+10(3), Art. no. e0118432. doi: 10.1371/journal.pone.0118432.
+(21) Thorne, J.; Vlachos, A.; Christodoulopoulos, C.; Mittal, A. FEVER: A large-scale dataset
+for fact extraction and verification. InProc. 2018 Conf. North American Chapter Assoc.
+Comput. Linguistics: Human Language Technologies (NAACL-HLT), Vol.1, New Orleans,
+LA, USA,2018, pp. 809–819, doi: 10.18653/v1/N18-1074.
+(22) Guo, C.; Pleiss, G.; Sun, Y.; Weinberger, K. Q. On calibration of modern neural networks.
+InProc. 34th Int. Conf. Machine Learning (ICML), ser. Proc. Mach. Learn. Res., Vol.70,
+2017, pp. 1321–1330.
+(23) Mitchell, M.;et al.Model cards for model reporting. InProc. Conf. Fairness, Ac-
+countability, and Transparency (F AT*), Atlanta, GA, USA,2019, pp. 220–229, doi:
+10.1145/3287560.3287596.
+(24) Mosbach, M.; Andriushchenko, M.; Klakow, D. On the stability of fine-tuning BERT:
+Misconceptions, explanations, and strong baselines. InProc. Int. Conf. Learning Repre-
+sentations (ICLR),2021.
+(25) Vosoughi, S.; Roy, D.; Aral, S. The spread of true and false news online.Science2018,
+359(6380), 1146–1151. doi: 10.1126/science.aap9559.
+(26) Rashkin, H.; Choi, E.; Jang, J. Y.; Volkova, S.; Choi, Y. Truth of varying shades: Analyzing
+language in fake news and political fact-checking. InProc. 2017 Conf. Empirical Methods
+in Natural Language Processing (EMNLP), Copenhagen, Denmark,2017, pp. 2931–2937,
+doi: 10.18653/v1/D17-1317.
+(27) Augenstein, I.; Lioma, C.; Wang, D.; Chaves Lima, L.; Hansen, C.; Hansen, C.; Simonsen,
+J. G. MultiFC: A real-world multi-domain dataset for evidence-based fact checking of
+claims. InProc. 2019 Conf. Empirical Methods in Natural Language Processing and 9th
+Int. Joint Conf. Natural Language Processing (EMNLP-IJCNLP), Hong Kong, China,
+2019, pp. 4685–4697, doi: 10.18653/v1/D19-1475.
+(28) Popat, K.; Mukherjee, S.; Yates, A.; Weikum, G. DeClarE: Debunking fake news and
+false claims using evidence-aware deep learning. InProc. 2018 Conf. Empirical Methods
+in Natural Language Processing (EMNLP), Brussels, Belgium,2018, pp. 22–32, doi:
+10.18653/v1/D18-1003.
+(29) Guo, Z.; Schlichtkrull, M.; Vlachos, A. A survey on automated fact-checking.Trans. Assoc.
+Comput. Linguistics2022,10, 178–206. doi: 10.1162/tacl a 00454.
+(30) Ghanem, B.; Ponzetto, S. P.; Rosso, P.; Rangel, F. FakeFlow: Fake news detection by
+modeling the flow of affective information. InProc. 16th Conf. European Chapter Assoc.
+Comput. Linguistics (EACL),2021, pp. 679–689, doi: 10.18653/v1/2021.eacl-main.56.
+(31) Choudhry, A.; Khatri, I.; Chakraborty, A.; Vishwakarma, D.; Prasad, M. Emotion-guided
+cross-domain fake news detection using adversarial domain adaptation. InProc. 19th Int.
+Conf. Natural Language Processing (ICON), New Delhi, India,2022, pp. 75–79.
+(32) Bouthillier, X.; Laurent, C.; Vincent, P. Unreproducible research is reproducible. InProc.
+36th Int. Conf. Machine Learning (ICML), ser. Proc. Mach. Learn. Res., Vol.97,2019,
+pp. 725–734.
+(33) Schlichtkrull, M.; Ousidhoum, N.; Vlachos, A. The intended uses of automated fact-
+checking artefacts: Why, how and who. InFindings Assoc. Comput. Linguistics: EMNLP
+2023, Singapore,2023, pp. 8618–8642, doi: 10.18653/v1/2023.findings-emnlp.577.
+(34) Gebru, T.;et al.Datasheets for datasets.Commun. ACM2021,64(12), 86–92. doi:
+10.1145/3458723.
+(35) McNemar, Q. Note on the sampling error of the difference between correlated proportions
+or percentages.Psychometrika1947,12(2), 153–157. doi: 10.1007/BF02295996.
+(36) Brier, G. W. Verification of forecasts expressed in terms of probability.Monthly Weather
+Review1950,78(1), 1–3.
+(37) Niculescu-Mizil, A.; Caruana, R. Predicting good probabilities with supervised learn-
+23
+
+=== PDF PAGE 24 ===
+ing. InProc. 22nd Int. Conf. Machine Learning (ICML),2005, pp. 625–632, doi:
+10.1145/1102351.1102430.
+(38) Hendrycks, D.; Liu, X.; Wallace, E.; Dziedzic, A.; Krishnan, R.; Song, D. Pretrained
+transformers improve out-of-distribution robustness. InProc. 58th Annu. Meeting Assoc.
+Comput. Linguistics (ACL),2020, pp. 2744–2751, doi: 10.18653/v1/2020.acl-main.244.
+(39) Koh, P. W.;et al.WILDS: A benchmark of in-the-wild distribution shifts. InProc. 38th
+Int. Conf. Machine Learning (ICML), ser. Proc. Mach. Learn. Res., Vol.139,2021,
+pp. 5637–5664.
+(40) Ribeiro, M. T.; Wu, T.; Guestrin, C.; Singh, S. Beyond accuracy: Behavioral testing of
+NLP models with CheckList. InProc. 58th Annu. Meeting Assoc. Comput. Linguistics
+(ACL),2020, pp. 4902–4912, doi: 10.18653/v1/2020.acl-main.442.
+24

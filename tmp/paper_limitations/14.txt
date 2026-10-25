@@ -1,0 +1,671 @@
+=== PDF PAGE 1 ===
+arXiv:2009.01047v2  [cs.CL]  22 Oct 2020
+Sentimental LIAR: Extended Corpus and Deep
+Learning Models for Fake Claim Classiﬁcation
+Bibek Upadhayay
+SAIL Lab
+University of New Haven
+West Haven, CT, USA
+bupad1@unh.newhaven.edu
+V ahid Behzadan
+SAIL Lab
+University of New Haven
+West Haven, CT, USA
+vbehzadan@newhaven.edu
+Abstract—The rampant integration of social media in our
+every day lives and culture has given rise to fast and easier
+access to the ﬂow of information than ever in human history.
+However , the inherently unsupervised nature of social medi a
+platforms has also made it easier to spread false informatio n
+and fake news. Furthermore, the high volume and velocity of
+information ﬂow in such platforms make manual supervision
+and control of information propagation infeasible. This pa per
+aims to address this issue by proposing a novel deep learning
+approach for automated detection of false short-text claim s on
+social media. We ﬁrst introduce Sentimental LIAR, which ext ends
+the LIAR dataset of short claims by adding features based
+on sentiment and emotion analysis of claims. Furthermore, w e
+propose a novel deep learning architecture based on the BERT -
+Base language model for classiﬁcation of claims as genuine o r
+fake. Our results demonstrate that the proposed architectu re
+trained on Sentimental LIAR can achieve an accuracy of 70%,
+which is an improvement of 30% over previously reported resu lts
+for the LIAR benchmark.
+Index Terms —False Claim Detection, Misinformation, Deep
+Learning, Social Media
+I. INTRODUCTION
+The percolation of social media throughout the world has
+facilitated unprecedented ease of access to the ﬂow of in-
+formation. The rise of the internet and its availability hav e
+also enabled every user to to not only consume, but also
+contribute to the information ﬂow. However, the beneﬁts of
+such ecosystems come at the cost of mistrust in the veracity
+of information. In recent years, the social media scene has
+witnessed the proliferation of false information campaign s,
+in which ordinary users are intentionally or otherwise both
+consuming false news and also spreading it among their
+communities.
+This phenomenon is commonly referred to as fake news ,
+broadly deﬁned as broadcasting of information that is inten -
+tionally and veriﬁably false [1]. The rise of fake news and it s
+societal impact has been studied in the context of numerous
+recent events, such as the Brexit referendum and the 2016
+US presidential elections [2]. Fake news has thus proven to
+be a major threat to democracy, journalism, and freedom
+of expression [1]. The exposure of users to fake news has
+been shown to have numerous deleterious effects, instances
+of which include inducing attitudes of inefﬁcacy, alienati on,
+trusting in false propaganda, cynicism toward certain poli tical
+candidates and communities, that can at times give rise to
+the violent events. For example, coordinated fake news and
+propaganda campaigns on Facebook are considered to have
+been key in inciting the Myanmar genocide in 2016-2017 [3].
+Also, the recent proliferation of false information about 5 G
+communication networks being the cause of the novel Coron-
+avirus outbreak has resulted in attacks against the employe es
+and infrastructure of cellular careers in the UK [4]. Fake ne ws
+can also affect ﬁnancial markets, as observed in the case of
+fake news claiming that Barack Obama was injured in an
+explosion resulting in a loss of $130 billion in stock value
+[5]. Hence, there is a growing need for effective tools and
+techniques to detect and control the spread of false informa tion
+campaigns on social media.
+Fake news classiﬁcation is the process of determining
+whether the news contains false news and misinformation or
+not. Traditionally, this classiﬁcation is performed by sub ject-
+matter experts and journalists via comparing the claims of
+an article with established facts and cross-checking with
+trusted and alternative sources. However, the high volume a nd
+velocity of information ﬂow on such platforms render such
+manual approaches infeasible. Therefore, recent efforts o f the
+stakeholders and the research community have been focused
+on automated techniques for classiﬁcation and detection of
+fake news. A promising solution in this domain is to leverage
+the recent advances in machine learning and Natural Languag e
+Processing (NLP) to automated the processing and classiﬁca -
+tion of the high-dimensional and complex text of news articl es
+and posts [6].
+While the literature on the applications of machine learnin g
+to fake news classiﬁcation has grown rapidly, the body of wor k
+on the classiﬁcation of short-text claims remains relative ly
+thin. This issue is of paramount importance, as many of the
+posts on social media such as Twitter contain only a short
+claim extracted from the longer text of news articles. The sh ort
+form of such claims poses a challenge to the classiﬁcation ta sk,
+as it provides very limited information (i.e., a few sentenc es
+or words) and thus constrains the applicability of machine
+learning models trained on full-length articles and texts. Over
+the past few years, a number of datasets and models have been
+proposed for the classiﬁcation of short-text claims, notab le
+instances of which are the studies based on the LIAR dataset
+
+=== PDF PAGE 2 ===
+of short statements [7]. However, the performance of machin e
+learning models trained on this dataset remain at impractic al
+levels, with the best accuracy values reported to be ˜41.5% [6].
+In this paper, we introduce Sentimental LIAR, which ex-
+tends the LIAR dataset by including new features based on
+the sentiment and emotion analysis of claims. Our extended
+dataset also proposes a modiﬁed encoding of textual attribu tes
+to mitigate unintended bias in modeling. Furthermore, we
+propose a novel deep learning architecture based on the BERT -
+Base language model for the classiﬁcation of claims as genui ne
+or fake. Our results demonstrate that the proposed architec ture
+trained on Sentimental LIAR can achieve an accuracy of 70%,
+which is an improvement of 30% over previously reported re-
+sults for the LIAR benchmark. The Sentimental LIAR dataset
+and the proof-of-concept code are made available on GitHub 1.
+The remainder of this paper is organized as follows: Section
+II presents the technical background and an overview of
+relevant datasets and literature on false claim classiﬁcat ion.
+Section III describes the extended features of Sentimental
+LIAR, and details the proposed deep learning architectures
+for false claim detection. The experimental evaluation of o ur
+proposed techniques is reported in Section IV. Finally, V
+concludes the paper with a discussion on the results and
+remarks on future directions of work.
+II. LITERATURE OVERVIEW
+A. Fake News
+Fake news is deﬁned as “fabricated information that mimics
+news media content in form but not in organizational process
+or intent” [8]. Fake news outlets exploit the fact that socia l
+media platforms lack the editorial norms and processes of
+the traditional news media for assuring the accuracy and
+credibility of the information. Fake news overlaps with oth er
+information disorders, such as misinformation (false or mi s-
+leading information) and disinformation (false informati on that
+is purposely spread to deceive people)” [8]. Fake news can al so
+be deﬁned as news that is false based on its authenticity (fal se
+or not), intention (bad or not), and whether the information
+is news or not [1]. Undeutsch hypothesis [9] implies that
+fake news are different from the true news in terms of their
+writing style. And the four-factor theory [10] implies that
+the fake statements are expressed with different emotions a nd
+sentiments than the truth ones. These two theories support t he
+intuition that the identiﬁcation of the attributes like emo tions
+and sentiments in a claim can help to distinguish between the
+fake and true claims
+Technical approaches to the detection of fake news include
+fact checking, rumor detection, stance detection, and sent iment
+analysis [6]. Fact checking is the task of assessing the truthful-
+ness of claims made by public ﬁgures such as politicians and
+pundits [11]. The contents of fake news often lacks pertinen t
+facts, or contain factual representations that are not corr ect
+according to the context of the news. Rumor can be deﬁned
+as the unveriﬁed pieces of information at the time of posting ,
+1https://github.com/UNHSAILLab/SentimentalLIAR
+where there is doubt to the truth of the claims. Zubiaga et al.
+[12] deﬁne rumor detection as the task of separating persona l
+statements into rumor or non-rumor. Stance detection refers
+to the process of automatically detecting whether the autho r
+of a piece of text is in favor of the given claim or against it
+[13]. Sentiment analysis is based on extracting emotions and
+contextual sentiments from statements to determine whethe r
+they are positive, negative or neutral with respect to the
+subject. It is noteworthy that while stance detection may re ly
+on sentiment analysis, the goal of sentiment analysis is to
+analyze personal emotions rather than the objective veriﬁc ation
+of statements. As detailed in Section III, our work leverage s a
+hybrid of stance detection and sentiment analysis to enhanc e
+the performance of machine learning models for false claim
+detection in short text.
+B. DATASETS
+Recent research on fake claim detection in short text has
+yielded a number of signiﬁcant open-source datasets, some o f
+the most notable of which are enumerated as follows:
+1) FEVER [14]: Fact Extraction and VERiﬁcation
+(FEVER) is a short claim dataset of 185,445 claims. This
+dataset is annotated with three labels: Supported, Refuted, and
+Not Enough Info . The claims are curated from Wikipedia.
+FEVER was constructed in two stages, the ﬁrst one is Claim
+Generation, where extracted information Wikipedia is con-
+verted into claims. The second stage is Claim Labeling, wher e
+each claim is labeled as ’supported’ or ’refuted’ according to
+Wikipedia. In cases where information were insufﬁcient for
+determination, a label of not enough information is assigned.
+2) PHEME [12]: is a dataset of 330 rumor threads com-
+posed of 4843 tweets associated with 9 newsworthy events.
+The annotators of this dataset were journalists who tracked
+the events in real time. Each entry in PHEME is labeled as
+either true or false.
+3) LIAR [7]: is a publicly available short statement dataset
+that is derived from Politifact.com. Each of the 12,836 stat e-
+ments in LIAR is annotated based on data available on
+Politifact with one of the following six labels: pants-ﬁre,
+false, barely true, half-true, mostly-true, and true. The d ataset
+contains the text of a claim, as well as relevant meta-data,
+structured as follows: ID, LABEL, STA TEMENT, SUBJECT,
+SPEAKER, SPEAKER JOB, STA TE INFO, P ARTY AFFILI-
+A TION, BARELY TRUE COUNTS, FALSE COUNTS, HALF
+TRUE COUNTS, MOSTLY TRUE COUNTS, P ANTS ON
+FIRE COUNTS, and CONTEXT. The distribution of the labels
+in the LIAR dataset is illustrated in Fig.1.
+C. Deep Learning for Fake Claim Detection
+Convolutional Neural Networks (CNNs) are generally
+known for their applications in image processing, where CNN s
+can learn representations of localized features from raw in put
+while preserving the relationship between them. However, t his
+capability of CNNs is not constrained to computer vision,
+and can also be adopted for NLP tasks. Wang et al. [7]
+demonstrate the performance a CNN architecture [15] traine d
+
+=== PDF PAGE 3 ===
+False
+True
+0
+1000
+2000
+3000
+4000
+5000
+6000
+Distribution of labels
+Fig. 1. Label Distribution in LIAR
+on LIAR for fake claim classiﬁcation, and report a test-time
+accuracy of 27.4%. In a subsequent study, Kirilin et al. [16]
+extend the LIAR dataset with a larger credibility source usi ng
+a credibility vectorization technique called Speaker2Cre dit.
+Experimental results reported in [6] demonstrate that trai ning
+a Long Short-Term Memory (LSTM) model on this extended
+dataset achieved an accuracy of 45.7%.
+Also, Long et al. [17] propose another extension of the
+LIAR dataset by adding more features based on speaker
+proﬁles, such as party afﬁliation, speaker title, location , and
+credit history. They also report that an attention-based LS TM
+model trained on this extended dataset results in an improve d
+accuracy of 41.5% compared to the benchmark of 27.4%
+reported in [7].
+Ruchansky et al. [18] propose a hybrid deep model for
+fake news detection, consisting of three modules: The ﬁrst
+module is a Recurrent Neural Network (RNN) that captures the
+temporal pattern of user activity on a given article, the sec ond
+module learns the article’s source characteristic based on the
+user response, and the third module integrates the previous
+modules for the classiﬁcation task. Their study was based on
+two datasets curated from Twitter and Weibo, and achieved an
+accuracy score of 89.2% and 95.3%, respectively.
+D. BERT
+Bidirectional Encoder Representations from Transformer
+(BERT) [19] is a state of the art word representation model
+that uses a transformer to learn the contextual relationshi ps
+between the given text in a bidrectional manner (i.e., in bot h
+left-to-right and right-to-left). The bidirectionality o f BERT
+has made it standout in many NLP tasks, as it improves ﬁne-
+tuning based approaches to token level tasks. BERT uses two
+strategies in training, the ﬁrst one is Masked Language Mode l
+(MLM) and second one is Next Sentence Prediction (NSP).
+In MLM, the model randomly masks some of the tokens from
+the input text and then model tries to predict those masked
+vocabulary id of the word. It does so by looking into the
+context in both direction. As for Next Sentence Prediction,
+the pairs of sentences are given input to the model and it
+tries to predict if the given second sentence is the continua tion
+or the next subsequent sentence to the ﬁrst one or not. The
+model uses both MLM and NSP during training to minimize
+the loss. BERT can be modiﬁed to perform many downstream
+tasks by feeding the task-speciﬁc inputs and outputs. For
+the classiﬁcation tasks, BERT can be extended by adding a
+classiﬁcation layers on the top of the transformer output fo r
+the token.
+III. METHODOLOGY
+Fake claims are often written in a style of exaggerated
+expressions and strong emotions. Style-based classiﬁcati on
+studies aim to assess news intention, that is to determine
+whether there is an intention to mislead the reader or not?
+The fake claims are written with an intention to convince
+the audiences to read and trust the claims, for which fake
+claims are written with different styles [9] and different
+sentiments and emotions [10]. With the aim of developing a
+computationally feasible model for fake claim detection, w e
+propose deep neural network architectures based on BERT-
+Base to analyze the deception in short-text claims. Our pro-
+posed models learn to detect deception based on attribute-
+based language features, such as sentiments and structure-
+based language features. In our approach, we rely on the
+representation learning capabilities of transformers to e xtract
+features from statements. We also propose an extension to th e
+LIAR dataset that includes additional features based on the
+sentiment and emotion analysis of the claim. The details of
+our proposals are presented in the remainder of this section .
+A. Sentimental LIAR
+Our Sentimental LIAR dataset is a modiﬁed and further
+extended version of the LIAR extension introduced by Kirili n
+et al. [16]. In our dataset, the multi-class labeling of LIAR is
+converted to a binary annotation by changing half-true, fal se,
+barely-true and pants-ﬁre labels to False, and the remainin g
+labels to True. Furthermore, we convert the speaker names to
+numerical IDs in order to avoid bias with regards to the textu al
+representation of names.
+The binary-label dataset is then extended by adding senti-
+ments derived using the Google NLP API 2. Sentiment analysis
+determines the overall attitude of the text (i.e., whether i t is
+positive or negative), and is quantiﬁed by a numerical score .
+If the sentiment score is positive, then we assign Positive
+for the sentiment attribute, otherwise Negative is assigned.
+We also introduced a further extension by adding emotion
+scores extracted using the IBM NLP API 3 for each claim,
+which determine the detected level of 6 emotional states,
+namely anger, sadness, disgust, fear and joy. The score for e ach
+emotion is between the range of 0 and 1. Table I demonstrates
+a sample record in Sentimental LIAR for a short claim in the
+LIAR dataset.
+2https://cloud.google.com/natural-language
+3https://www.ibm.com/cloud/watson-natural-language-understanding
+
+=== PDF PAGE 4 ===
+TEXT
+statement
+McCain opposed a
+requirement that the
+government buy American
+-made motorcycles. And
+he said all buy-American
+provisions were quote
+’disgraceful.’
+subject federal-budget
+speaker id 2
+speaker job President
+state info Illinois
+party afﬁliation democrat
+sentiment NEGA TIVE
+EMO
+anger 0.1353
+disgust 0.8253
+sad 0.1419
+fear 0.0157
+joy 0.0236
+SPC
+barely true counts 70
+false counts 71
+half true counts 160
+mostly true counts 163
+pants on ﬁre counts 9
+SEN sentiment score -0.7
+TABLE I
+SAMPLE RECORD FROM SENTIMENTAL LIAR
+B. Models
+We investigate two model architectures based on BERT-
+Base [19] for the claim classiﬁcation task:
+1) Model 1: BERT-Base with Feed-F orward Neural Net-
+work: This model extends BERT-Base by appending a Feed-
+Forward neural network for classiﬁcation, as illustrated i n
+ﬁg.(2). Two variations of the model were investigated: The
+ﬁrst variant feed all the input data directly to the BERT-Bas e,
+the second variant passes only the TEXT input to BERT-Base,
+and feeds the SEN, EMO and SPC attributes in parallel to
+the output of BERT-Base to the feed-forward component, as
+depicted in ﬁg.(2).
+BERT-Base
++
++
+Subject,
+Statement,
+Speaker ID,
+Speaker Position,
+Party Affiliation
+Sentiment Score,
+Emotions,
+Speaker Credit
+Linear NN
+1
+0
+Fig. 2. BERT-Base with feed-forward component for classiﬁc ation
+2) Model 2: BERT-Base with CNN: The base model is
+modiﬁed by appending a CNN to BERT-Base, as shown in
+ﬁg.(3). Similar to the previous model, we investigate two
+variants of this architecture. In ﬁrst variant, the TEXT, SP C,
+SEN and EMO are fed into the BERT-Base, whose output is
+then passed to the CNN. In the second variant, only the TEXT
+is fed into BERT-Base, and the EMO, SPC and SEN attributes
+are concatenated with output of BERT-Base to be fed into the
+CNN.
+BERT-Base
++
+Subject,
+Statement,
+Speaker ID,
+Speaker Position,
+Party Affiliation
+Sentiment Score,
+Emotions,
+Speaker Credit
+Linear NN
+1
+0
+1D Pooling
+Convolution
+Layers
+Concatenated
+T orch
+Fig. 3. BERT-Base with CNN for Classiﬁcation
+IV. E XPERIMENTAL RESULTS
+In both experiments, the dataset was split into 80% train
+set, 10% valid set, and 10% test set. The train batch size
+and the test batch size were set to 8, with a learning rate
+of 1e-05. The BERT-Base was conﬁgured with a dropout of
+0.3 and model used Sigmoid as its activation function. The
+loss function used in both architectures was the binary cros s
+entropy loss optimized using the Adam optimizer [20].
+A. Experiments with BERT-Base + Feed-F orward Neural Net-
+work
+The ﬁrst method was used in three experiments with BERT-
+Base + Feed-Forward NN. The model was composed of BERT-
+Base layers, a dropout layer, and one feed-forward hidden
+layer. The TEXT and EMO attributes were ﬁrst fed into model
+and the output of BERT-Base (BB
+OP) was fed into the
+feedforward component. This model achieved the accuracy
+score of 64.92% with a F1 Score of 0.6105. The input to
+BERT-Base was then extended by adding more meta data:
+TEXT+EMO+SPC and TEXT+EMO+SPC+SEN, yielding an
+accuracy of 67% and F1 Score of 0.40.
+The model-1 was then modiﬁed based on the second variant.
+The hidden layers in neural nets were increased to size six
+(with dimensions 768, 800, 512, 256, 128, 2). The TEXT
+attribute was fed into BERT-Base and the BERT-Base’s out-
+put (BB
+OP) was concatenated with the EMO, SPC, SEN
+attributes to be passed to the feedforward NN. The model
+performed better than the previous variant, with the accura cy
+score of 69.37% and the F1 Score of 0.57234. The accuracy
+and F1-score for the experiments performed with BERT-Base
+with feed-forward NN are given in Table II.
+
+=== PDF PAGE 5 ===
+0 2 4 6 8
+Epoch
+0.00
+0.25
+0.50
+0.75
+1.00
+1.25
+1.50
+1.75Losses
+Training Loss VS Validation Loss
+Training loss
+Validation loss
+Fig. 4. Experiment 5 Training Loss VS V alidation Loss
+S.N. Experiment Accuracy F1 Score
+Macro
+1. TEXT → [BB],
+BB OP → [NN] 0.6882 0.5842
+2. TEXT+EMO → [BB],
+BB OP → [NN] 0.6773 0.6352
+3.
+TEXT+EMO+
+SPC → [BB],
+BB
+OP → [NN]
+0.6720 0.4021
+4.
+TEXT+EMO+
+SPC+SEN → [BB],
+BB
+OP → [NN]
+0.6734 0.4097
+5.
+TEXT → [BB],
+BB OP+EMP+
+SPC+SEN → [NN]
+0.6937 0.57234
+TABLE II
+BERT-B ASE WITH FEED -F ORWARD NN, A CCURACY AND F1 S CORE
+B. Experiments with BERT-Base + CNN
+In second model, a CNN component was appended to
+BERT-Base with 2 1D convolution layers. The ﬁrst layer input
+channel size was 1 and output channel size was 50, and the
+second layer input channel size was 50 and output channel
+size was 100. The kernel size for both layers was 20 with
+stride of 1. The 1D max-pooling of size one was used in all
+the experiments. We started with the ﬁrst variant, where the
+TEXT and other attributes were fed directly into BERT-Base,
+the output (BB
+OP) of which was passed into the CNN. In
+our ﬁrst experiment, only TEXT was given to BERT-Base,
+yielding an accuracy score of 68.82% with a F1 Score of
+0.5308. Both the accuracy and the F1 Score were similar to the
+best performer of model-I. In the next experiment, only TEXT
+was fed into BERT-Base and the output of BERT-Base was
+concatenated with EMO and then fed into CNN. The model
+produced an accuracy of 65.54% and a F1 Score of 0.608. In
+the fourth experiment, the TEXT and SPC attributes were fed
+into BERT-Base and the output was concatenated with EMO
+to be passed into the CNN. This model performed better with
+the accuracy of 68.90% and F1 Score of 0.6542. In the ﬁfth
+experiment, TEXT was fed into BERT-Base, and its output
+was concatenated with EMO and SPC before feeding into
+S.N. Experiment Accuracy F1 Score
+Macro
+1. TEXT → [BB],
+BB OP → [CNN] 0.6882 0.5308
+2.
+TEXT+EMO +
+SPC → [BB],
+BB
+OP → [CNN]
+0.5546 0.55641
+3.
+TEXT → [BB],
+BB OP+
+EMO → [CNN]
+0.6554 0.608
+4.
+TEXT+SPC → [BB],
+BB OP+
+EMO → [CNN]
+0.6890 0.6542
+5.
+TEXT → [BB],
+BB OP+EMO
++SPC → [CNN]
+0.7000 0.6370
+6.
+TXT → [BB],
+BB OP+EMO+
+SPC+SEN → [CNN]
+0.6992 0.6430
+TABLE III
+BERT-B ASE + CNN, A CCURACY AND F1 S CORE
+CNN. The model performed better than all others, yielding
+an accuracy of 70% and F1 Score of 0.630. The accuracy and
+F1-score for the experiments performed with BERT-Base +
+CNN are given in Table III.
+0 2 4 6 8
+Epoch
+0.00
+0.25
+0.50
+0.75
+1.00
+1.25
+1.50
+1.75
+2.00Losses
+Training Loss VS Validation Loss
+Training loss
+Validation loss
+Fig. 5. Experiment 6, Training Loss VS V alidation Loss
+V. D ISCUSSION AND CONCLUSION
+This paper introduced Sentimental LIAR as an extension
+of the LIAR dataset, and proposed novel model architectures
+based on BERT-Base for fake claim detection in short text.
+The proposed architectures extend BERT-Base by adding (1) a
+feedforward neural network, or (2) a CNN. The LIAR dataset
+is extended by adding emotions anger, sad, fear, anger and
+disgust by using IBM NLP API and added sentiment score
+using Google NLP API. We also included speaker credit as
+an input attribute to our models.
+The experiments performed with BERT-Base + feedforward
+NN, the accuracy ranged from 68.8% to 69% within the ﬁve
+experiments. These experiments were performed by changing
+the input structure in the ﬁrst three experiments and by
+changing the hidden layers in the latter two experiments. A
+
+=== PDF PAGE 6 ===
+slight improvement of 1% was observed in the accuracy and
+no improvements in the F1 Score. This suggests that the model
+may need to be revised to handle the complexity of the input
+data. Hence, a CNN-based architecture was investigated in o ur
+further experiments.
+The experiments were performed with BERT-Base + CNN,
+the accuracy ranged from 68.82% to 70% within six exper-
+iments, and also major improvements were observed in the
+F1 Score (0.5308 to 0.6430). The best performing model is
+found to be one where the text attribute is fed directly into
+BERT-Base, and the output of BERT-Base is concatenated with
+the emotions, speaker’s credit and sentiments before being
+passed to the CNN. Undeutsch hypothesis [9] and the four-
+factor theory [10] supported the intuition that the emotion al
+and sentimental attributes can help to distinguish the fake
+claims, which can be veriﬁed by the observation of the model
+performing better when EMO and SEN were added. Adding
+the SEN and EMO with BERT-Base output supplemented the
+features which boosted the CNN model performance.
+For both models, it can be observed that adding the metadata
+(i.e., emotions, sentiments, and speakers’ credit) increa sed the
+accuracy of model. Also, both the model accuracy and the F1
+Score improved with the CNN-based architecture.
+The training loss VS validation Loss graphs for BERT-Base
++ feedforward NN is given in Fig.(4), and for BERT-Base
++ CNN in Fig.(5). These plots suggest that the models were
+overﬁtted only after 2 epochs, which is mostly due to the smal l
+size of the dataset. Also, it must be noted that the dataset is
+imbalanced, with 65% of data labeled as false and only 35%
+labeled as true. These observations demonstrate the need fo r
+the curation of larger and more representative datasets of s hort-
+text claims.
+Furthermore, our results further verify that fake claims ca n
+be detected in short-text according to exaggerated express ions
+and strong emotions demonstrated in the text. The proposed
+architecture also sets a new state-of-the-art benchmark fo r fake
+claim classiﬁcation on the LIAR dataset with an accuracy of
+70%.
+REFERENCES
+[1] X. Zhou and R. Zafarani, “Fake news: A survey of research,
+detection methods, and opportunities,” CoRR, vol. abs/1812.00315,
+2018. [Online]. Available: http://arxiv.org/abs/1812.0 0315
+[2] D. Pogue, “How to stamp out fake news,” Scientiﬁc American, vol. 316,
+pp. 24–24, 01 2017.
+[3] A. Stevenson, “Facebook admits it was used to incite
+violence in myanmar,” The New York Times . [Online]. Available:
+https://www.nytimes.com/2018/11/06/technology/myanmar-facebook.html
+[4] S. Laato, A. Islam, M. N. Islam, and E. Whelan, “Why do peop le
+share misinformation during the covid-19 pandemic?” arXiv preprint
+arXiv:2004.09600, 2020.
+[5] K. Rapoza, “Can ’fake news’ impact the
+stock market?” F orbes. [Online]. Available:
+https://www.forbes.com/sites/kenrapoza/2017/02/26/can-fake-news-impact-the-stock-market/
+[6] R. Oshikawa, J. Qian, and W. Y . Wang, “A survey on natural l anguage
+processing for fake news detection,” CoRR, vol. abs/1811.00770, 2018.
+[Online]. Available: http://arxiv.org/abs/1811.00770
+[7] W. Y . Wang, “”liar, liar pants on ﬁre”: A new benchmark dat aset for
+fake news detection,” 2017.
+[8] D. M. J. Lazer, M. A. Baum, Y . Benkler, A. J. Berinsky, K. M.
+Greenhill, F. Menczer, M. J. Metzger, B. Nyhan, G. Pennycook ,
+D. Rothschild, M. Schudson, S. A. Sloman, C. R. Sunstein, E. A .
+Thorson, D. J. Watts, and J. L. Zittrain, “The science of fake news,”
+Science, vol. 359, no. 6380, pp. 1094–1096, 2018. [Online]. Availab le:
+https://science.sciencemag.org/content/359/6380/1094
+[9] U. Undeutsch, “Beurteilung der glaubhaftigkeit von aus sagen,” Hand-
+buch der psychologie , vol. 11, pp. 26–181, 1967.
+[10] M. Zuckerman, B. M. DePaulo, and R. Rosenthal, “V erbal a nd nonver-
+bal communication of deception,” in Advances in experimental social
+psychology. Elsevier, 1981, vol. 14, pp. 1–59.
+[11] A. Vlachos and S. Riedel, “Fact checking: Task deﬁnitio n and dataset
+construction,” in Proceedings of the ACL 2014 W orkshop on Language
+Technologies and Computational Social Science , 2014, pp. 18–22.
+[12] A. Zubiaga, M. Liakata, R. Procter, G. Wong Sak Hoi, and
+P . Tolmie, “Analysing how people orient to and spread rumour s
+in social media by looking at conversational threads,” PLOS ONE ,
+vol. 11, no. 3, p. e0150989, Mar 2016. [Online]. Available:
+http://dx.doi.org/10.1371/journal.pone.0150989
+[13] P . Krejzl, B. Hourov´ a, and J. Steinberger, “Stance det ection in online
+discussions,” 2017.
+[14] J. Thorne, A. Vlachos, C. Christodoulopoulos, and A. Mi ttal,
+“Fever: a large-scale dataset for fact extraction and veriﬁ cation,”
+Proceedings of the 2018 Conference of the North American Cha pter
+of the Association for Computational Linguistics: Human La nguage
+Technologies, V olume 1 (Long Papers) , 2018. [Online]. Available:
+http://dx.doi.org/10.18653/v1/N18-1074
+[15] Y . Kim, “Convolutional neural networks for sentence cl assi-
+ﬁcation,” CoRR, vol. abs/1408.5882, 2014. [Online]. Available:
+http://arxiv.org/abs/1408.5882
+[16] A. Kirilin and M. Strube, “Exploiting a speakers credib ility to detect fake
+news,” in Proceedings of Data Science, Journalism & Media workshop
+at KDD (DSJM18) , 2018.
+[17] Y . Long, Q. Lu, R. Xiang, M. Li, and C.-R. Huang, “Fake new s
+detection through multi-perspective speaker proﬁles,” in Proceedings
+of the Eighth International Joint Conference on Natural Lan guage
+Processing (V olume 2: Short Papers). Taipei, Taiwan: Asian Federation
+of Natural Language Processing, Nov. 2017, pp. 252–256. [On line].
+Available: https://www.aclweb.org/anthology/I17-2043
+[18] N. Ruchansky, S. Seo, and Y . Liu, “Csi,” Proceedings of the 2017
+ACM on Conference on Information and Knowledge Management , Nov
+2017. [Online]. Available: http://dx.doi.org/10.1145/3 132847.3132877
+[19] J. Devlin, M. Chang, K. Lee, and K. Toutanova, “BERT:
+pre-training of deep bidirectional transformers for langu age
+understanding,” CoRR, vol. abs/1810.04805, 2018. [Online]. Available:
+http://arxiv.org/abs/1810.04805
+[20] D. P . Kingma and J. Ba, “Adam: A method for stochastic opt imization,”
+arXiv preprint arXiv:1412.6980 , 2014.

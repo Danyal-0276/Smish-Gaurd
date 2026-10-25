@@ -1,0 +1,1239 @@
+[
+  {
+    "id": 1,
+    "title": "WELFake: Word Embedding over Linguistic Features for Fake News Detection",
+    "file": "WELFake__Word_Embedding_over_Linguistic_Features_for_Fake_News_Detection.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          1
+        ],
+        "text": "Although, there exist a few websites to check the authenticity of the news like PolitiFact [9], The Washington Post Fact Checker [10], FactCheck [11], Snopes [12], TruthOrFiction [13], FullFact [14], HoaxSlayer [15], Vishvas News [16], Factly Media & Research [17] yet, these websites are unable to spontaneously react to any fake news event [18]."
+      },
+      {
+        "pages": [
+          3
+        ],
+        "text": "Chen et al. [30] scrutinized potential techniques for programmed discovery of clickbaits by combining syntax and semantics under textual cues, as well as images and news reader behavior under non-textual cues. They surveyed the importance of these cues for the identification of fake news, but failed to implement a prototype of their methodology."
+      },
+      {
+        "pages": [
+          3
+        ],
+        "text": "Kaliyar et al. [36] proposed a deep CNN method called FNDNet to detect fake news and achieved a 98.36% accuracy on the Kaggle dataset. However, they did not show results on generalized text [37]."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "Ahmed et al. [48] used an unclear private version of the continuously updated Kaggle dataset for fake news detection and achieved an accuracy of 92%. Shu et al. [49] used Politifact and BuzzFeed datasets in their analysis, which are hard to generalise due to their very small size."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "a) Benjamin Political News: is a very small dataset with 75 stories each for real, fake and satire categories. b) Burfoot Satire News: is an unbalanced dataset with real and satire categories. c) BuzzFeed News: is a very small dataset of 101 news. d) CREDBANK: consists of incomplete news articles in real and fake events categories."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "f) FakeNewsNet: consists of only 422 news articles with incomplete classification in real and fake categories. g) LIAR: contains various hard to classify social media posts and speeches due to the lack of verification sources or knowledge bases [62]. h) Reuters: consists of real and fake news articles from a single source that increases the chances of biased data. i) McIntire: consists of real and fake news categories without authentic confirmation from any individual. j) Kaggle: consists of real and fake news data without source information."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "No single method guarantees the best solution for all datasets. The state-of-the-art approach of Gravanis et al. [37] used 57 linguistic features and embed them with word-to-vector embedding method on UNBiased dataset of less than 4000 articles only."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "Although there exist an important number of open datasets for the study of fake news (see Section III and Table II), the literature showed their serious limitations in terms of size, category or bias."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Towards Reliable Fake News Detection: Enhanced Attention-Based Transformer Model",
+    "file": "jcp-05-00043.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          2,
+          3
+        ],
+        "text": "Traditional approaches for FND are found to be inadequate to address the scale and sophistication of modern misinformation campaigns [4]. Although manual fact-checking is accurate, its feasibility cannot match the speed of content creation and distribution [5]. Rule-based systems and crowdsourcing platforms such as PolitiFact [6] and ClaimBuster [7] are valuable but suffer from scalability limitations, subjective interpretations, and language barriers that prevent comprehensive coverage in the global landscape."
+      },
+      {
+        "pages": [
+          3
+        ],
+        "text": "Classical ML approaches using hand-crafted features such as n grams, Term Frequency-Inverse Document Frequency (TF-IDF) vectors, and sentiment scores capture surface-level patterns but do not understand the nuanced contextual relationships and implicit semantic structures that characterize sophisticated misinformation."
+      },
+      {
+        "pages": [
+          3
+        ],
+        "text": "Despite the promising capabilities of transformer models, current research in FND has several limitations that affect both theoretical understanding and practical deployment. Various studies have observed that these models are treated as black boxes: evaluating their performance without understanding which architectural components contribute the most significantly to their effectiveness [ 8]. The lack of systematic ablation studies means that researchers cannot determine whether improvements come from attention mechanisms, positional encodings, layer normalization, or other architectural elements. In addition, existing evaluations often lack rigorous statistical validation, reproducibility protocols, and cross-dataset generalization analysis, making it difficult to assess the true robustness and reliability of proposed solutions. It is also important to find the optimal balance between model complexity, computational efficiency, and performance stability in various datasets."
+      },
+      {
+        "pages": [
+          20
+        ],
+        "text": "In terms of improved performance, its implications in the real world could have been better illustrated with access to a larger volume of labeled data. FND models are very unlikely to be flawless because the problem itself is inherently dynamic, context-dependent, linguistically complex, etc., and any automated system must balance fairness, adaptability, and ethical constraints."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "DeClarE: Debunking Fake News and False Claims using Evidence-Aware Deep Learning",
+    "file": "D18-1003 (1).pdf",
+    "excerpts": [
+      {
+        "pages": [
+          1
+        ],
+        "text": "However, this manual verification is time-consuming."
+      },
+      {
+        "pages": [
+          1
+        ],
+        "text": "On the one hand, methods like Rashkin et al. (2017); Wang (2017) train neural networks on labeled claims from sites like PolitiFact.com, providing credibility assessments without any explicit feature modeling. However, they use only the text of questionable claims and no external evidence or interactions that provide limited context for credibility analysis. These approaches also do not offer any explanation of their verdicts."
+      },
+      {
+        "pages": [
+          1
+        ],
+        "text": "On the other hand, Popat et al. (2017) considers external evidence in the form of other articles (retrieved from the Web) that confirm or refute a claim, and jointly assesses the language style (using subjectivity lexicons), the trustworthiness of the sources, and the credibility of the claim. This is achieved via a pipeline of supervised classifiers. On the upside, this method generates user-interpretable explanations by pointing to informative snippets of evidence articles. On the downside, it requires substantial feature modeling and rich lexicons to detect bias and subjectivity in the language style."
+      },
+      {
+        "pages": [
+          8,
+          9
+        ],
+        "text": "The method proposed by Samadi et al. (2016) uses the Probabilistic Soft Logic (PSL) framework to estimate source reliability and claim correctness. Vydiswaran et al. (2011) proposes an iterative algorithm which jointly learns the veracity of textual claims and trustworthiness of the sources. These approaches do not consider the deeper semantic aspects of language, however. Wiebe and Riloff (2005); Lin et al. (2011); Recasens et al. (2013) study the problem of detecting bias in language, but do not consider credibility."
+      },
+      {
+        "pages": [
+          9
+        ],
+        "text": "Nakashole and Mitchell (2014) proposed a method to extract conflicting values from the Web in the form of Subject-Predicate-Object (SPO) triplets and uses language objectivity analysis to determine the true value. Like the other truth discovery approaches, however, this approach is mainly suitable for use with structured data."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Truth of Varying Shades: Analyzing Language in Fake News and Political Fact-Checking",
+    "file": "D17-1317.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          3,
+          4
+        ],
+        "text": "The model achieves F1 scores of 65% on the out-of-domain test set (Table 3). This is a promising result as it is much higher than random, but still leaves room for improvement compared to the performance on the development set consisting of articles from in-domain sources."
+      },
+      {
+        "pages": [
+          5
+        ],
+        "text": "In contrast, the LIWC features do not improve the neural model much, indicating that some of this lexical information is perhaps redundant to what the model was already learning from text."
+      },
+      {
+        "pages": [
+          5
+        ],
+        "text": "As in the dev. set results, the LIWC features do not improve the LSTM’s performance, and even seem to hurt the performance slightly."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Emotion Detection for Misinformation: A Review",
+    "file": "d6cf2169-5355-4c31-89d0-e6e37c651a40.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          17
+        ],
+        "text": "Although we suggest possible reasons for different performance levels, it is important to note that performance may influenced by numerous factors, including differences in data processing methods, selection of base models, and the predictive behavior of the sentiment model, etc."
+      },
+      {
+        "pages": [
+          17,
+          18
+        ],
+        "text": "Although the experimental results for EmoAttention BERT [163] highlight the importance of emotionally charged style, and in particular emotional intensity, as a predictive feature of fake news, Table 5 illustrates that the performance of this method is low. A probable reason is that their method is evaluated on a complex dataset that includes multiple domains and labels, but their fairly simple framework fails to account for potential differences in the characteristics of data across different domains."
+      },
+      {
+        "pages": [
+          18
+        ],
+        "text": "Similarly, The challenging characteristics of the RumourEval-2019 dataset (i.e., low inter-annotator agreement and sparse data [141, 214]) resulted in relatively low performance from RvNN with Temporal [169] (0.53 F1) and MDE [29] (0.35 F1) methods, even though they achieved much higher results on other datasets."
+      },
+      {
+        "pages": [
+          18
+        ],
+        "text": "Nevertheless, ptVAE exhibits lower performance than SA-HyperGAT on these datasets, and is also inferior to several other methods that have been evaluated on the Weibo16 dataset. This could be due to the less rigorous data processing methods used in ptVAE, but it is more likely that their proposed VAE architecture for sentiment analysis is not as effective as other methods, such as the fine-tuned RoBERTa model used in SA-HyperGAT [162]."
+      },
+      {
+        "pages": [
+          20
+        ],
+        "text": "While the language used on each platform is diverse, and the data formats are varied, making the processing of such data cumbersome."
+      },
+      {
+        "pages": [
+          20
+        ],
+        "text": "However, achieving this goal is hindered by the limitations of the majority of currently publicly available datasets, which are usually collected from a single platform (as shown in Table 2) and which predominantly concern textual data in a single language (typically English or Chinese)."
+      },
+      {
+        "pages": [
+          20
+        ],
+        "text": "The development of emotion-based misinformation detection methods with optimal performance requires that supporting misinformation datasets are annotated with reliable emotion and/or sentiment labels, since inaccurate labels are likely to impact negatively on the overall performance of the methods. While this is most often carried out using dictionary lookup, some studies have employed transfer learning methods, by applying models trained on other sentiment analysis or emotion-labeled datasets to automatically annotate the emotions expressed in misinformation datasets. Examples include [30, 181, 182], which use a previously developed Unison model, and [162], which utilizes a finetuned RoBERTa model. However, the emotion labels obtained in these ways are not sufficiently accurate."
+      },
+      {
+        "pages": [
+          21
+        ],
+        "text": "Despite the value of these datasets in facilitating the evaluation of various different individual aspects of methods, there is still a lack of a suitably comprehensive benchmark that can simultaneously evaluate the ability of misinformation detection methods to handle diverse types of multi-modal data from multiple platforms and covering different languages, as well as assessing their ability to perform important subsidiary tasks such as emotion, sentiment and stance detection, identification of rumor source, etc."
+      },
+      {
+        "pages": [
+          21
+        ],
+        "text": "However, despite the high levels of performance achieved by many DL approaches, their black-box nature means that no such reasoning information is available, and that their decisions are hard to justify."
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "A comprehensive survey on machine learning approaches for fake news detection",
+    "file": "s11042-023-17470-8.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          20
+        ],
+        "text": "Although the studies mentioned above that relied largely upon features derived from content perform well in identifying fake content, their major limitation is that content-based features alone cannot be used to characterise fake news content properly. The fakers mainly utilise different tactics to mimic trustworthy content."
+      },
+      {
+        "pages": [
+          20
+        ],
+        "text": "However, high-quality data, particularly online social media data, poses another challenge to the process, including misspellings and others. Adding to the problem is the access restriction posed by Twitter API. As such, developing an automated solution with high accuracy is, therefore, challenging."
+      },
+      {
+        "pages": [
+          24
+        ],
+        "text": "Although these studies showed significant performance, however, they tend to encode the input unidirectionally using context-independent word embedding techniques."
+      },
+      {
+        "pages": [
+          24
+        ],
+        "text": "Fusing the relevant information between different modalities while maintaining the unique properties of each is a challenge. In addition, for some news, a fusion between different modalities may result in noise information that has a negative impact on the performance of the model."
+      },
+      {
+        "pages": [
+          30
+        ],
+        "text": "As mentioned previously, although statistical-based representation methods are computationally efficient and have shown promise as the foundation of text classification tasks, they are not without limitations. These methods focus solely on capturing frequency features of individual words, disregarding the contextual information of the text, thereby making it challenging to capture semantic-based information. To address this limitation, context-independent pre-trained models like Word2V ec and GloV e have been developed, which capture semantic patterns but overlook contextual information."
+      },
+      {
+        "pages": [
+          30
+        ],
+        "text": "A bag-of-words model, as the name implies, discards any information about the order or structure of words in the document and is only concerned with whether known words occur in the document, not where in the document, thus, failing to capture semantic patterns."
+      },
+      {
+        "pages": [
+          30,
+          31
+        ],
+        "text": "Another issue of such a model is that as the vocabulary size increases, so does the vector space dimension since, in this model, the number of words in the vocabulary forms the dimension of the vector representation of a document resulting in what is called sparse representations. Such large dimensions, however, are bound to result in so-called curse of dimensionality, making it easy to fall into overfitting resulting in terrible out-of-sample performance."
+      },
+      {
+        "pages": [
+          31
+        ],
+        "text": "The problem with the BoWs method is that it treats all words equally important, and this is attributed to the fact that BoWs score each word based on its frequency in a document; thus, highly frequently occurring words dominate others in the document with a larger score which is problematic especially when such words are not as informative to the model as rarer occurring words."
+      },
+      {
+        "pages": [
+          32
+        ],
+        "text": "Y et, nevertheless, these techniques failed to capture deeper contextual relations since they mostly model indirect relationships by capturing only shortrange context based on a specific co-occurrence window."
+      },
+      {
+        "pages": [
+          37
+        ],
+        "text": "In RNN, gradients are typically computed by applying back-propagation through time [221]. However, due to the vanishing or exploding gradients [ 26], with gradient-based optimisation, the basic RNN is unable to learn long-distance temporal dependencies."
+      },
+      {
+        "pages": [
+          38
+        ],
+        "text": "The basic RNN only considers the previous context but cannot capture future context."
+      },
+      {
+        "pages": [
+          38
+        ],
+        "text": "Even though BiLSTM and BiGRU have shown their superiority in a suit of NLP problems, they are not free from two shortcomings. (i) As high-dimensional input space increases, so does the complexity of these models leading to further complexity in optimising such models, and (ii) as these models can capture succeeding and proceeding contextual information (bidirectionality concept), they are not able to focus on the most salient parts of the contextual information of the text."
+      },
+      {
+        "pages": [
+          43
+        ],
+        "text": "Classical ML algorithms, such as LR, SVM, etc., are easy to comprehend and perform well on small datasets, but they (i) require complex feature engineering, (ii) fail to capture substantial semantical contextual knowledge for a specific input text and (iii) limited generalisation abilities."
+      },
+      {
+        "pages": [
+          43
+        ],
+        "text": "Classical ML algorithms, including shallow neural networks, lack an in-depth understanding of a given input text, which increases the risk of overfitting."
+      },
+      {
+        "pages": [
+          44
+        ],
+        "text": "However, CNN typically struggles with capturing long-term contextual dependencies, while RNN-based methods perform sub-optimally in handling such dependencies."
+      },
+      {
+        "pages": [
+          44
+        ],
+        "text": "However, besides the fact that surface-level features cannot effectively capture semantical patterns in text, the lack of a sufficient amount of data constitutes a bottleneck for DL models. Furthermore, these models are impotent towards capturing deep semantical contextualised understanding of a given input text."
+      },
+      {
+        "pages": [
+          44
+        ],
+        "text": "However, research on FND has been mostly restricted to limited comparisons of deep and ML models using particular untested combinations of word representation methods on specific datasets in order to obtain better detection results. The question of which ML, DL, and other advanced transformer-based methods are the most effective for FND remains unanswered."
+      },
+      {
+        "pages": [
+          44
+        ],
+        "text": "Despite the success of ML and DL models that relied largely on textual content for FND, textual content is insufficient on its own. Besides content-based clues, little research on exploiting visual information, which of course, shows the superiority of multimodal approaches over unimodal approaches, has been established to combat fake news dissemination."
+      },
+      {
+        "pages": [
+          45
+        ],
+        "text": "Driven by the high performance achieved by most of today’s models, they often lack transparency as they seemingly follow a black box nature that provides results that are obscure to humans."
+      },
+      {
+        "pages": [
+          45
+        ],
+        "text": "Lack of empirical analysis: The study primarily focuses on providing an extensive review of previous studies in the field of FND. However, it does not include original empirical analysis or experiments to validate the effectiveness of the discussed methods and techniques."
+      },
+      {
+        "pages": [
+          45
+        ],
+        "text": "Limited discussion on real-world implementation: Although the study extensively discusses various methods and models used in the literature, there is a lack of in-depth analysis of the practical implementation and deployment of these techniques in realworld scenarios."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "A Survey on Automated Fact-Checking",
+    "file": "43b0fe45-d64f-4f31-a09a-bc3009f84fa0.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          3
+        ],
+        "text": "Some earlier efforts do not use any evidence beyond the claim itself (Wang, 2017; Rashkin et al., 2017; V olkova et al., 2017; Dungs et al., 2018). Relying on surface patterns of claims without considering the state of the world fails to identify well-presented misinformation, including machine-generated claims (Schuster et al., 2020)."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "A fundamental issue is that not all available information is trustworthy. Most fact-checking approaches implicitly assume access to a trusted information source such as encyclopedias (e.g. Wikipedia (Thorne et al., 2018a)) or results provided (and thus vetted) by search engines (Augenstein et al., 2019)."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "Debunking purely by calling somethingfalse often fails to be persuasive, and can induce a “backfire”- effect where belief in the erroneous claim is reinforced (Lewandowsky et al., 2012). This need is even greater for automated fact-checking, which may employ black-box components. When developers deploy black-box models whose decisionmaking processes cannot be understood, these artefacts can lead to unintended, harmful consequences (O’Neil, 2016)."
+      },
+      {
+        "pages": [
+          5
+        ],
+        "text": "Presenting the evidence returned by a retrieval system can as such be seen as a rather weak baseline for justification production, as it does not explain the process used to reach the verdict."
+      },
+      {
+        "pages": [
+          6
+        ],
+        "text": "However, the implicit assumption that every claim in it is either factually correct or incorrect is problematic, and thus rarely practised by human fact-checkers (Uscinski and Butler, 2013)."
+      },
+      {
+        "pages": [
+          6,
+          7
+        ],
+        "text": "A popular type of evidence often considered is metadata, such as publication date, sources, user profiles, etc. However, while it offers information complementary to textual sources or structural knowledge which is useful when the latter are unavailable (Wang, 2017; Potthast et al., 2018), it does not provide evidence grounding the claim."
+      },
+      {
+        "pages": [
+          7
+        ],
+        "text": "The aforementioned works assume that evidence is given for every claim, which is not conducive to developing systems that need to retrieve evidence from a large knowledge source."
+      },
+      {
+        "pages": [
+          7
+        ],
+        "text": "However, these efforts restricted world knowledge to a single source (Wikipedia), ignoring the challenge of retrieving evidence from heterogeneous sources on the web. To address this, other works (Popat et al., 2016; Baly et al., 2018; Augenstein et al., 2019) retrieved evidence from the Internet, but the search results were not annotated. Thus, it is possible that irrelevant information is present in the evidence, while information that is necessary for verification is missing."
+      },
+      {
+        "pages": [
+          7
+        ],
+        "text": "However, while graph topology can be an indicator of plausibility, it does not provide conclusive evidence. A claim that is not represented by a path in the graph, or that is represented by an unlikely path, is not necessarily false. The knowledge base approach assumes that true facts relevant to the claim are present in the graph; but given the incompleteness of even the largest knowledge bases, this is not realistic (Bordes et al., 2013; Socher et al., 2013)."
+      },
+      {
+        "pages": [
+          8
+        ],
+        "text": "Most existing datasets do not contain textual explanations provided by journalists as justification for verdicts."
+      },
+      {
+        "pages": [
+          8
+        ],
+        "text": "Recently, Kotonya and Toni (2020b) constructed the first dataset which explicitly includes gold explanations. These consist of fact-checking articles and other news items, which can be used to train natural language generation models to provide posthoc justifications for the verdicts, However, using fact-checking articles is not realistic, as they are not available during inference, which makes the trained system unable to provide justifications based on retrieved evidence."
+      },
+      {
+        "pages": [
+          8
+        ],
+        "text": "This is challenging, especially in the case of check-worthiness: rumourous and non-rumourous information is often difficult to distinguish, and the volume of claims analysed in real-world scenarios – e.g. all posts published to a social network every day – prohibits the retrieval and use of evidence."
+      },
+      {
+        "pages": [
+          9
+        ],
+        "text": "Some work avoids retrieval by making a closed-domain assumption and evaluating in a setting where appropriate evidence has already been found (Ferreira and Vlachos, 2016; Chen et al., 2020; Zhong et al., 2020a; Yang et al., 2020b; Eisenschlos et al., 2020); this, however, is unrealistic."
+      },
+      {
+        "pages": [
+          9
+        ],
+        "text": "Without explicitly considering evidence such approaches are likely to propagate biases learned during training, and render justification production impossible (Lee et al., 2021; Pan et al., 2021)."
+      },
+      {
+        "pages": [
+          9,
+          10
+        ],
+        "text": "Recent studies have shown the use of attention as explanation to be problematic. Some tokens with high attention scores can be removed without affecting predictions, while some tokens with low (non-zero) scores turn out to be crucial (Jain and Wallace, 2019; Serrano and Smith, 2019; Pruthi et al., 2020). Explanations provided by attention may therefore not be sufficiently faithful. Furthermore, as they are difficult for non-experts and/or those not well-versed in the architecture of the model to grasp, they lack readability."
+      },
+      {
+        "pages": [
+          10
+        ],
+        "text": "These rules are mined from a pre-constructed knowledge base, such as DBpedia (Auer et al., 2007). This limits what can be fact-checked to claims which are representable as triples, and to information present in the (often manually curated) knowledge base."
+      },
+      {
+        "pages": [
+          10
+        ],
+        "text": "A potential issue is that such models can generate explanations that do not represent their actual veracity prediction process, but which are nevertheless plausible with respect to the decision. This is especially an issue with abstractive models, where hallucinations can produce very misleading justifications (Maynez et al., 2020). Also, the model of Atanasova et al. (2020b) assumes fact-checking articles provided as input during inference, which is unrealistic."
+      },
+      {
+        "pages": [
+          10
+        ],
+        "text": "Fact-checking can help detect misinformation, but not distinguish it from disinformation."
+      },
+      {
+        "pages": [
+          10
+        ],
+        "text": "Nevertheless, new claims and evidence emerge regularly. Previous fact-checks can be useful, but they can become outdated and potentially misleading over time."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "In-between labels like “mostly true” often represent “meta-ratings” for composite claims consisting of multiple elementary claims of different veracity. For example, a politician might claim improvements to unemployment and productivity; if one part is true and the other false, a fact-checker might label the full statement “half true”."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "The separation of claims into truth and falsehood can be too simplistic, as true claims can still mislead. Examples include cherrypicking, where evidence is chosen to suggest a misleading trend (Asudeh et al., 2020), and technical truth, where true information is presented in a way that misleads (e.g. “I have never lost a game of chess”is also true if the speaker has never played chess). A major challenge is integrating analysis of such claims into the existing frameworks."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "Not all information is equally trustworthy, and sometimes trustworthy sources contradict each other. This challenges the assumptions made by most current fact-checking research relying on a single source considered authoritative, such as Wikipedia."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "Similarly, check-worthiness is a subjective concept varying along axes including target audience, recency, and geography."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "However, the practical limitations of fact-checking (e.g. the deadlines of journalists and the time-constraints of media consumers) often force the use of a triage system (Borel, 2016). This can introduce biases regardless of the intentions of journalists and system-developers to use objective criteria (Uscinski and Butler, 2013; Uscinski, 2015)."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "Synthetic datasets constructed through crowd-sourcing are common (Zeichner et al., 2012; Hermann et al., 2015; Williams et al., 2018). It has been shown that models tend to rely on biases in these datasets, without learning the underlying task (Gururangan et al., 2018; Poliak et al., 2018; McCoy et al., 2019)."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "For fact-checking, Schuster et al. (2019) showed that the predictions of models trained on FEVER (Thorne et al., 2018a) were largely driven by indicative claim words. The FEVER 2.0 shared task explored how to generate adversarial claims and build systems resilient to such attacks (Thorne et al., 2019). Alleviating such biases and increasing the robustness to adversarial examples remains an open question."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "Available multimodal corpora are either small in size (Zhang et al., 2018; Zlatkova et al., 2019) or constructed based on distant supervision (Nakamura et al., 2020)."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "While misinformation spans both geographic and linguistic boundaries, most work in the field has focused on English."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "Currently, there exist a handful of datasets for factual verification in languages other than English (Baly et al., 2018; Lillie et al., 2019; Khouja, 2020; Shahi and Nandini, 2020; Nørregaard and Derczynski, 2021), but they do not offer a crosslingual setup. More recently, Gupta and Srikumar (2021) introduced a multilingual dataset covering 25 languages, but found that adding training data from other languages did not improve performance. How to effectively align, coordinate, and leverage resources from different languages remains an open question."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "A significant unaddressed challenge in justification production is faithfulness. As we discuss in Section 4.3, some justifications – such as those generated abstractively (Maynez et al., 2020) – may not be faithful. This can be highly problematic, especially if these justifications are used to convince users of the validity of model predictions (Lertvittayakumjorn and Toni, 2019). Faithfulness is difficult to evaluate for, as human evaluators and human-produced gold standards often struggle to separate highly plausible, unfaithful explanations from faithful ones (Jacovi and Goldberg, 2020)."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "Efforts have been made to respond quickly after the appearance of a piece of misinformation (Monti et al., 2019), but common to all approaches is that intervention takes place reactively after misinformation has already been introduced to the public."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "This could be seen as a form of dialogue agent to educate users, however there are as of yet no resources for the development of such systems."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "A Multi-Transformer Framework for Short-Claim Fake News Detection with Affective Feature Ablation",
+    "file": "main.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          9
+        ],
+        "text": "The available experiment summary preserves aggregate metrics and confusion matrices but not the paired claim-level prediction vectors required to calculate n01 and n10. We therefore do not report a fabricated significance value."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "Short claims involving missing dates, quantities, comparisons, negation, named entities, or emotionally charged wording can be difficult because the claim string does not contain enough evidence to resolve factuality."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "The integer cells are reconstructed from the locked class totals and the reported accuracy, precision, and recall values. They reproduce the published aggregate metrics but do not replace the missing claim-level prediction vectors required for paired significance testing."
+      },
+      {
+        "pages": [
+          20
+        ],
+        "text": "The results establish performance for one clear-label conversion of English political claims, one fixed random seed, and one in-domain test partition. They do not establish stability across repeated fine-tuning runs, calibrated probabilities, fairness across demographic or political subgroups, or generalization to other topics and languages. The deployed interface also remains a screening tool because the model does not retrieve evidence or verify claims against primary sources."
+      },
+      {
+        "pages": [
+          20
+        ],
+        "text": "The reported experiment uses one fixed seed. This design makes the run reproducible but does not quantify variation across random initializations ( 24, 32)."
+      },
+      {
+        "pages": [
+          20
+        ],
+        "text": "The study does not evaluate probability calibration or subgroup performance. Interface scores must therefore not be interpreted as calibrated probabilities of truth ( 22, 23)."
+      },
+      {
+        "pages": [
+          20
+        ],
+        "text": "LIAR contains English political claims from one fact-checking context. Performance can change for health misinformation, disaster rumors, financial claims, other countries, other languages, or complete news articles. The present results therefore establish in-domain short-claim performance only."
+      },
+      {
+        "pages": [
+          21
+        ],
+        "text": "The system does not retrieve primary sources, model multimodal evidence, or verify numerical claims against external databases. Affective tag serialization also provides a simple auxiliary representation rather than learned multimodal fusion."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "FakeFlow: Fake News Detection by Modeling the Flow of Affective Information",
+    "file": "2021.eacl-main.56.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          6
+        ],
+        "text": "It is worth mentioning that BERT input length is limited to 512 word pieces (sub-words level) (Devlin et al., 2019), thus, we discard the rest of the text in long news articles."
+      },
+      {
+        "pages": [
+          6
+        ],
+        "text": "Also, despite the huge amount of data used to train the BERT model, the results show that BERT performs worse than FakeFlow and also fails to outperform some of the other models. We speculate that this is due to the fact that the input length in BERT is limited to 512 words, as we mentioned previously, and a large portion of the news articles in the MultiSourceFake dataset has a length greater than 512 words."
+      },
+      {
+        "pages": [
+          7
+        ],
+        "text": "Constantly, new events are covered by news agencies. These events are different from the old ones in terms of discourse and topic. Therefore, a fake news detector trained on news articles from years back is unable to detect recent news."
+      },
+      {
+        "pages": [
+          7,
+          8
+        ],
+        "text": "Lastly, for both sentiment and imageability features, we are not able to find a clear interpretation in this example where many words across the segments match."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Fake News Detection Using Deep Learning: A Systematic Literature Review",
+    "file": "Fake_News_Detection_Using_Deep_Learning_A_Systemat.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          9
+        ],
+        "text": "Despite the promising results of deep learning methods for fake news detection, several challenges remain to be addressed. These include issues related to dataset quality, model performance on imbalanced datasets, and the generalizability of models across different datasets."
+      },
+      {
+        "pages": [
+          9
+        ],
+        "text": "One major issue is the potential for overfitting, where models achieve high accuracy on the training data but perform poorly on new, unseen data [60]. Some previous research has reported extremely high accuracy results, but these were obtained by evaluating the model on the same data that was used for training. The performance of their models achieved a high accuracy of 99.9% [25], [53], [60], [120], [124], [126], [131], and [132]. This raises questions about the model’s ability to generalize to new data. Another challenge is the use of accuracy as the sole evaluation measure for imbalanced datasets, where the number of fake news samples vastly outweighs the number of real news samples [17], [18], [19], [20], [36], [57], [60], [61], [62], [117], [120], [123], [131], [137], [138], [139]. Accuracy can be misleading in these cases, as it can be skewed by the dominance of the majority class."
+      },
+      {
+        "pages": [
+          9
+        ],
+        "text": "Additionally, different datasets can have varying characteristics and biases, and models that perform well on one dataset may not generalize to other datasets. This is noted from our findings in [43], [50], [125], [135], and [136]. This was also proved by the thorough experiments that were made in a recent study of cross-domain fake news detection [186]. Finally, the quality and diversity of the training data can greatly impact the performance of the model [189], [190]. In some cases, models have been trained on datasets that are not representative of the full range of fake news content, leading to poor detection performance [190], [191]."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "One of the main difficulties in the fake news detection field is the scarcity of labelled cases [196], [197]. Even though multiple datasets with a massive amount of records exist they are mostly unlabeled or have only a few records labeled."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "It is also clear from our findings that the datasets used in fake news detection are insufficient for training models due to their characteristics, such as language features or size [199]."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "Sources of fake and non-fake news: Identifying reliable sources of fake and non-fake news can be difficult, especially in today’s world where there are numerous sources of information and not all of them are trustworthy [200]."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "Bias in the data: Bias can be introduced in the data due to various reasons such as the sources of the data, the labelling process, or the selection criteria for the dataset. Bias can affect the accuracy of the model and can also lead to unfair predictions [201]."
+      },
+      {
+        "pages": [
+          11,
+          12
+        ],
+        "text": "Labeling issues: Labeling data for fake news detection can be challenging, as there can be discrepancies in the definition of what constitutes fake news. Human labels may be subjective, and there may be inconsistencies in the labelling process. Automatic labels generated using machine learning techniques can also have their limitations [197], [202]."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "Bots involvement: Bots can be used to generate large volumes of fake news and spread it rapidly across the internet, making it difficult to detect and remove. Bots can also be used to manipulate the labelling process by providing biased labels, leading to inaccuracies in the dataset [200]."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "Rapid evolving nature of fake news: The nature of fake news is constantly evolving, and new techniques for creating and spreading it are being developed all the time. This makes it difficult to create a comprehensive dataset and up-to-date [198], [203]."
+      },
+      {
+        "pages": [
+          15
+        ],
+        "text": "One initial aspect that we must highlight is that transfer learning has not been extensively explored in fake news detection. we consider that this is partly due to the complexity of the task, which requires identifying subtle linguistic cues and context-specific information. Another challenge concerns the difficulty in finding related domains and publicly available datasets that can be useful for training the models. The success of transfer learning relies on the availability of large and diverse datasets that share some commonality with the target task. However, in the case of fake news detection, relevant datasets are often limited, and it can be challenging to find related domains that can be used for transfer learning. The rarity of data is another significant challenge in fake news detection. Since the detection of fake news is a relatively new area of research, there are limited annotated datasets available for training and testing models. This scarcity of data makes it difficult to apply transfer learning techniques, which rely on large amounts of labelled data for pre-training."
+      },
+      {
+        "pages": [
+          15
+        ],
+        "text": "For instance, the choice of pre-trained models and their adaptation to specific tasks can significantly impact the performance of the models. Furthermore, the transferability of pre-trained models across different languages, domains, and cultures is still an active area of research."
+      },
+      {
+        "pages": [
+          15
+        ],
+        "text": "Random under-sampling can be a simple and quick technique to address class imbalance, but it may result in the loss of valuable information from the majority class, leading to a potential loss of predictive performance."
+      },
+      {
+        "pages": [
+          16
+        ],
+        "text": "Random over-sampling can help in increasing the representation of the minority class, but it may also result in overfitting or amplification of noise if not done carefully."
+      },
+      {
+        "pages": [
+          16
+        ],
+        "text": "Typically, specially developed algorithms for dealing with the class imbalance issue will work very well for a specific domain for which they were thought. However, they will fail under other domains and they require a thorough understanding of the algorithm to implement the modifications [231]."
+      },
+      {
+        "pages": [
+          16
+        ],
+        "text": "It should be noted that despite the effectiveness of class imbalance techniques in improving the accuracy of fake news detection models, a significant portion of the literature has not thoroughly investigated or addressed this issue. From our findings, only five research articles investigated the class imbalance effect on fake news detection."
+      },
+      {
+        "pages": [
+          16
+        ],
+        "text": "Class imbalance is a common problem in multiple application domains, and fake news detection is not an exception. However, it has not received as much attention as it deserves in the context of fake news detection, which we consider a big challenge to be addressed. The imbalance between real and fake news samples in the dataset can lead to biased classification, where the model performs well on the majority class but poorly on the minority class [231]. Even when considering the usage of deep learning models, it was shown that the class imbalance problem will still affect the performance of the models [236]."
+      },
+      {
+        "pages": [
+          16
+        ],
+        "text": "One of the challenges related to the class imbalance problem in fake news detection is the issue of using adequate performance assessment metrics to evaluate the model’s performance. Traditional metrics such as accuracy can be misleading, as the model may perform well on the majority class but miss out on correctly identifying the minority class."
+      },
+      {
+        "pages": [
+          16
+        ],
+        "text": "In the FND domain, there is a lack of systematic studies that evaluate the impact of known techniques for dealing with class imbalance. Techniques such as oversampling, undersampling, and ensemble methods have been widely used in many other domains. However, their effectiveness in fake news detection remains understudied."
+      },
+      {
+        "pages": [
+          16,
+          17
+        ],
+        "text": "An important challenge with the application of these techniques for fake news detection is related to the generation of fake news texts. In this case, it is necessary to generate complete texts that look like real news, but it is also necessary to generate texts that correspond to fake news. This leads to another challenge connected to the need to carefully craft the synthetic text generation so that it corresponds to either fake news or real news. In particular, the generated fake news articles should be realistic and representative of the actual fake news articles to ensure the effectiveness of the model."
+      },
+      {
+        "pages": [
+          17
+        ],
+        "text": "The context is also a challenge when considering the generation of fake news. Since fake news is often generated in response to specific events or situations, it can be difficult to apply generic techniques for dealing with a class imbalance that does not consider the specific context in which the fake news was generated."
+      },
+      {
+        "pages": [
+          17
+        ],
+        "text": "Lastly, special-purpose algorithms that can deal with the class imbalance problem have not been explored or evaluated for FND. These algorithms include cost-sensitive learning, manipulating the loss functions, or building ensembles that are specially developed to address the class imbalance problem [231]. These techniques have shown promising results in multiple domains, and their effectiveness in FND requires further investigation."
+      },
+      {
+        "pages": [
+          18
+        ],
+        "text": "SLRs are prone to several threats to validity that may lead to a bias in the review outcomes. These threats are publication bias and errors in data collection, study exclusion, and data extraction. Regarding publication bias, studies with positive results are more expected to be selected over negative studies."
+      },
+      {
+        "pages": [
+          18
+        ],
+        "text": "Regarding filtering out studies based on the search criteria, we aimed to have a broad search query as we mentioned in Section II-C to alleviate this threat. We could also expand the survey date range to contain the studies that were published before 2018."
+      },
+      {
+        "pages": [
+          19
+        ],
+        "text": "Lack of labelled data: One of the major challenges in training deep learning models for fake news detection is the limited availability of labelled data [197], [202]. Fake news datasets are often small, and obtaining accurate and comprehensive annotations for training can be challenging. This can impact the performance and generalization of deep learning models, as they heavily rely on large amounts of labelled data for effective training."
+      },
+      {
+        "pages": [
+          19
+        ],
+        "text": "Potentially biased datasets: Another issue in fake news detection is the potential bias in the datasets used for training and evaluation [201]. Fake news datasets may contain inherent biases, such as political or cultural biases, that can affect the performance and fairness of deep learning models."
+      },
+      {
+        "pages": [
+          19
+        ],
+        "text": "Lack of benchmarks: There is a lack of standardized benchmarks for evaluating the performance of deep learning models in fake news detection. The absence of benchmark datasets, evaluation metrics, and protocols makes it challenging to compare the performance of different models and assess their effectiveness [186], [238]."
+      },
+      {
+        "pages": [
+          19
+        ],
+        "text": "Transfer learning solutions not sufficiently explored: Transfer learning, which leverages pre-trained models for feature extraction or model initialization, has shown promise in improving the performance of deep learning models for various tasks [239], [240]. However, in the context of fake news detection, the exploration of transfer learning solutions is still limited."
+      },
+      {
+        "pages": [
+          19
+        ],
+        "text": "Class imbalance not adequately addressed: Class imbalance, where the number of samples in different classes is significantly imbalanced, is a common issue in fake news detection. Deep learning models trained on imbalanced datasets may result in biased and inaccurate predictions, as they tend to be biased towards the majority class [241], [242]. Although some studies have explored imbalance techniques such as oversampling or undersampling, the effectiveness of these techniques in deep learning for fake news detection needs further investigation."
+      },
+      {
+        "pages": [
+          19
+        ],
+        "text": "Limited understanding of fake news dynamics: Despite extensive research on fake news, there is still a limited understanding of the complex dynamics and mechanisms underlying the spread and impact of misinformation [243]. Deep learning models for fake news detection may be limited by the lack of a comprehensive understanding of how fake news is created, disseminated, and received, which can impact the models’ accuracy and effectiveness."
+      },
+      {
+        "pages": [
+          19
+        ],
+        "text": "Real-world applicability: While deep learning models for fake news detection show promising results in controlled research settings, their real-world applicability, and effectiveness in detecting fake news in diverse and dynamic environments, such as social media or online news platforms, is still a challenge. Realworld factors, such as varying levels of information quality, diverse sources of misinformation, and rapid information spread, can impact the performance and reliability of deep learning models in practical scenarios [198], [203]."
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "title": "“Liar, Liar Pants on Fire”: A New Benchmark Dataset for Fake News Detection",
+    "file": "P17-2067.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          1
+        ],
+        "text": "Even though crowdsourcing is an important approach to create labeled training data, there is a mismatch between training and testing. When testing on real-world review datasets, the results could be suboptimal since the positive training data was created in a completely different, simulated platform."
+      },
+      {
+        "pages": [
+          1
+        ],
+        "text": "However, the lack of manually labeled fake news dataset is still a bottleneck for advancing computational-intensive, broadcoverage models in this direction. Vlachos and Riedel (2014) are the first to release a public fake news detection and fact-checking dataset, but it only includes 221 statements, which does not permit machine learning based assessments."
+      },
+      {
+        "pages": [
+          2
+        ],
+        "text": "They are very useful datasets to study deception detection, but the positive training data are collected from a simulated environment. More importantly, these datasets are not suitable for fake statements detection, since the fake news on TVs and social media are much shorter than customer reviews."
+      },
+      {
+        "pages": [
+          2
+        ],
+        "text": "However, with less than a thousand samples, it is impractical to use these datasets as benchmarks for developing and evaluating machine learning algorithms for fake news detection."
+      },
+      {
+        "pages": [
+          3
+        ],
+        "text": "Since this vector also includes the count for the current statement, it is important to subtract the current label from the credit history when using this meta data vector in prediction experiments."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "Due to overfitting, the Bi-LSTMs did not perform well."
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "title": "DeClarE: Debunking Fake News and False Claims using Evidence-Aware Deep Learning",
+    "file": "D18-1003.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          1
+        ],
+        "text": "However, this manual verification is time-consuming."
+      },
+      {
+        "pages": [
+          1
+        ],
+        "text": "On the one hand, methods like Rashkin et al. (2017); Wang (2017) train neural networks on labeled claims from sites like PolitiFact.com, providing credibility assessments without any explicit feature modeling. However, they use only the text of questionable claims and no external evidence or interactions that provide limited context for credibility analysis. These approaches also do not offer any explanation of their verdicts."
+      },
+      {
+        "pages": [
+          1
+        ],
+        "text": "On the other hand, Popat et al. (2017) considers external evidence in the form of other articles (retrieved from the Web) that confirm or refute a claim, and jointly assesses the language style (using subjectivity lexicons), the trustworthiness of the sources, and the credibility of the claim. This is achieved via a pipeline of supervised classifiers. On the upside, this method generates user-interpretable explanations by pointing to informative snippets of evidence articles. On the downside, it requires substantial feature modeling and rich lexicons to detect bias and subjectivity in the language style."
+      },
+      {
+        "pages": [
+          8,
+          9
+        ],
+        "text": "The method proposed by Samadi et al. (2016) uses the Probabilistic Soft Logic (PSL) framework to estimate source reliability and claim correctness. Vydiswaran et al. (2011) proposes an iterative algorithm which jointly learns the veracity of textual claims and trustworthiness of the sources. These approaches do not consider the deeper semantic aspects of language, however. Wiebe and Riloff (2005); Lin et al. (2011); Recasens et al. (2013) study the problem of detecting bias in language, but do not consider credibility."
+      },
+      {
+        "pages": [
+          9
+        ],
+        "text": "Nakashole and Mitchell (2014) proposed a method to extract conflicting values from the Web in the form of Subject-Predicate-Object (SPO) triplets and uses language objectivity analysis to determine the true value. Like the other truth discovery approaches, however, this approach is mainly suitable for use with structured data."
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "title": "MultiFC: A Real-World Multi-Domain Dataset for Evidence-Based Fact Checking of Claims",
+    "file": "D19-1475.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          1
+        ],
+        "text": "However, existing efforts either use small datasets consisting of naturally occurring claims (e.g. Mihalcea and Strapparava (2009); Zubiaga et al. (2016)), or datasets consisting of artificially constructed claims such as FEVER (Thorne et al., 2018). While the latter offer valuable contributions to further automatic claim verification work, they cannot replace real-world datasets."
+      },
+      {
+        "pages": [
+          3
+        ],
+        "text": "There were a number of crawling issues, e.g. security protection of websites with SSL/TLS protocols, time out, URLs that pointed to pdf files instead of HTML content, or unresolvable encoding. In all of these cases, the content could not be retrieved. For some websites, no veracity labels were available, in which case, they were not selected as domains for training a veracity prediction model. Moreover, not all types of metadata (category, speaker, checker, tags, claim date, publish date) were available for all websites; and availability of articles and full texts differs as well."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "We acknowledge that search results change over time, which might have an effect on veracity prediction. However, studying such temporal effects is outside the scope of this paper. Similar to Web crawling claims, as described in Section 3.1, the corresponding Web pages can in some cases not be retrieved, in which case fewer than 10 evidence pages are available. The resulting evidence pages are from a wide variety of URL domains, though with a predictable skew towards popular websites, such as Wikipedia or The Guardian (see Table 3 for detailed statistics)."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "This clearly shows that most of the claims involve entities related to the United States, which is to be expected, as most of the fact checking websites are US-based."
+      },
+      {
+        "pages": [
+          5
+        ],
+        "text": "However, since the sheer number of labels is rather large (165), and it is not always clear from the guidelines on fact checking websites how they can be mapped onto one another, we opt to learn how these labels relate to one another as part of the veracity prediction model."
+      },
+      {
+        "pages": [
+          6
+        ],
+        "text": "Such a model ignores evidence for and against a claim, and ends up guessing the veracity based on surface patterns observed in the claim texts."
+      },
+      {
+        "pages": [
+          6
+        ],
+        "text": "Here, we opt to encode search snippets as opposed to whole retrieved pages. While the latter would also be possible, it comes with a number of additional challenges, such as encoding large documents, parsing tables or PDF files, and encoding images or videos on these pages, which we leave to future work."
+      },
+      {
+        "pages": [
+          7
+        ],
+        "text": "No direct labels are available to learn the ranking of individual documents, only for the veracity of the associated claim, so the model has to learn evidence ranks implicitly."
+      },
+      {
+        "pages": [
+          7
+        ],
+        "text": "The claim publication date is potentially relevant, but it does not make sense to merely model this as a one-hot feature, so we leave incorporating temporal information to future work."
+      },
+      {
+        "pages": [
+          8
+        ],
+        "text": "Unsurprisingly, it is hard to achieve a high Macro F1 for domains with many labels, e.g. tron and snes. Further, some domains, surprisingly mostly with small numbers of instances, seem to be very easy – a perfect Micro and Macro F1 score of 1.0 is achieved on ranz, bove, buca, fani and thal. We find that for those domains, the verdict is often already revealed as part of the claim using explicit wording."
+      },
+      {
+        "pages": [
+          9
+        ],
+        "text": "We find that encoding metadata within the model hurts performance for domains where no metadata is available, but improves performance where it is."
+      },
+      {
+        "pages": [
+          9
+        ],
+        "text": "One can observe that the model struggles more to detect claims with labels ‘true’ than those with label ‘false’. Generally, many confusions occur over close labels, e.g. ‘half-true’ vs. ‘mostly true’. We further analyse what properties instances that are predicted correctly vs. incorrectly have, using the model crawled ranked meta. We find that, unsurprisingly, longer claims are harder to classify correctly, and that claims with a high direct token overlap with evidence pages lead to a high evidence ranking. When it comes to frequently occurring tags and entities, very general tags such as ‘government-and-politics’ or ‘tax’ that do not give away much, frequently co-occur with incorrect predictions, whereas more specific tags such as ‘brisbane-4000’ or ‘hong-kong’ tend to co-occur with correct predictions. Similar trends are observed for bigrams. This means that the model has an easy time succeeding for instances where the claims are short, where specific topics tend to co-occur with certain veracities, and where evidence documents are highly informative. Instances with longer, more complex claims where evidence is ambiguous remain challenging."
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "title": "Sentimental LIAR: Extended Corpus and Deep Learning Models for Fake Claim Classification",
+    "file": "2009.01047v2.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          5,
+          6
+        ],
+        "text": "A slight improvement of 1% was observed in the accuracy and no improvements in the F1 Score. This suggests that the model may need to be revised to handle the complexity of the input data."
+      },
+      {
+        "pages": [
+          6
+        ],
+        "text": "The training loss VS validation Loss graphs for BERT-Base + feedforward NN is given in Fig.(4), and for BERT-Base + CNN in Fig.(5). These plots suggest that the models were overfitted only after 2 epochs, which is mostly due to the small size of the dataset. Also, it must be noted that the dataset is imbalanced, with 65% of data labeled as false and only 35% labeled as true. These observations demonstrate the need for the curation of larger and more representative datasets of shorttext claims."
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "title": "A Survey on Automated Fact-Checking",
+    "file": "2022.tacl-1.11.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          3
+        ],
+        "text": "Some earlier efforts do not use any evidence beyond the claim itself (Wang, 2017; Rashkin et al., 2017; Volkova et al., 2017; Dungs et al., 2018). Relying on surface patterns of claims without considering the state of the world fails to identify well-presented misinformation, including machine-generated claims (Schuster et al., 2020)."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "A fundamental issue is that not all available information is trustworthy. Most fact-checking approaches implicitly assume access to a trusted information source such as encyclopedias (e.g., Wikipedia [Thorne et al., 2018a]) or results provided (and thus vetted) by search engines (Augenstein et al., 2019)."
+      },
+      {
+        "pages": [
+          4
+        ],
+        "text": "Debunking purely by calling something false often fails to be persuasive, and can induce a ‘‘backfire’’ effect where belief in the erroneous claim is reinforced (Lewandowsky et al., 2012). This need is even greater for automated factchecking, which may employ black-box components. When developers deploy black-box models whose decision-making processes cannot be understood, these artefacts can lead to unintended, harmful consequences (O’Neil, 2016)."
+      },
+      {
+        "pages": [
+          5
+        ],
+        "text": "Presenting the evidence returned by a retrieval system can as such be seen as a rather weak baseline for justification production, as it does not explain the process used to reach the verdict."
+      },
+      {
+        "pages": [
+          6
+        ],
+        "text": "However, the implicit assumption that every claim in it is either factually correct or incorrect is problematic, and thus rarely practised by human fact-checkers (Uscinski and Butler, 2013)."
+      },
+      {
+        "pages": [
+          7
+        ],
+        "text": "A popular type of evidence often considered is metadata, such as publication date, sources, user profiles, and so forth. However, while it offers information complementary to textual sources or structural knowledge which is useful when the latter are unavailable (Wang, 2017; Potthast et al., 2018), it does not provide evidence grounding the claim."
+      },
+      {
+        "pages": [
+          7
+        ],
+        "text": "The aforementioned works assume that evidence is given for every claim, which is not conducive to developing systems that need to retrieve evidence from a large knowledge source."
+      },
+      {
+        "pages": [
+          7
+        ],
+        "text": "However, these efforts restricted world knowledge to a single source (Wikipedia), ignoring the challenge of retrieving evidence from heterogeneous sources on the web. To address this, other works (Popat et al., 2016; Baly et al., 2018; Augenstein et al., 2019) retrieved evidence from the Internet, but the search results were not annotated. Thus, it is possible that irrelevant information is present in the evidence, while information that is necessary for verification is missing."
+      },
+      {
+        "pages": [
+          7,
+          8
+        ],
+        "text": "However, while graph topology can be an indicator of plausibility, it does not provide conclusive evidence. A claim that is not represented by a path in the graph, or that is represented by an unlikely path, is not necessarily false. The knowledge base approach assumes that true facts relevant to the claim are present in the graph; but given the incompleteness of even the largest knowledge bases, this is not realistic (Bordes et al., 2013; Socher et al., 2013)."
+      },
+      {
+        "pages": [
+          8
+        ],
+        "text": "Most existing datasets do not contain textual explanations provided by journalists as justification for verdicts."
+      },
+      {
+        "pages": [
+          8
+        ],
+        "text": "Recently, Kotonya and Toni (2020b) constructed the first dataset that explicitly includes gold explanations. These consist of fact-checking articles and other news items, which can be used to train natural language generation models to provide post-hoc justifications for the verdicts, However, using fact-checking articles is not realistic, as they are not available during inference, which makes the trained system unable to provide justifications based on retrieved evidence."
+      },
+      {
+        "pages": [
+          8
+        ],
+        "text": "This is challenging, especially in the case of check-worthiness: Rumorous and non-rumorous information is often difficult to distinguish, and the volume of claims analyzed in real-world scenarios (e.g., all posts published to a social network every day) prohibits the retrieval and use of evidence."
+      },
+      {
+        "pages": [
+          9
+        ],
+        "text": "Some work avoids retrieval by making aclosed-domain assumptionand evaluating in a setting where appropriate evidence has already been found (Ferreira and Vlachos, 2016; Chen et al., 2020; Zhong et al., 2020a; Yang et al., 2020b; Eisenschlos et al., 2020); this, however, is unrealistic."
+      },
+      {
+        "pages": [
+          9,
+          10
+        ],
+        "text": "Without explicitly considering evidence such approaches are likely to propagate biases learned during training, and render justification production impossible (Lee et al., 2021; Pan et al., 2021)."
+      },
+      {
+        "pages": [
+          10
+        ],
+        "text": "Recent studies have shown the use of attention as explanation to be problematic. Some tokens with high attention scores can be removed without affecting predictions, while some tokens with low (non-zero) scores turn out to be crucial (Jain and Wallace, 2019; Serrano and Smith, 2019; Pruthi et al., 2020). Explanations provided by attention may therefore not be sufficiently faithful. Furthermore, as they are difficult for non-experts and/or those not well-versed in the architecture of the model to grasp, they lack readability."
+      },
+      {
+        "pages": [
+          10
+        ],
+        "text": "These rules are mined from a pre-constructed knowledge base, such as DBpedia (Auer et al., 2007). This limits what can be fact-checked to claims that are representable as triples, and to information present in the (often manually curated) knowledge base."
+      },
+      {
+        "pages": [
+          10
+        ],
+        "text": "A potential issue is that such models can generate explanations that do not represent their actual veracity prediction process, but which are nevertheless plausible with respect to the decision. This is especially an issue with abstractive models, where hallucinations can produce very misleading justifications (Maynez et al., 2020). Also, the model of Atanasova et al. (2020b) assumes fact-checking articles provided as input during inference, which is unrealistic."
+      },
+      {
+        "pages": [
+          10
+        ],
+        "text": "Fact-checking can help detect misinformation, but not distinguish it from disinformation."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "Nevertheless, new claims and evidence emerge regularly. Previous factchecks can be useful, but they can become outdated and potentially misleading over time."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "In-between labels like ‘‘mostly true’’ often represent ‘‘meta-ratings’’ for composite claims consisting of multiple elementary claims of different veracity. For example, a politician might claim improvements to unemployment and productivity; if one part is true and the other false, a fact-checker might label the full statement ‘‘half true’’ ."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "The separation of claims into truth and falsehood can be too simplistic, as true claims can still mislead. Examples include cherry-picking, where evidence is chosen to suggest a misleading trend (Asudeh et al., 2020), and technical truth, where true information is presented in a way that misleads (e.g., ‘‘I have never lost a game of chess’’ is also true if the speaker has never played chess). A major challenge is integrating analysis of such claims into the existing frameworks."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "Not all information is equally trustworthy, and sometimes trustworthy sources contradict each other. This challenges the assumptions made by most current fact-checking research relying on a single source considered authoritative, such as Wikipedia."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "Similarly, check-worthiness is a subjective concept varying along axes including target audience, recency, and geography."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "However, the practical limitations of fact-checking (e.g., the deadlines of journalists and the time-constraints of media consumers) often force the use of a triage system (Borel, 2016). This can introduce biases regardless of the intentions of journalists and system-developers to use objective criteria (Uscinski and Butler, 2013; Uscinski, 2015)."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "Synthetic datasets constructed through crowd-sourcing are common (Zeichner et al., 2012; Hermann et al., 2015; Williams et al., 2018). It has been shown that models tend to rely on biases in these datasets, without learning the underlying task (Gururangan et al., 2018; Poliak et al., 2018; McCoy et al., 2019)."
+      },
+      {
+        "pages": [
+          11
+        ],
+        "text": "For fact-checking, Schuster et al. (2019) showed that the predictions of models trained on FEVER (Thorne et al., 2018a) were largely driven by indicative claim words. The FEVER 2.0 shared task explored how to generate adversarial claims and build systems resilient to such attacks (Thorne et al., 2019). Alleviating such biases and increasing the robustness to adversarial examples remains an open question."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "Available multimodal corpora are either small in size (Zhang et al., 2018; Zlatkova et al., 2019) or constructed based on distant supervision (Nakamura et al., 2020)."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "While misinformation spans both geographic and linguistic boundaries, most work in the field has focused on English."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "Currently, there exist a handful of datasets for factual verification in languages other than English (Baly et al., 2018; Lillie et al., 2019; Khouja, 2020; Shahi and Nandini, 2020; Nørregaard and Derczynski, 2021), but they do not offer a cross-lingual setup. More recently, Gupta and Srikumar (2021) introduced a multilingual dataset covering 25 languages, but found that adding training data from other languages did not improve performance. How to effectively align, coordinate, and leverage resources from different languages remains an open question."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "A significant unaddressed challenge in justification production is faithfulness. As we discuss in Section 4.3, some justifications —such as those generated abstractively (Maynez et al., 2020)—may not be faithful. This can be highly problematic, especially if these justifications are used to convince users of the validity of model predictions (Lertvittayakumjorn and Toni, 2019). Faithfulness is difficult to evaluate for, as human evaluators and human-produced gold standards often struggle to separate highly plausible, unfaithful explanations from faithful ones (Jacovi and Goldberg, 2020)."
+      },
+      {
+        "pages": [
+          12
+        ],
+        "text": "Efforts have been made to respond quickly after the appearance of a piece of misinformation (Monti et al., 2019), but common to all approaches is that intervention takes place reactively after misinformation has already been introduced to the public."
+      },
+      {
+        "pages": [
+          13
+        ],
+        "text": "This could be seen as a form of dialogue agent to educate users, however there are as of yet no resources for the development of such systems."
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "title": "An Emotion-Based Multi-Task Approach to Fake News Detection (Student Abstract)",
+    "file": "00226-ChoudhryA.pdf",
+    "excerpts": [
+      {
+        "pages": [
+          1
+        ],
+        "text": "Incorporating emotion classification as an auxiliary task in our multi-task framework poses two challenges: annotating the datasets with emotion classes, and choosing a set of basic emotions."
+      },
+      {
+        "pages": [
+          1
+        ],
+        "text": "Due to unavailability of fake news datasets annotated with emotion classes, we use the Unison model (Colneric and Demsar 2018) to generate both Plutchik and Ekman emotion tags for our datasets, and compare the performance of various classifiers in multi-task settings on both emotion sets."
+      },
+      {
+        "pages": [
+          2,
+          2
+        ],
+        "text": "We observed comparable performance between MTL models trained on Ekman (MTL(6)) and Plutchik (MTL(8)) emotions across all datasets, with the exception of LSTM and CNN-LSTM models on Celeb dataset, which performed worse with Plutchik emotions."
+      }
+    ]
+  }
+]
